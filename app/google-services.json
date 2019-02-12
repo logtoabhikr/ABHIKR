@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "237041780036",
+    "firebase_url": "https://abhikr-f817d.firebaseio.com",
+    "project_id": "abhikr-f817d",
+    "storage_bucket": "abhikr-f817d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:237041780036:android:be33a54fc2f373ed",
+        "android_client_info": {
+          "package_name": "com.abhikr.abhikr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "237041780036-jg8sh4eagv1sbbc3rkk7ju4e3u18dp1j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.abhikr.abhikr",
+            "certificate_hash": "0092199ddbc238566d7baf4ff781ac8246c40587"
+          }
+        },
+        {
+          "client_id": "237041780036-77nhmsdpt2qehcm5k91qhgtajpj0dai6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.abhikr.abhikr",
+            "certificate_hash": "f86a50d12821ce0f04821b9d7c6b63ff9a5571db"
+          }
+        },
+        {
+          "client_id": "237041780036-1ngfmat6stln7dq8kvptv1a4tlcu7mho.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCYFapMpi_-RJMZO-9Al4jGi9VKAazGkQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "237041780036-1ngfmat6stln7dq8kvptv1a4tlcu7mho.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

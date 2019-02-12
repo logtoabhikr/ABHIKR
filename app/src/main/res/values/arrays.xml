@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="ld_activityScreenTitles">
+        <item>HOME</item>
+        <item>ADDRESS</item>
+        <item>FASHION</item>
+        <item>PUSH FCM</item>
+        <item>SMS VERIFY</item>
+       <!-- <item>UTHHAN</item>
+        <item>BARGAIN STORE</item>
+        <item>NEW PRODUCT</item>-->
+        <item>CART</item>
+        <item />
+        <item>LOG OUT</item>
+    </string-array>
+
+    <array name="ld_activityScreenIcons">
+        <item>@drawable/ic_action_home</item>
+        <item>@drawable/ic_add_location_black_24dp</item>
+        <item>@drawable/ic_add_to_photos_black_24dp</item>
+        <item>@drawable/ic_add_to_photos_black_24dp</item>
+        <item>@drawable/ic_explicit_black_24dp</item>
+        <item>@drawable/ic_cart_outline_grey600_24dp</item>
+        <item>0</item>
+        <item>@drawable/ic_logout_grey600_24dp</item>
+    </array>
+
+</resources>

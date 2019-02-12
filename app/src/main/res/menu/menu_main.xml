@@ -1,0 +1,26 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.android.abhichat.MainActivity">
+    <item
+        android:id="@+id/action_call_abhi"
+        android:orderInCategory="100"
+        android:title="@string/app_name"
+        android:icon="@drawable/ic_btn_more"
+        app:showAsAction="ifRoom">
+        <menu>
+    <item
+        android:id="@+id/home_call"
+        android:orderInCategory="101"
+        android:title="Home"
+        android:icon="@mipmap/favicon"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/about"
+        android:orderInCategory="102"
+        android:title="@string/about"
+        android:icon="@drawable/ic_notify_group"
+        app:showAsAction="never" />
+        </menu>
+    </item>
+</menu>
