@@ -13,39 +13,36 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 import dmax.dialog.SpotsDialog;
 
 public class EXP extends Activity implements View.OnClickListener {
 
 private ExpandableLayout expandableLayout0;
 private ExpandableLayout expandableLayout1;
-
-        ImageView abhikr;
-    WebView abhi;
+private AppCompatImageView abhikr;
+   private WebView abhi;
     ProgressDialog pg;
-    TextView expend_button;
+    AppCompatTextView expend_button;
     private FirebaseAuth firebaseAuth;
-    FirebaseUser user;
-    AlertDialog spotsdialog;
+   private FirebaseUser user;
+   private AlertDialog spotsdialog;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exp);
-        spotsdialog=new SpotsDialog(EXP.this, R.style.abhi);
-
-        expandableLayout0 = (ExpandableLayout) findViewById(R.id.expandable_layout_0);
-        expandableLayout1 = (ExpandableLayout) findViewById(R.id.expandable_layout_1);
-        expend_button= (TextView) findViewById(R.id.expand_button);
-        abhikr= (ImageView) findViewById(R.id.ak);
+        expandableLayout0 =  findViewById(R.id.expandable_layout_0);
+        expandableLayout1 =  findViewById(R.id.expandable_layout_1);
+        expend_button=  findViewById(R.id.expand_button);
+        abhikr=  findViewById(R.id.ak);
         firebaseAuth=FirebaseAuth.getInstance();
         if(firebaseAuth.getCurrentUser() == null)
         {
@@ -56,7 +53,22 @@ private ExpandableLayout expandableLayout1;
             startActivity(i);
         }
         user=firebaseAuth.getCurrentUser();
-        expend_button.setText(user.getEmail()+" ! Touch Here ");
+        if(user!=null)
+        {
+            expend_button.setText(user.getEmail()+" ! Touch Here ");
+            if (expandableLayout0.isExpanded()) {
+                expandableLayout0.collapse();
+            } else if (expandableLayout1.isExpanded()) {
+                expandableLayout1.collapse();
+            } else {
+                expandableLayout0.expand();
+                expandableLayout1.expand();
+            }
+        }
+        spotsdialog=new SpotsDialog.Builder()
+                .setContext(EXP.this)
+                .setTheme(R.style.abhi)
+                .build();
         abhikr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,16 +76,22 @@ private ExpandableLayout expandableLayout1;
                 startActivity(i);
             }
         });
-        abhi = (WebView) findViewById(R.id.webview);
+        abhi =  findViewById(R.id.webview);
         pg=new ProgressDialog(EXP.this);
         //pg.setMessage("Loading ...");
-        abhi.getSettings().setJavaScriptEnabled(true);
         WebSettings ak=abhi.getSettings();
-        ak.setBuiltInZoomControls(false);
         ak.setLoadsImagesAutomatically(true);
         abhi.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+        ak.setJavaScriptEnabled(true);
+        // Enable responsive layout
+        ak.setUseWideViewPort(true);
+        // Zoom out if the content width is greater than the width of the viewport
+        ak.setLoadWithOverviewMode(true);
+        ak.setSupportZoom(true);
+        ak.setBuiltInZoomControls(true); // allow pinch to zooom
+        ak.setDisplayZoomControls(false); // disable the default zoom controls on the page
         abhi.loadUrl("http://www.abhikr.com/");
-        Toast.makeText(this, "To load user view click on top - ", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "To View Developer profile click on top - ", Toast.LENGTH_SHORT).show();
         abhi.setWebViewClient(new abhikr1());
 
         expandableLayout0.setOnExpansionUpdateListener(new ExpandableLayout.OnExpansionUpdateListener() {
@@ -101,8 +119,9 @@ private ExpandableLayout expandableLayout1;
             //pg.show();
             if(Appstatus.getInstance(EXP.this).isOnline())
             {
-                Toast.makeText(EXP.this, "Internet detected ! Go ahead", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(EXP.this, "Internet detected ! Go ahead", Toast.LENGTH_SHORT).show();
                 spotsdialog.show();
+                spotsdialog.setMessage("Loading developer profile....");
             }
             else
             {
@@ -122,10 +141,14 @@ private ExpandableLayout expandableLayout1;
 
         @Override
         public void onPageFinished(WebView view, String url) {
-            if (pg.isShowing())
+
+            if (spotsdialog.isShowing())
                 {
                     spotsdialog.dismiss();
-                    spotsdialog=null;
+                }
+                if(pg.isShowing())
+                {
+                    pg.cancel();
                 }
             super.onPageFinished(view, url);
         }

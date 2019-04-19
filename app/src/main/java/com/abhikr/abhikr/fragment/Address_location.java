@@ -10,8 +10,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +35,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
 
 
 public class Address_location extends Fragment implements GoogleApiClient.ConnectionCallbacks,

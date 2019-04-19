@@ -9,9 +9,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +21,9 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import dmax.dialog.SpotsDialog;
 
 public class MainActivity_old extends AppCompatActivity {
@@ -41,7 +41,10 @@ public class MainActivity_old extends AppCompatActivity {
         //setTheme(R.style.SplashTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_old);
-        spotsdialog=new SpotsDialog(MainActivity_old.this, R.style.abhi);
+        spotsdialog=new SpotsDialog.Builder()
+                .setContext(getApplicationContext())
+                .setTheme(R.style.abhi)
+                .build();
         //initializing firebase authentication object
         mAuth = FirebaseAuth.getInstance();
          mAuthStateListener=new FirebaseAuth.AuthStateListener() {

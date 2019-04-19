@@ -5,7 +5,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -14,6 +13,8 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.LinearLayout;
 
 import com.abhikr.abhikr.ui.LoginActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class Splash_Reveal extends AppCompatActivity {
 LinearLayout Splash_lay;

@@ -1,26 +1,16 @@
 package com.abhikr.abhikr;
 
-import android.*;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
@@ -32,21 +22,27 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.app.ActivityCompat;
 import dmax.dialog.SpotsDialog;
 
 public class SignIn extends AppCompatActivity implements View.OnClickListener,GoogleApiClient.OnConnectionFailedListener {
 
     //defining views
-    private Button buttonSignIn;
-    private EditText editTextEmail;
-    private EditText editTextPassword;
-    private TextView textViewSignup,forgotpass;
+    private MaterialButton buttonSignIn;
+    private AppCompatEditText editTextEmail,editTextPassword;
+    private AppCompatTextView textViewSignup,forgotpass;
         View sn;
     private static final String TAG = "Abhikr";
     private static final int RC_SIGN_IN = 9;
@@ -67,7 +63,10 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener,Go
         super.onCreate(savedInstanceState);
         //setTheme(R.style.PartyTheme);
         setContentView(R.layout.activity_sign_in);
-        spotsdialog=new SpotsDialog(SignIn.this, R.style.abhi);
+        spotsdialog=new SpotsDialog.Builder()
+                .setContext(getApplicationContext())
+                .setTheme(R.style.abhi)
+                .build();
         //getting firebase auth object
         mAuth = FirebaseAuth.getInstance();
 
@@ -81,7 +80,7 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener,Go
 //            finish();
 //            //opening profile activity
 //            startActivity(new Intent(getApplicationContext(), MainActivity_old.class));
-                    Intent i = new Intent(SignIn.this, SampleActivity.class);
+                 /*   Intent i = new Intent(SignIn.this, SampleActivity.class);
 
                     // Closing all the Activities
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -91,7 +90,7 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener,Go
 
                     // Staring Login Activity
                     startActivity(i);
-                    finish();
+                    finish();*/
                     spotsdialog.dismiss();
 
                 }
@@ -107,9 +106,11 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener,Go
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
         int PERMISSION_ALL = 1;
-        String[] PERMISSIONS = {android.Manifest.permission.READ_SMS, android.Manifest.permission.READ_PHONE_STATE,android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.INTERNET, android.Manifest.permission.ACCESS_NOTIFICATION_POLICY
-                , android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.CHANGE_NETWORK_STATE, android.Manifest.permission.ACCESS_WIFI_STATE, android.Manifest.permission.GET_ACCOUNTS, android.Manifest.permission.SYSTEM_ALERT_WINDOW};
-
+        String[] PERMISSIONS = {android.Manifest.permission.READ_PHONE_STATE,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.CHANGE_NETWORK_STATE,
+                android.Manifest.permission.ACCESS_WIFI_STATE, android.Manifest.permission.GET_ACCOUNTS};
         if (!hasPermissions(this, PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         }
@@ -123,12 +124,12 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener,Go
 
         });
         //initializing views
-        editTextEmail = (EditText) findViewById(R.id.editTextEmail);
-        editTextPassword = (EditText) findViewById(R.id.editTextPassword);
-        buttonSignIn = (Button) findViewById(R.id.buttonSignin);
-        textViewSignup  = (TextView) findViewById(R.id.textViewSignUp);
-        forgotpass= (TextView) findViewById(R.id.textViewforgotpass);
-        sn=findViewById(R.id.fab);
+        editTextEmail =  findViewById(R.id.editTextEmail);
+        editTextPassword =  findViewById(R.id.editTextPassword);
+        buttonSignIn =  findViewById(R.id.buttonSignin);
+        textViewSignup  =  findViewById(R.id.textViewSignUp);
+        forgotpass=  findViewById(R.id.textViewforgotpass);
+        sn=findViewById(R.id.fabsigin);
         progressDialog = new ProgressDialog(this);
 
         //attaching click listener

@@ -8,10 +8,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +21,10 @@ import com.abhikr.abhikr.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import dmax.dialog.SpotsDialog;
 
 public class HomeFragment extends Fragment {
@@ -44,7 +44,10 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View abhiview=inflater.inflate(R.layout.fragment_home, null);
-        spotsdialog=new SpotsDialog(getActivity(), R.style.abhi);
+        spotsdialog=new SpotsDialog.Builder()
+                .setContext(getActivity())
+                .setTheme(R.style.abhi)
+                .build();
         //initializing firebase authentication object
         mAuth = FirebaseAuth.getInstance();
         mAuthStateListener=new FirebaseAuth.AuthStateListener() {

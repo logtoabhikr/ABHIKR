@@ -19,8 +19,8 @@
 
     <item android:id="@+id/user"
         android:orderInCategory="102"
-        android:title="User"
-        android:icon="@mipmap/favicon"
+        android:title="Dev profile"
+        android:icon="@drawable/ic_notify_group"
         app:showAsAction="never"/>
     <item
         android:id="@+id/logout"
@@ -33,7 +33,7 @@
                 android:id="@+id/about_home"
                 android:orderInCategory="102"
                 android:title="@string/about"
-                android:icon="@drawable/ic_notify_group"
+                android:icon="@mipmap/favicon"
                 app:showAsAction="never" />
         </menu>
     </item>

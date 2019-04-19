@@ -7,12 +7,14 @@ import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+
 import static com.abhikr.abhikr.ExpandableLayout.State.COLLAPSED;
 import static com.abhikr.abhikr.ExpandableLayout.State.COLLAPSING;
 import static com.abhikr.abhikr.ExpandableLayout.State.EXPANDED;

@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
-
 import com.abhikr.abhikr.model.Group;
 
 import java.util.ArrayList;

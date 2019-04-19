@@ -1,57 +1,56 @@
 package com.abhikr.abhikr;
 
 import android.app.ActivityOptions;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.transition.Explode;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.abhikr.abhikr.fragment.Address_location;
 import com.abhikr.abhikr.fragment.Chat_MainFrag;
-import com.abhikr.abhikr.fragment.HomeFragment;
 import com.abhikr.abhikr.fragment.Product_loadbar;
 import com.abhikr.abhikr.fragment.Sms_Verify;
-import com.abhikr.abhikr.fragment.gerg_explist;
 import com.abhikr.abhikr.menu.DrawerAdapter;
 import com.abhikr.abhikr.menu.DrawerItem;
 import com.abhikr.abhikr.menu.SimpleItem;
 import com.abhikr.abhikr.menu.SpaceItem;
+import com.abhikr.abhikr.ui.FriendsFragment;
+import com.abhikr.abhikr.ui.GroupFragment;
 import com.abhikr.abhikr.ui.LoginActivity;
+import com.abhikr.abhikr.ui.UserProfileFragment;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 
 import java.util.Arrays;
 
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 public class SampleActivity extends AppCompatActivity implements DrawerAdapter.OnItemSelectedListener {
 
     private static final int POS_DASHBOARD = 0;
-    private static final int POS_ADDRESS = 1;
-    private static final int POS_FASHION = 2;
-    private static final int POS_ACCESSORIES = 3;
-    private static final int POS_ELECTRONIC=4;
-    private static final int POS_CART = 5;
+    private static final int POS_FRIENDS = 1;
+    private static final int POS_GROUP = 2;
+    private static final int POS_PROFILE = 3;
+    private static final int POS_PUSHFCM =4;
+    private static final int POS_SHARE = 5;
     private static final int POS_LOGOUT=7;
 
     private String[] screenTitles;
@@ -62,7 +61,7 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
     FirebaseUser user;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
-
+    private FirebaseAnalytics mFirebaseAnalytics;
     @Override
     protected void onStart() {
         super.onStart();
@@ -73,7 +72,7 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample);
-       final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+       final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if(getSupportActionBar() != null) {
             //getSupportActionBar().setTitle(R.string.app_name);
@@ -82,7 +81,7 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
             getSupportActionBar().setDisplayShowTitleEnabled(true);
         }
         mAuth = FirebaseAuth.getInstance();
-        user=FirebaseAuth.getInstance().getCurrentUser();
+        //user=FirebaseAuth.getInstance().getCurrentUser();
         mAuthStateListener=new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -95,7 +94,6 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
 //            startActivity(new Intent(this, SignIn.class));
                     // After logout redirect user to Login Activity
                     Intent i = new Intent(getApplicationContext(), LoginActivity.class);
-
                     /*// Closing all the Activities
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
@@ -103,23 +101,23 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);*/
 
                     // Staring Login Activity
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         startActivity(i,ActivityOptions.makeSceneTransitionAnimation(SampleActivity.this).toBundle());
-                    }
                     finish();
-                }
-                else
-                {
-                    Log.d(TAG,"Signout:User");
                 }
             }
         };
 
 
         //getting current user
-//        user = mAuth.getCurrentUser();
+     user = mAuth.getCurrentUser();
+     if(user!=null)
+     {
+         // Obtain the FirebaseAnalytics instance.
+         //mFirebaseAnalytics = FirebaseAnalytics.getInstance(SampleActivity.this);
          getSupportActionBar().setTitle("Welcome "+user.getEmail());
-        MobileAds.initialize(this, getString(R.string.YOUR_ADMOB_APP_ID));
+         MobileAds.initialize(this, getString(R.string.YOUR_ADMOB_APP_ID));
+     }
+
         new SlidingRootNavBuilder(this)
                 .withToolbarMenuToggle(toolbar)
                 .withMenuOpened(false)// if true than automatically nav open show on runtime
@@ -136,16 +134,16 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
 
         DrawerAdapter adapter = new DrawerAdapter(Arrays.asList(
                 createItemFor(POS_DASHBOARD).setChecked(true),
-                createItemFor(POS_ADDRESS),
-                createItemFor(POS_FASHION),
-                createItemFor(POS_ACCESSORIES),
-                createItemFor(POS_ELECTRONIC),
-                createItemFor(POS_CART),
+                createItemFor(POS_PROFILE),
+                createItemFor(POS_GROUP),
+                createItemFor(POS_FRIENDS),
+                createItemFor(POS_PUSHFCM),
+                createItemFor(POS_SHARE),
                 new SpaceItem(48),
                 createItemFor(POS_LOGOUT)));
         adapter.setListener(this);
 
-        RecyclerView list = (RecyclerView) findViewById(R.id.list);
+        RecyclerView list =  findViewById(R.id.list);
         list.setNestedScrollingEnabled(true);
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(adapter);
@@ -163,53 +161,56 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
             manager.beginTransaction().replace(R.id.container,homeFragment,"abhi").commit();
             getSupportActionBar().setTitle(screenTitles[POS_DASHBOARD]);
         }
-        if(position==POS_ADDRESS)
+        if(position== POS_PROFILE)
         {
             //startActivity(new Intent(SampleActivity.this,Main2Activity.class));
-            Address_location fragment1=new Address_location();
+            //Address_location fragment1=new Address_location();
+            UserProfileFragment userProfileFragment=new UserProfileFragment();
             FragmentManager manager=getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.container,fragment1,"abhi").commit();
-            getSupportActionBar().setTitle(screenTitles[POS_ADDRESS]);
-
+            manager.beginTransaction().replace(R.id.container,userProfileFragment,"PROFILE").commit();
+            getSupportActionBar().setTitle(screenTitles[POS_PROFILE]);
         }
 
-        if(position==POS_FASHION)
+        if(position== POS_GROUP)
         {
             //startActivity(new Intent(SampleActivity.this,Main2Activity.class));
-            gerg_explist fragment=new gerg_explist();
+            //gerg_explist fragment=new gerg_explist();
+            GroupFragment fragment=new GroupFragment();
             FragmentManager manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.container,fragment,"abhi").commit();
-            getSupportActionBar().setTitle(screenTitles[POS_FASHION]);// for set titles
+            manager.beginTransaction().replace(R.id.container,fragment,"GROUP").commit();
+            getSupportActionBar().setTitle(screenTitles[POS_GROUP]);// for set titles
 //            new SlidingRootNavBuilder(this)
 //                    .wi
         }
-
-        if(position==POS_ACCESSORIES)
+        if(position== POS_FRIENDS)
         {
+            FriendsFragment fragment1=new FriendsFragment();
+            FragmentManager manager=getSupportFragmentManager();
+            manager.beginTransaction().replace(R.id.container,fragment1,"FRIEND").commit();
+            getSupportActionBar().setTitle(screenTitles[POS_FRIENDS]);
+
+        }
+        if (position == POS_PUSHFCM) {
             Product_loadbar fram=new Product_loadbar();
             FragmentManager manager=getSupportFragmentManager();
             manager.beginTransaction().replace(R.id.container,fram,"abhi").commit();
-            getSupportActionBar().setTitle(screenTitles[POS_ACCESSORIES]);
+            getSupportActionBar().setTitle(screenTitles[POS_PUSHFCM]);
         }
-        if (position == POS_ELECTRONIC) {
+        if (position == POS_SHARE) {
             Sms_Verify frag=new Sms_Verify();
             FragmentManager manager=getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.container,frag,"abhi").commit();
-            getSupportActionBar().setTitle(screenTitles[POS_ELECTRONIC]);
-        }
-        if (position == POS_CART) {
-            getSupportActionBar().setTitle(screenTitles[POS_CART]);
+            manager.beginTransaction().replace(R.id.container,frag,"SMS").commit();
+            getSupportActionBar().setTitle(screenTitles[POS_SHARE]);
         }
         if (position == POS_LOGOUT) {
             //mAuth.signOut();
-            FirebaseAuth.getInstance().signOut();
+            ABHI_LOGOUT();
+            //FirebaseAuth.getInstance().signOut();
 
             //starting login activity
             //startActivity(new Intent(this, SignIn.class));
             //closing activity
             //finish();
-
-
         }
         //Fragment selectedScreen = CenteredTextFragment.createFor(screenTitles[position]);
         //showFragment(selectedScreen);
@@ -230,9 +231,9 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
 
     private DrawerItem createItemFor(int position) {
         return new SimpleItem(screenIcons[position], screenTitles[position])
-                .withTextTint(color(R.color.textColorPrimary))
-                .withSelectedIconTint(color(R.color.colorAccent))
-                .withSelectedTextTint(color(R.color.colorAccent));
+                .withTextTint(color(R.color.colorPrimary))
+                .withSelectedIconTint(color(R.color.colorSecondary))
+                .withSelectedTextTint(color(R.color.colorSecondryVarient));
     }
 
     private String[] loadScreenTitles() {
@@ -271,7 +272,7 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
         {    //FirebaseAuth mAuth = FirebaseAuth.getInstance();
             //mAuth.signOut();
             //startActivity(new Intent(SampleActivity.this,SampleActivity.class));
-            Intent a=new Intent(getApplicationContext(),EXP.class);
+            Intent a=new Intent(getApplicationContext(),MainActivity.class);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 startActivity(a, ActivityOptions.makeSceneTransitionAnimation(SampleActivity.this).toBundle());
             }
@@ -279,19 +280,22 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
         if(id==R.id.user)
         {
             //setTitle(user.getEmail());
-            getSupportActionBar().setTitle(user.getEmail());
+            /*if(user!=null)
+            getSupportActionBar().setTitle(user.getEmail());*/
+            Intent a=new Intent(getApplicationContext(),EXP.class);
+                startActivity(a, ActivityOptions.makeSceneTransitionAnimation(SampleActivity.this).toBundle());
         }
         if(id==R.id.logout)
         {            //logging out the user
             //mAuth.signOut();
-            FirebaseAuth.getInstance().signOut();
-            //closing activity
-            //finish();
-            //starting login activity
+           ABHI_LOGOUT();
+
         }
         if(id==R.id.about_home)
         {
-            Toast.makeText(this, "Abhichat version 1.0", Toast.LENGTH_LONG).show();
+            Intent aaa=new Intent(getApplicationContext(),Phone.class);
+            startActivity(aaa, ActivityOptions.makeSceneTransitionAnimation(SampleActivity.this).toBundle());
+            Toast.makeText(this, "AbhiKr version 1.3", Toast.LENGTH_LONG).show();
             return true;
         }
 
@@ -299,12 +303,32 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
         return super.onOptionsItemSelected(item);
     }
 
+    private void ABHI_LOGOUT() {
+        MaterialAlertDialogBuilder materialAlertDialogBuilder=new MaterialAlertDialogBuilder(this);
+        materialAlertDialogBuilder.setIcon(R.drawable.ic_notify_group).setTitle("Abhikr Says : ").setMessage("Are you sure want to logout.")
+                .setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //FirebaseAuth.getInstance().signOut();
+                        mAuth.signOut();
+                        //closing activity
+                        //finish();
+                        //starting login activity
+                    }
+                }).setNegativeButton(getString(android.R.string.no), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(SampleActivity.this, "Welcome back : "+user.getEmail(), Toast.LENGTH_SHORT).show();
+            }
+        }).show();
+    }
+
     @Override
     public void onBackPressed() {
         // super.onBackPressed(); removing for not showing error solution
-        AlertDialog.Builder ald=new AlertDialog.Builder(SampleActivity.this);
+        MaterialAlertDialogBuilder ald=new MaterialAlertDialogBuilder(SampleActivity.this);
 
-        ald.setTitle("ABHIKR SAYS").setMessage("are you sure You want to exit").setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+        ald.setIcon(R.mipmap.ic_launcher).setTitle("ABHIKR SAYS").setMessage("Are you sure You want to exit").setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(SampleActivity.this, "Welcome back", Toast.LENGTH_SHORT).show();
@@ -317,10 +341,7 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
                 finish();
 
             }
-        });
-        AlertDialog alertDialog = ald.create();
-        alertDialog.setCanceledOnTouchOutside(false);
-        alertDialog.show();
+        }).setCancelable(true).show();
 
     }
 

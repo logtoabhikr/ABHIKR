@@ -3,8 +3,6 @@ package com.abhikr.abhikr.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +11,9 @@ import android.widget.TextView;
 
 import com.abhikr.abhikr.Fire_Push.Push_getToken;
 import com.abhikr.abhikr.R;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 
 public class Product_loadbar extends Fragment {

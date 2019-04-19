@@ -11,8 +11,6 @@ import android.os.Binder;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.provider.Settings;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
 import android.util.Base64;
 import android.util.Log;
 
@@ -33,6 +31,9 @@ import com.google.firebase.database.Query;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 
 
 public class FriendChatService extends Service {

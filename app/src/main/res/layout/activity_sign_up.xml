@@ -27,7 +27,7 @@
             android:id="@+id/textView"
             android:layout_gravity="center_horizontal" />
 
-<android.support.design.widget.TextInputLayout
+<com.google.android.material.textfield.TextInputLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
         <EditText
@@ -40,9 +40,9 @@
             android:drawablePadding="5dp"
             android:textColor="@android:color/white"
             android:inputType="textEmailAddress" />
-</android.support.design.widget.TextInputLayout>
+</com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         <EditText
@@ -54,7 +54,7 @@
             android:drawableRight="@drawable/password"
             android:drawablePadding="5dp"
             android:inputType="textPassword" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/buttonSignup"

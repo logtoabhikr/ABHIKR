@@ -38,45 +38,50 @@
             android:layout_gravity="center|center_horizontal"
             android:layout_marginTop="1dp" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox.Dense"
+            app:boxCornerRadiusBottomEnd="@dimen/activity_horizontal_margin"
+            app:boxCornerRadiusTopStart="@dimen/activity_horizontal_margin">
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
                 android:hint="Enter your email"
                 android:drawableRight="@drawable/gmail"
-                android:drawablePadding="5dp"
                 android:textColor="@android:color/white"
                 android:inputType="textEmailAddress" />
-        </android.support.design.widget.TextInputLayout>
-        <android.support.design.widget.TextInputLayout
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputEditText.FilledBox.Dense"
+            app:boxCornerRadiusBottomEnd="@dimen/activity_horizontal_margin"
+            app:boxCornerRadiusTopStart="@dimen/activity_horizontal_margin">
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
                 android:hint="Enter your password"
                 android:textColor="@android:color/white"
                 android:drawableRight="@drawable/password"
-                android:drawablePadding="5dp"
                 android:inputType="textPassword" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonSignin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:background="@drawable/background"
+            style="@style/Widget.MaterialComponents.Button"
+            app:cornerRadius="@dimen/abhikr_margin"
+            app:strokeColor="@color/colorPrimaryDark"
+            app:strokeWidth="1dp"
             android:textColor="@android:color/white"
             android:text="Sign In" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:text="Not have an account? Signup Here"
             android:id="@+id/textViewSignUp"
             android:textAlignment="center"
@@ -85,7 +90,7 @@
             android:layout_width="match_parent"
             android:textColor="@android:color/white"
             android:layout_height="wrap_content" />
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:text="Forgot pass ? Don't worry ! Reset Here"
             android:id="@+id/textViewforgotpass"
             android:textAlignment="center"
@@ -94,8 +99,8 @@
             android:textColor="@android:color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabsigin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"

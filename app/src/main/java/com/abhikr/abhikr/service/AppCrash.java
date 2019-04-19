@@ -6,6 +6,7 @@ import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import io.fabric.sdk.android.Fabric;
 
 
@@ -29,6 +30,7 @@ public class AppCrash extends Application {
        {
            e.printStackTrace();
        }
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
     void abhiprofile()
     {

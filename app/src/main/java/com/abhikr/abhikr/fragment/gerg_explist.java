@@ -1,7 +1,6 @@
 package com.abhikr.abhikr.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +10,13 @@ import android.widget.Toast;
 import com.abhikr.abhikr.R;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import androidx.fragment.app.Fragment;
 
 public class gerg_explist extends Fragment {
 

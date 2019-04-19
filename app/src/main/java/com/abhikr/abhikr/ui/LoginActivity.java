@@ -2,28 +2,41 @@ package com.abhikr.abhikr.ui;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import com.abhikr.abhikr.MainActivity;
 import com.abhikr.abhikr.R;
+import com.abhikr.abhikr.SampleActivity;
+import com.abhikr.abhikr.SignIn;
 import com.abhikr.abhikr.data.SharedPreferenceHelper;
 import com.abhikr.abhikr.data.StaticConfig;
 import com.abhikr.abhikr.model.User;
+import com.abhikr.abhikr.util.ImageUtils;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -31,17 +44,26 @@ import com.google.firebase.database.ValueEventListener;
 import com.yarolegovich.lovelydialog.LovelyInfoDialog;
 import com.yarolegovich.lovelydialog.LovelyProgressDialog;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.app.ActivityCompat;
 
-public class LoginActivity extends AppCompatActivity {
+
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
     private static String TAG = "LoginActivity";
     FloatingActionButton fab;
     private final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-    private EditText editTextUsername, editTextPassword;
+    private AppCompatEditText editTextUsername, editTextPassword;
     private LovelyProgressDialog waitingDialog;
 
     private AuthUtils authUtils;
@@ -49,6 +71,9 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseUser user;
     private boolean firstTimeAccess;
+    private static final int RC_SIGN_IN = 9;
+    private GoogleApiClient mGoogleApiClient;
+    private SignInButton signInButton;
 
     @Override
     protected void onStart() {
@@ -60,19 +85,45 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        editTextUsername = (EditText) findViewById(R.id.et_username);
-        editTextPassword = (EditText) findViewById(R.id.et_password);
+        fab =  findViewById(R.id.fabloginactv);
+        editTextUsername =  findViewById(R.id.et_username);
+        editTextPassword = findViewById(R.id.et_password);
         firstTimeAccess = true;
         initFirebase();
+
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        int PERMISSION_ALL = 1;
+        String[] PERMISSIONS = { android.Manifest.permission.READ_PHONE_STATE,
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.ACCESS_NETWORK_STATE, android.Manifest.permission.CHANGE_NETWORK_STATE,
+                android.Manifest.permission.ACCESS_WIFI_STATE, android.Manifest.permission.GET_ACCOUNTS};
+
+        if (!hasPermissions(this, PERMISSIONS)) {
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+        }
+
+
+        signInButton =  findViewById(R.id.googlesignin);
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                startActivityForResult(signInIntent, RC_SIGN_IN);
+            }
+
+        });
     }
 
-
-    /**
-     * Khởi tạo các thành phần cần thiết cho việc quản lý đăng nhập
-     */
     private void initFirebase() {
-        //Khoi tao thanh phan de dang nhap, dang ky
         mAuth = FirebaseAuth.getInstance();
         authUtils = new AuthUtils();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -82,9 +133,9 @@ public class LoginActivity extends AppCompatActivity {
                 if (user != null) {
                     // User is signed in
                     StaticConfig.UID = user.getUid();
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    //Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                     if (firstTimeAccess) {
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        startActivity(new Intent(LoginActivity.this, SampleActivity.class));
                         LoginActivity.this.finish();
                     }
                 } else {
@@ -97,7 +148,91 @@ public class LoginActivity extends AppCompatActivity {
         //Khoi tao dialog waiting khi dang nhap
         waitingDialog = new LovelyProgressDialog(this).setCancelable(false);
     }
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
+    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+        waitingDialog.setIcon(R.drawable.ic_person_low)
+                .setTitle("Login....")
+                .setTopColorRes(R.color.colorPrimary)
+                .show();
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        waitingDialog.dismiss();
+                        if (!task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "signInWithCredential:Failure");
+
+                            new LovelyInfoDialog(LoginActivity.this) {
+                                @Override
+                                public LovelyInfoDialog setConfirmButtonText(String text) {
+                                    findView(com.yarolegovich.lovelydialog.R.id.ld_btn_confirm).setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            dismiss();
+                                        }
+                                    });
+                                    return super.setConfirmButtonText(text);
+                                }
+                            }
+                                    .setTopColorRes(R.color.colorAccent)
+                                    .setIcon(R.drawable.ic_add_friend)
+                                    .setTitle("Register false")
+                                    .setMessage("Email Already exist!")
+                                    .setConfirmButtonText("ok")
+                                    .setCancelable(false)
+                                    .show();
+                        } else {
+                            user = task.getResult().getUser();
+                            if(user!=null) {
+                                // creating db with sharedpref
+                                User newUser = new User();
+                                newUser.email = user.getEmail();
+                                newUser.name = user.getEmail().substring(0, user.getEmail().indexOf("@"));
+                                //Toast.makeText(LoginActivity.this, ""+user.getPhotoUrl(), Toast.LENGTH_SHORT).show();
+                                //newUser.avata = StaticConfig.STR_DEFAULT_BASE64; google signin will also give image
+                                try {
+                                    InputStream inputStream = getContentResolver().openInputStream(user.getPhotoUrl());
+
+                                    Bitmap imgBitmap = BitmapFactory.decodeStream(inputStream);
+                                    imgBitmap = ImageUtils.cropToSquare(imgBitmap);
+                                    InputStream is = ImageUtils.convertBitmapToInputStream(imgBitmap);
+                                    final Bitmap liteImage = ImageUtils.makeImageLite(is,
+                                            imgBitmap.getWidth(), imgBitmap.getHeight(),
+                                            ImageUtils.AVATAR_WIDTH, ImageUtils.AVATAR_HEIGHT);
+
+                                    newUser.avata = ImageUtils.encodeBase64(liteImage);
+                                    FirebaseDatabase.getInstance().getReference().child("user/" + user.getUid()).setValue(newUser);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "signInWithCredential:failure", task.getException());
+                                Toast.makeText(LoginActivity.this, "Authentication Successfull.",
+                                        Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "signInWithCredential: Successfull :"+task.getResult(), Toast.LENGTH_LONG).show();
+                                startActivity(new Intent(LoginActivity.this, SampleActivity.class));
+                                LoginActivity.this.finish();
+                            }
+                            else
+                            {
+                                Toast.makeText(LoginActivity.this, "Signin failur due to user data null", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
+    }
     @Override
     protected void onStop() {
         super.onStop();
@@ -126,6 +261,19 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == StaticConfig.REQUEST_CODE_REGISTER && resultCode == RESULT_OK) {
             authUtils.createUser(data.getStringExtra(StaticConfig.STR_EXTRA_USERNAME), data.getStringExtra(StaticConfig.STR_EXTRA_PASSWORD));
+        }
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = result.getSignInAccount();
+                firebaseAuthWithGoogle(account);
+            } else {
+                // Google Sign In failed, update UI appropriately
+                // ...
+                Toast.makeText(getApplicationContext(), "Google Signin failed : "+result, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -158,6 +306,15 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Invalid email", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d(TAG, "onConnectionFailed:" + connectionResult);
+        //Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
+        Toast toast=Toast.makeText(getApplicationContext(), "Google play services error...", Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.TOP|Gravity.CENTER, 0, 330);
+        toast.show();
     }
 
     /**
@@ -207,7 +364,7 @@ public class LoginActivity extends AppCompatActivity {
                             } else {
                                 initNewUserInfo();
                                 Toast.makeText(LoginActivity.this, "Register and Login success", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                startActivity(new Intent(LoginActivity.this, SampleActivity.class));
                                 LoginActivity.this.finish();
                             }
                         }
@@ -265,7 +422,7 @@ public class LoginActivity extends AppCompatActivity {
                                         .show();
                             } else {
                                 saveUserInfo();
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                startActivity(new Intent(LoginActivity.this, SampleActivity.class));
                                 LoginActivity.this.finish();
                             }
                         }

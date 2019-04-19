@@ -8,7 +8,6 @@ import android.content.ServiceConnection;
 import android.net.ConnectivityManager;
 import android.os.IBinder;
 
-
 import com.abhikr.abhikr.data.SharedPreferenceHelper;
 import com.abhikr.abhikr.data.StaticConfig;
 import com.abhikr.abhikr.model.Friend;

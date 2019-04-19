@@ -1,14 +1,8 @@
 package com.abhikr.abhikr.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.AppCompatButton;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +25,10 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 
 public class Sms_Verify extends Fragment implements View.OnClickListener {

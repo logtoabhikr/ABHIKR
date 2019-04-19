@@ -3,6 +3,7 @@ package com.abhikr.abhikr.Fire_Push;
 /**
  * Created by ak on 06/20/17.
  */
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 
 import com.abhikr.abhikr.R;
@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import androidx.core.app.NotificationCompat;
 
 
 public class MyNotificationManager {
@@ -103,8 +105,7 @@ public class MyNotificationManager {
             connection.setDoInput(true);
             connection.connect();
             InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
+            return BitmapFactory.decodeStream(input);
         } catch (IOException e) {
             e.printStackTrace();
             return null;

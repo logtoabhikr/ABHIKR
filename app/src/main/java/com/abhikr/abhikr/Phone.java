@@ -5,11 +5,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.transition.Explode;
 import android.util.Log;
@@ -20,6 +15,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthResult;
@@ -31,6 +27,10 @@ import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import dmax.dialog.SpotsDialog;
 
 public class Phone extends AppCompatActivity implements
@@ -68,13 +68,16 @@ public class Phone extends AppCompatActivity implements
             getWindow().setEnterTransition(new Explode());
         }
 
-        notesignup= (TextView) findViewById(R.id.note);
-        mPhoneNumberField = (EditText) findViewById(R.id.field_phone_number);
-        mVerificationField = (EditText) findViewById(R.id.field_verification_code);
-        mStartButton = (Button) findViewById(R.id.button_start_verification);
-        mVerifyButton = (Button) findViewById(R.id.button_verify_phone);
-        mResendButton = (Button) findViewById(R.id.button_resend);
-        spotsdialog=new SpotsDialog(Phone.this, R.style.abhi);
+        notesignup=  findViewById(R.id.note);
+        mPhoneNumberField =  findViewById(R.id.field_phone_number);
+        mVerificationField =  findViewById(R.id.field_verification_code);
+        mStartButton =  findViewById(R.id.button_start_verification);
+        mVerifyButton =  findViewById(R.id.button_verify_phone);
+        mResendButton = findViewById(R.id.button_resend);
+        spotsdialog=new SpotsDialog.Builder()
+                .setContext(getApplicationContext())
+                .setTheme(R.style.abhi)
+                .build();
         mStartButton.setOnClickListener(this);
         mVerifyButton.setOnClickListener(this);
         mResendButton.setOnClickListener(this);
@@ -87,9 +90,9 @@ public class Phone extends AppCompatActivity implements
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser()!=null)
                 {
-                    Intent i1=new Intent(Phone.this,SampleActivity.class);
+                    /*Intent i1=new Intent(Phone.this,SampleActivity.class);
                     startActivity(i1, ActivityOptions.makeSceneTransitionAnimation(Phone.this).toBundle());
-                    finish();
+                    finish();*/
                     spotsdialog.dismiss();
                 }
             }

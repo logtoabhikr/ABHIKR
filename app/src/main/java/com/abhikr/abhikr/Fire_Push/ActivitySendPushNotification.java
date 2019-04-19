@@ -2,7 +2,6 @@ package com.abhikr.abhikr.Fire_Push;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -27,6 +26,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class ActivitySendPushNotification extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
 

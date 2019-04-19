@@ -6,8 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +29,9 @@ import com.google.android.gms.common.api.Status;
 
 import java.io.InputStream;
 import java.net.URL;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 /*00:92:19:9D:DB:C2:38:56:6D:7B:AF:4F:F7:81:AC:82:46:C4:05:87*/
 public class GPlusFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener {

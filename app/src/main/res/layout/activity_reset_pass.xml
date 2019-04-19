@@ -39,7 +39,7 @@ android:background="@drawable/background"
             android:textColor="@color/colorPrimary"
             android:textSize="14dp" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -54,7 +54,7 @@ android:background="@drawable/background"
                 android:inputType="textEmailAddress"
                 android:textColor="@android:color/white"
                 android:textColorHint="@color/colorPrimaryDark" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Login Button -->
 

@@ -2,11 +2,12 @@ package com.abhikr.abhikr;
 
 /**
  * Created by ak on 08/19/17.
- */import android.app.ProgressDialog;
-import android.support.annotation.VisibleForTesting;
-import android.support.v7.app.AppCompatActivity;
+ */
 
-import com.abhikr.abhikr.R;
+import android.app.ProgressDialog;
+
+import androidx.annotation.VisibleForTesting;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class BaseActivity extends AppCompatActivity {
 

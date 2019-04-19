@@ -5,9 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.view.View;
@@ -16,12 +13,15 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.EditText;
 import android.widget.Toast;
 
-
 import com.abhikr.abhikr.R;
 import com.abhikr.abhikr.data.StaticConfig;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -36,11 +36,11 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        cvAdd = (CardView) findViewById(R.id.cv_add);
-        editTextUsername = (EditText) findViewById(R.id.et_username);
-        editTextPassword = (EditText) findViewById(R.id.et_password);
-        editTextRepeatPassword = (EditText) findViewById(R.id.et_repeatpassword);
+        fab =  findViewById(R.id.fabregis);
+        cvAdd =  findViewById(R.id.cv_add);
+        editTextUsername =  findViewById(R.id.et_username);
+        editTextPassword =  findViewById(R.id.et_password);
+        editTextRepeatPassword =  findViewById(R.id.et_repeatpassword);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ShowEnterAnimation();
         }

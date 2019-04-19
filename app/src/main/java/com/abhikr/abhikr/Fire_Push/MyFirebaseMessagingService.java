@@ -21,6 +21,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
 
     @Override
+    public void onNewToken(String s) {
+        super.onNewToken(s);
+        Log.d(TAG, "Refreshed token: " + s);
+        storeToken(s);
+    }
+    private void storeToken(String token) {
+        //saving the token on shared preferences
+        SharedPrefManager.getInstance(getApplicationContext()).saveDeviceToken(token);
+    }
+
+    @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         if (remoteMessage.getData().size() > 0) {
             Log.e(TAG, "Data Payload: " + remoteMessage.getData().toString());

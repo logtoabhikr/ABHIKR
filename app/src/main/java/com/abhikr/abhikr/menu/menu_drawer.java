@@ -1,11 +1,12 @@
 package com.abhikr.abhikr.menu;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.abhikr.abhikr.R;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Created by ak on 11/26/17.

@@ -17,7 +17,7 @@
             android:layout_width="150dp"
             android:layout_height="100dp" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -27,9 +27,9 @@
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:hint="User email" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -39,9 +39,9 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:hint="Password"/>
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -52,9 +52,9 @@
                 android:maxLength="10"
                 android:inputType="number"
                 android:hint="Phone" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonRegister"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

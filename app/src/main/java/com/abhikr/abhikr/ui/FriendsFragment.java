@@ -10,12 +10,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.util.Base64;
 import android.util.Log;
@@ -53,6 +47,12 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -110,8 +110,6 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
         recyclerListFrends = (RecyclerView) layout.findViewById(R.id.recycleListFriend);
         recyclerListFrends.setLayoutManager(linearLayoutManager);
         mSwipeRefreshLayout = (SwipeRefreshLayout) layout.findViewById(R.id.swipeRefreshLayout);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
-                R.color.colorPrimary1,R.color.colorPrimaryDark);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         adapter = new ListFriendsAdapter(getContext(), dataListFriend, this);
         recyclerListFrends.setAdapter(adapter);
