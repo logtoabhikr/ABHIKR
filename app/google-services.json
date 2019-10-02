@@ -15,19 +15,19 @@
       },
       "oauth_client": [
         {
+          "client_id": "237041780036-nt2gdm7v5kbu21h461bcfbb8ptb0h730.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.abhikr.abhikr",
+            "certificate_hash": "f86a50d12821ce0f04821b9d7c6b63ff9a5571db"
+          }
+        },
+        {
           "client_id": "237041780036-jg8sh4eagv1sbbc3rkk7ju4e3u18dp1j.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.abhikr.abhikr",
             "certificate_hash": "0092199ddbc238566d7baf4ff781ac8246c40587"
-          }
-        },
-        {
-          "client_id": "237041780036-77nhmsdpt2qehcm5k91qhgtajpj0dai6.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.abhikr.abhikr",
-            "certificate_hash": "f86a50d12821ce0f04821b9d7c6b63ff9a5571db"
           }
         },
         {
@@ -41,22 +41,16 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "237041780036-1ngfmat6stln7dq8kvptv1a4tlcu7mho.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-1434360809532426~7820648808"
     }
   ],
   "configuration_version": "1"

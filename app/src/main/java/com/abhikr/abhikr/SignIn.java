@@ -54,7 +54,7 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener,Go
 
     //progress dialog
     private ProgressDialog progressDialog;
-    BaseActivity ba;
+    //BaseActivity ba;
     AlertDialog spotsdialog;
 
 
