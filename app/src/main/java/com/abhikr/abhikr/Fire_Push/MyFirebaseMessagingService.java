@@ -1,6 +1,6 @@
 package com.abhikr.abhikr.Fire_Push;
 
-/**
+/*
  * Created by ak on 06/20/17.
  */
 import android.content.Intent;
@@ -12,9 +12,6 @@ import com.google.firebase.messaging.RemoteMessage;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by Belal on 03/11/16.
- */
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 

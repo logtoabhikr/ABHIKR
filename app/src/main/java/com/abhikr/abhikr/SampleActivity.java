@@ -24,6 +24,7 @@ import com.abhikr.abhikr.ui.GroupFragment;
 import com.abhikr.abhikr.ui.LoginActivity;
 import com.abhikr.abhikr.ui.UserProfileFragment;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,6 +38,7 @@ import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
@@ -71,8 +73,10 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO_TIME); //For night mode theme
+        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES); //For day mode theme
         setContentView(R.layout.activity_sample);
-       final Toolbar toolbar = findViewById(R.id.toolbar);
+       final MaterialToolbar toolbar = findViewById(R.id.toolbar_sample);
         setSupportActionBar(toolbar);
         if(getSupportActionBar() != null) {
             //getSupportActionBar().setTitle(R.string.app_name);
