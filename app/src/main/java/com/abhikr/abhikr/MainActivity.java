@@ -14,6 +14,7 @@ import com.abhikr.abhikr.ui.FriendsFragment;
 import com.abhikr.abhikr.ui.GroupFragment;
 import com.abhikr.abhikr.ui.LoginActivity;
 import com.abhikr.abhikr.ui.UserProfileFragment;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -30,7 +31,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-
 
 public class MainActivity extends AppCompatActivity {
     private static String TAG = "MainActivity";
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+       final MaterialToolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if(getSupportActionBar() != null) {
             //getSupportActionBar().setTitle(R.string.app_name);
@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(true);
         }
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        floatButton = (FloatingActionButton) findViewById(R.id.fabmainatv);
+        viewPager =  findViewById(R.id.viewpager);
+        floatButton =  findViewById(R.id.fabmainatv);
         initTab();
         initFirebase();
         // Obtain the FirebaseAnalytics instance.
