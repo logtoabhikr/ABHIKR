@@ -64,7 +64,6 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/Username"
                         android:inputType="textEmailAddress"
-
                         android:textColor="#2fa881"
                         android:textCursorDrawable="@drawable/bg_input_cursor"
                         android:textSize="13sp" />

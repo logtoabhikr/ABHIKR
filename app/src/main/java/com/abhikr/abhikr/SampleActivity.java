@@ -104,11 +104,6 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
                 //if the user is not logged in
                 //that means current user will return null
                 if(firebaseAuth.getCurrentUser() == null){
-//            //closing this activity
-//            finish();
-//            //starting login activity
-//            startActivity(new Intent(this, SignIn.class));
-                    // After logout redirect user to Login Activity
                     Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                     /*// Closing all the Activities
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -118,7 +113,7 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
 
                     // Staring Login Activity
                         startActivity(i,ActivityOptions.makeSceneTransitionAnimation(SampleActivity.this).toBundle());
-                    finish();
+                    supportFinishAfterTransition();
                 }
             }
         };
@@ -150,9 +145,9 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
 
         DrawerAdapter adapter = new DrawerAdapter(Arrays.asList(
                 createItemFor(POS_DASHBOARD).setChecked(true),
-                createItemFor(POS_PROFILE),
-                createItemFor(POS_GROUP),
                 createItemFor(POS_FRIENDS),
+                createItemFor(POS_GROUP),
+                createItemFor(POS_PROFILE),
                 createItemFor(POS_PUSHFCM),
                 createItemFor(POS_SHARE),
                 new SpaceItem(48),
@@ -169,7 +164,7 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
                 .context(getApplicationContext())
                 .awsConfiguration(new AWSConfiguration(getApplicationContext()))
                 .build();
-        runMutation(); runQuery(); subscribe();// running aws app amplify single wala query and subscribe
+        //runMutation(); runQuery(); subscribe();// running aws app amplify single wala query and subscribe
     }
     public void runMutation(){
         CreateTodoInput createTodoInput = CreateTodoInput.builder().
@@ -243,6 +238,14 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
             manager.beginTransaction().replace(R.id.container,homeFragment,"abhi").commit();
             getSupportActionBar().setTitle(screenTitles[POS_DASHBOARD]);
         }
+        if(position== POS_FRIENDS)
+        {
+            FriendsFragment fragment1=new FriendsFragment();
+            FragmentManager manager=getSupportFragmentManager();
+            manager.beginTransaction().replace(R.id.container,fragment1,"FRIEND").commit();
+            getSupportActionBar().setTitle(screenTitles[POS_FRIENDS]);
+
+        }
         if(position== POS_PROFILE)
         {
             //startActivity(new Intent(SampleActivity.this,Main2Activity.class));
@@ -264,14 +267,6 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
 //            new SlidingRootNavBuilder(this)
 //                    .wi
         }
-        if(position== POS_FRIENDS)
-        {
-            FriendsFragment fragment1=new FriendsFragment();
-            FragmentManager manager=getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.container,fragment1,"FRIEND").commit();
-            getSupportActionBar().setTitle(screenTitles[POS_FRIENDS]);
-
-        }
         if (position == POS_PUSHFCM) {
             Product_loadbar fram=new Product_loadbar();
             FragmentManager manager=getSupportFragmentManager();
@@ -279,20 +274,20 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
             getSupportActionBar().setTitle(screenTitles[POS_PUSHFCM]);
         }
         if (position == POS_SHARE) {
-            Sms_Verify frag=new Sms_Verify();
+            Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+            sharingIntent.setType("text/plain");
+            String shareBody = "Hi, This is abhishek Kumar. I just created a app for secure personal/family chat application with some unique featur.Hope i will live soon! ";
+            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "AbhiKr Coming Soon");
+            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+            startActivity(Intent.createChooser(sharingIntent, "Share via"));
+           /* Sms_Verify frag=new Sms_Verify();
             FragmentManager manager=getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.container,frag,"SMS").commit();
+            manager.beginTransaction().replace(R.id.container,frag,"SMS").commit();*/
             getSupportActionBar().setTitle(screenTitles[POS_SHARE]);
         }
         if (position == POS_LOGOUT) {
             //mAuth.signOut();
             ABHI_LOGOUT();
-            //FirebaseAuth.getInstance().signOut();
-
-            //starting login activity
-            //startActivity(new Intent(this, SignIn.class));
-            //closing activity
-            //finish();
         }
         //Fragment selectedScreen = CenteredTextFragment.createFor(screenTitles[position]);
         //showFragment(selectedScreen);

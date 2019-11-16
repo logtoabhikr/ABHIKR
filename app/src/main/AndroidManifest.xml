@@ -25,8 +25,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true"
-        tools:ignore="GoogleAppIndexingWarning">
+        android:usesCleartextTraffic="true">
+
         <service android:name="org.eclipse.paho.android.service.MqttService" />
         <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
@@ -81,7 +81,6 @@
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".menu.menu_drawer" />
-
 
         <service android:name=".Fire_Push.MyFirebaseMessagingService"
             android:exported="true"

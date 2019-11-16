@@ -65,7 +65,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
     private AppCompatEditText editTextUsername, editTextPassword;
     private LovelyProgressDialog waitingDialog;
-
     private AuthUtils authUtils;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -90,7 +89,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         editTextPassword = findViewById(R.id.et_password);
         firstTimeAccess = true;
         initFirebase();
-
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -304,7 +302,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         if (validate(username, ";")) {
             authUtils.resetPassword(username);
         } else {
-            Toast.makeText(this, "Invalid email", Toast.LENGTH_SHORT).show();
+            editTextUsername.requestFocus();
+            Toast.makeText(this, "Please enter your email id", Toast.LENGTH_SHORT).show();
         }
     }
 

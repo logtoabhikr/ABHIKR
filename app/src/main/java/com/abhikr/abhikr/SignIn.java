@@ -56,8 +56,6 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener,Go
     private ProgressDialog progressDialog;
     BaseActivity ba;
     AlertDialog spotsdialog;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
