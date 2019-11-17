@@ -46,7 +46,6 @@ public class Chat_MainFrag extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseUser user;
-    private FirebaseAnalytics mFirebaseAnalytics;
 
 
     @Override
@@ -68,15 +67,6 @@ public class Chat_MainFrag extends Fragment {
 
             initTab(view);
             initFirebase();
-        try
-        {
-            // Obtain the FirebaseAnalytics instance.
-            mFirebaseAnalytics = FirebaseAnalytics.getInstance(getContext());
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
 
         //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         return view;
@@ -93,7 +83,7 @@ public class Chat_MainFrag extends Fragment {
                 } else {
                     //getActivity().finish();
                     // User is signed in
-                    startActivity(new Intent(getContext(), LoginActivity.class));
+                    //startActivity(new Intent(getContext(), LoginActivity.class));
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
                 // ...
@@ -127,7 +117,7 @@ public class Chat_MainFrag extends Fragment {
      * Khoi tao 3 tab
      */
     private void initTab(View view) {
-        tabLayout = (TabLayout) view.findViewById(R.id.tabs);
+        tabLayout =  view.findViewById(R.id.tabs);
         tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorIndivateTab));
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
@@ -154,7 +144,11 @@ public class Chat_MainFrag extends Fragment {
         adapter.addFrag(new UserProfileFragment(), STR_INFO_FRAGMENT);
         floatButton.setOnClickListener(((FriendsFragment) adapter.getItem(0)).onClickFloatButton.getInstance(getActivity()));
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(3);
+        //viewPager.setOffscreenPageLimit(3);
+        int limit = (adapter.getCount() > 1 ? adapter.getCount() - 1 : 1);
+        //adapter.notifyDataSetChanged(); if u choose 1 it will again load only one tab at a time( by deafult its take 1 as limit value)
+        //ConnectionAbhikr.getInstance(getApplicationContext()).ABhiToast(String.valueOf(limit));
+        viewPager.setOffscreenPageLimit(limit);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

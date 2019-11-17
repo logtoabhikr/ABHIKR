@@ -26,22 +26,31 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".projects.WorkStation"
+            android:label="@string/title_activity_work_station"
+            android:configChanges="keyboardHidden|screenLayout|screenSize|orientation"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".customtab.WebviewActivity" />
 
-        <service android:name="org.eclipse.paho.android.service.MqttService" />
-        <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
+        <receiver android:name=".customtab.ActionBroadcastReceiver" />
+        <receiver android:name=".ABHIWeb$CopyBroadcastReceiver" />
+
+        <service android:name="org.eclipse.paho.android.service.MqttService" /> <!-- Sample AdMob App ID: ca-app-pub-3940256099942544~3347511713 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/YOUR_ADMOB_APP_ID"/>
+            android:value="@string/YOUR_ADMOB_APP_ID" />
+
         <activity
             android:name=".ui.LoginActivity"
             android:configChanges="keyboardHidden|screenLayout|screenSize|orientation"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/TranslucentBackground"/>
+            android:theme="@style/TranslucentBackground" />
         <activity android:name=".MainActivity_old" />
         <activity
             android:name=".Splash"
-            android:theme="@style/SplashTheme"/>
+            android:theme="@style/SplashTheme" />
         <activity android:name=".EXP" />
         <activity
             android:name=".SignUp"
@@ -73,36 +82,47 @@
                 android:value="com.abhikr.abhikr.SignUp" />
         </activity>
         <activity android:name=".GoogleSignIn" />
-        <activity android:name=".Fire_Push.ActivitySendPushNotification" />
-        <activity android:name=".Fire_Push.Main2Activity" />
+        <activity android:name=".firepush.ActivitySendPushNotification" />
+        <activity android:name=".firepush.Main2Activity" />
         <activity
             android:name=".SampleActivity"
             android:configChanges="keyboardHidden|screenLayout|screenSize|orientation"
             android:exported="true"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter android:label="@string/app_name"
+                android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="http"
+                    android:host="www.abhikr.com" />
+            </intent-filter>
+        </activity>
         <activity android:name=".menu.menu_drawer" />
 
-        <service android:name=".Fire_Push.MyFirebaseMessagingService"
-            android:exported="true"
+        <service
+            android:name=".firepush.AbhiFirebaseMessagingService"
+            android:enabled="true"
+            android:exported="false"
             android:stopWithTask="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <!--
- Set custom default icon. This is used when no icon is set for incoming notification messages.
-     See README(https://goo.gl/l4GJaQ) for more.
-        -->
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_notify_group" />
-        <!--
- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more.
-        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/colorPrimary" />
+            android:resource="@color/colorAccent" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="default_channel_id" />
 
         <activity
             android:name=".MainActivity"
@@ -132,7 +152,8 @@
             android:name="firebase_crashlytics_collection_enabled"
             android:value="false" />
 
-        <activity android:name=".Splash_Reveal"
+        <activity
+            android:name=".Splash_Reveal"
             android:theme="@style/AppTheme.Transparent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

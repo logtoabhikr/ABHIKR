@@ -6,7 +6,7 @@
         <item>FRIENDS</item>
         <item>GROUPS</item>
         <item>PROFILE</item>
-        <item>PUSH FCM</item>
+        <item>@string/title_activity_work_station</item>
        <!-- <item>UTHHAN</item>
         <item>BARGAIN STORE</item>
         <item>NEW PRODUCT</item>-->
@@ -20,10 +20,10 @@
         <item>@drawable/ic_explicit_black_24dp</item>
         <item>@drawable/ic_explicit_black_24dp</item>
         <item>@drawable/ic_explicit_black_24dp</item>
-        <item>@drawable/ic_add_to_photos_black_24dp</item>
-        <item>@android:drawable/ic_menu_share</item>
+        <item>@drawable/favicondrawable</item>
+        <item>@drawable/ic_share_new</item>
         <item>0</item>
-        <item>@drawable/ic_logout_grey600_24dp</item>
+        <item>@drawable/ic_logout</item>
     </array>
 
 </resources>

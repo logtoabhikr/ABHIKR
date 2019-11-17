@@ -40,3 +40,5 @@
 -keepclassmembers class com.abhikr.abhikr.** {
      *;
 }
+#-keepclassmembers class com.abhikr.abhikr.projects.WorkModal.** { *; }
+-keep public class com.abhikr.abhikr.projects.** { *; }

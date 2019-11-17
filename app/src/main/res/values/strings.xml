@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">ABHIKR</string>
-    <string name="account_balance">My Account</string>
+    <string name="account_balance">Portfolio</string>
     <string name="balance_currency">Gerg</string>
     <string name="balance_amount">Abhi</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -75,5 +75,29 @@
     <string name="name">Name :</string>
     <string name="YOUR_ADMOB_APP_ID">ca-app-pub-1434360809532426~7820648808</string>
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
-
+    <string name="title_activity_work_station">WorkStation</string>
+    <string name="action_button_toast_text">AbhiKr Web with URL: %s</string>
+    <string name="toolbar_toast_text">AbhiKr Search Product URL: %s</string>
+    <string name="unknown_toast_text">Unknown Action Clicked with URL: %s</string>
+    <string name="menu_item_title">AbhiKr Home</string>
+    <array name="swipe_colors">
+        <item>@color/red_500</item>
+        <item>@color/pink_500</item>
+        <item>@color/purple_500</item>
+        <item>@color/deep_purple_500</item>
+        <item>@color/indigo_500</item>
+        <item>@color/blue_500</item>
+        <item>@color/light_blue_500</item>
+        <item>@color/cyan_500</item>
+        <item>@color/teal_500</item>
+        <item>@color/green_500</item>
+        <item>@color/light_green_500</item>
+        <item>@color/lime_500</item>
+        <item>@color/yellow_500</item>
+        <item>@color/orange_500</item>
+        <item>@color/deep_orange_500</item>
+        <item>@color/brown_500</item>
+        <item>@color/grey_500</item>
+        <item>@color/blue_grey_500</item>
+    </array>
 </resources>

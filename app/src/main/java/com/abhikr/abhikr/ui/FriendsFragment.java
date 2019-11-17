@@ -107,9 +107,10 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
         }
         View layout = inflater.inflate(R.layout.fragment_people, container, false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        recyclerListFrends = (RecyclerView) layout.findViewById(R.id.recycleListFriend);
+        recyclerListFrends =  layout.findViewById(R.id.recycleListFriend);
         recyclerListFrends.setLayoutManager(linearLayoutManager);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) layout.findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout =  layout.findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setColorSchemeColors(getResources().getIntArray(R.array.swipe_colors));
         mSwipeRefreshLayout.setOnRefreshListener(this);
         adapter = new ListFriendsAdapter(getContext(), dataListFriend, this);
         recyclerListFrends.setAdapter(adapter);

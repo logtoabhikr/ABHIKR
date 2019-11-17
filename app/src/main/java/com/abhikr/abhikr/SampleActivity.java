@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,13 +14,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.abhikr.abhikr.firepush.NotificationBase;
+import com.abhikr.abhikr.firepush.NotificationVO;
 import com.abhikr.abhikr.fragment.Chat_MainFrag;
-import com.abhikr.abhikr.fragment.Product_loadbar;
-import com.abhikr.abhikr.fragment.Sms_Verify;
 import com.abhikr.abhikr.menu.DrawerAdapter;
 import com.abhikr.abhikr.menu.DrawerItem;
 import com.abhikr.abhikr.menu.SimpleItem;
 import com.abhikr.abhikr.menu.SpaceItem;
+import com.abhikr.abhikr.projects.WorkStation;
 import com.abhikr.abhikr.ui.FriendsFragment;
 import com.abhikr.abhikr.ui.GroupFragment;
 import com.abhikr.abhikr.ui.LoginActivity;
@@ -35,8 +37,14 @@ import com.apollographql.apollo.GraphQLCall;
 import com.apollographql.apollo.api.Response;
 import com.apollographql.apollo.exception.ApolloException;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.appindexing.Action;
+import com.google.firebase.appindexing.FirebaseAppIndex;
+import com.google.firebase.appindexing.FirebaseUserActions;
+import com.google.firebase.appindexing.Indexable;
+import com.google.firebase.appindexing.builders.Actions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
@@ -48,7 +56,6 @@ import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -64,7 +71,7 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
     private static final int POS_FRIENDS = 1;
     private static final int POS_GROUP = 2;
     private static final int POS_PROFILE = 3;
-    private static final int POS_PUSHFCM =4;
+    private static final int POS_WORKSTATION =4;
     private static final int POS_SHARE = 5;
     private static final int POS_LOGOUT=7;
 
@@ -82,15 +89,17 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthStateListener);
+        FirebaseAppIndex.getInstance().update(new Indexable.Builder().setName(getString(R.string.app_name)).setUrl("http://www.abhikr.com/").build());
+        FirebaseUserActions.getInstance().start(getIndexApiAction());
     }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample);
-       final Toolbar toolbar = findViewById(R.id.toolbar);
+        final MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if(getSupportActionBar() != null) {
+        if (getSupportActionBar() != null) {
             //getSupportActionBar().setTitle(R.string.app_name);
             /*getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);*/
@@ -98,12 +107,12 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
         }
         mAuth = FirebaseAuth.getInstance();
         //user=FirebaseAuth.getInstance().getCurrentUser();
-        mAuthStateListener=new FirebaseAuth.AuthStateListener() {
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 //if the user is not logged in
                 //that means current user will return null
-                if(firebaseAuth.getCurrentUser() == null){
+                if (firebaseAuth.getCurrentUser() == null) {
                     Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                     /*// Closing all the Activities
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -112,7 +121,7 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);*/
 
                     // Staring Login Activity
-                        startActivity(i,ActivityOptions.makeSceneTransitionAnimation(SampleActivity.this).toBundle());
+                    startActivity(i, ActivityOptions.makeSceneTransitionAnimation(SampleActivity.this).toBundle());
                     supportFinishAfterTransition();
                 }
             }
@@ -120,14 +129,35 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
 
 
         //getting current user
-     user = mAuth.getCurrentUser();
-     if(user!=null)
-     {
-         // Obtain the FirebaseAnalytics instance.
-         //mFirebaseAnalytics = FirebaseAnalytics.getInstance(SampleActivity.this);
-         getSupportActionBar().setTitle("Welcome "+user.getEmail());
-         MobileAds.initialize(this, getString(R.string.YOUR_ADMOB_APP_ID));
-     }
+        user = mAuth.getCurrentUser();
+        if (user != null) {
+            // Obtain the FirebaseAnalytics instance.
+            //mFirebaseAnalytics = FirebaseAnalytics.getInstance(SampleActivity.this);
+            getSupportActionBar().setTitle("Welcome " + user.getEmail());
+            MobileAds.initialize(this, getString(R.string.YOUR_ADMOB_APP_ID));
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+            try {
+                    //Sets the user ID property.
+                    mFirebaseAnalytics.setUserId(user.getUid());
+                    //Sets a user property to a given value.
+                    mFirebaseAnalytics.setUserProperty("ABHIKRHome", user.getUid());
+            /*trace = FirebasePerformance.getInstance().newTrace("DCT_Home");
+            trace.start();Integer.parseInt(user.getUid())*/
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(FirebaseAnalytics.Param.ITEM_ID, 89);
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, user.getDisplayName());
+                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
+                    //Logs an app event.
+                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle);
+
+                    //Sets whether analytics collection is enabled for this app on this device.
+                    mFirebaseAnalytics.setAnalyticsCollectionEnabled(true);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
 
         new SlidingRootNavBuilder(this)
                 .withToolbarMenuToggle(toolbar)
@@ -148,13 +178,13 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
                 createItemFor(POS_FRIENDS),
                 createItemFor(POS_GROUP),
                 createItemFor(POS_PROFILE),
-                createItemFor(POS_PUSHFCM),
+                createItemFor(POS_WORKSTATION),
                 createItemFor(POS_SHARE),
                 new SpaceItem(48),
                 createItemFor(POS_LOGOUT)));
         adapter.setListener(this);
 
-        RecyclerView list =  findViewById(R.id.list);
+        RecyclerView list = findViewById(R.id.list);
         list.setNestedScrollingEnabled(true);
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(adapter);
@@ -165,6 +195,13 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
                 .awsConfiguration(new AWSConfiguration(getApplicationContext()))
                 .build();
         //runMutation(); runQuery(); subscribe();// running aws app amplify single wala query and subscribe
+        // ATTENTION: This was auto-generated to handle app links.
+        Intent appLinkIntent = getIntent();
+        String appLinkAction = appLinkIntent.getAction();
+        Uri appLinkData = appLinkIntent.getData();
+    }
+    public Action getIndexApiAction() {
+        return Actions.newView("ABHIKR Home", "http://www.dealcometrue.com/");
     }
     public void runMutation(){
         CreateTodoInput createTodoInput = CreateTodoInput.builder().
@@ -267,11 +304,12 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
 //            new SlidingRootNavBuilder(this)
 //                    .wi
         }
-        if (position == POS_PUSHFCM) {
-            Product_loadbar fram=new Product_loadbar();
+        if (position == POS_WORKSTATION) {
+            startActivity(new Intent(this,WorkStation.class),ActivityOptions.makeSceneTransitionAnimation(SampleActivity.this).toBundle());
+            /*Product_loadbar fram=new Product_loadbar();
             FragmentManager manager=getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.container,fram,"abhi").commit();
-            getSupportActionBar().setTitle(screenTitles[POS_PUSHFCM]);
+            manager.beginTransaction().replace(R.id.container,fram,"abhi").commit();*/
+            getSupportActionBar().setTitle(screenTitles[POS_WORKSTATION]);
         }
         if (position == POS_SHARE) {
             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
@@ -292,10 +330,23 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
         //Fragment selectedScreen = CenteredTextFragment.createFor(screenTitles[position]);
         //showFragment(selectedScreen);
         // above code is for set middle of text .
-
+        //createAndShowNotification("ABHIKR","This is my personal Portifolio to represent my work with simple chat feature...");
     }
 
+    private void createAndShowNotification(String title,String msg) {
 
+        NotificationVO notificationVO = new NotificationVO();
+        notificationVO.setTitle(title);
+        notificationVO.setMessage(msg);
+        //notificationVO.setIconUrl(""); // passing nothing to display without image
+        notificationVO.setAction("activity");
+        notificationVO.setActionDestination("Cashback");
+
+        Intent resultIntent = new Intent(getApplicationContext(), SampleActivity.class);
+
+        NotificationBase notificationUtils = new NotificationBase(getApplicationContext());
+        notificationUtils.displayNotification(notificationVO, resultIntent);
+    }
     private void showFragment(Fragment fragment) {
 
         getFragmentManager().beginTransaction()
@@ -370,9 +421,9 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
         }
         if(id==R.id.about_home)
         {
-            Intent aaa=new Intent(getApplicationContext(),Phone.class);
+            Intent aaa=new Intent(getApplicationContext(), WorkStation.class);
             startActivity(aaa, ActivityOptions.makeSceneTransitionAnimation(SampleActivity.this).toBundle());
-            Toast.makeText(this, "AbhiKr version 1.3", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "AbhiKr version 1.3", Toast.LENGTH_LONG).show();
             return true;
         }
 
@@ -415,7 +466,7 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(SampleActivity.this, "Thanks for Visiting", Toast.LENGTH_SHORT).show();
-                finish();
+                finishAfterTransition();
 
             }
         }).setCancelable(true).show();
@@ -425,12 +476,17 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
     @Override
     protected void onStop() {
         super.onStop();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        FirebaseUserActions.getInstance().end(getIndexApiAction());
         if(mAuth!=null)
         {
             mAuth.removeAuthStateListener(mAuthStateListener);
         }
     }
 
-
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }
 

@@ -33,7 +33,9 @@
         <item name="android:windowAllowEnterTransitionOverlap">true</item>
         <item name="android:windowAllowReturnTransitionOverlap">true</item>
     </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
     <style name="Theme.Transparent" parent="android:Theme">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -57,6 +59,7 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
+
     <style name="abhi" parent="android:Theme.DeviceDefault.Dialog">
         <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
         <item name="DialogTitleText">Loading...</item>
@@ -64,8 +67,10 @@
         <item name="DialogSpotColor">@color/colorPrimary</item>
         <item name="DialogSpotCount">6</item>
     </style>
+
     <style name="MyTheme" parent="android:Theme.Holo.Dialog">
-        <item name="android:progressBarStyle">@android:style/Widget.Holo.Light.ProgressBar.Large</item>
+        <item name="android:progressBarStyle">@android:style/Widget.Holo.Light.ProgressBar.Large
+        </item>
         <item name="android:alertDialogStyle">@style/CustomAlertDialogStyle</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:textColorPrimary">#00bcd4</item>
@@ -74,6 +79,7 @@
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">16sp</item>
     </style>
+
     <style name="CustomAlertDialogStyle">
         <item name="android:bottomBright">@android:color/transparent</item>
         <item name="android:bottomDark">@android:color/transparent</item>
@@ -94,7 +100,8 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
     <!-- Light EditTexts -->
-    <style name="ThemeOverlay.MyLightEditText" parent="ThemeOverlay.MaterialComponents.Dark"/>
+    <style name="ThemeOverlay.MyLightEditText" parent="ThemeOverlay.MaterialComponents.Dark" />
+
     <style name="ThemeOverlay.MyTextDetail" parent="AppTheme">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -105,28 +112,34 @@
         <item name="android:scrollbars">vertical</item>
         <item name="android:textSize">14sp</item>
     </style>
+
     <style name="NoActionBarTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="MyThemeNoActionbar" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
+
     <style name="EditTextTintTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
         <item name="colorPrimaryDark">#0288D1</item>
     </style>
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
+
+
+
     <style name="TextLabel" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
         <item name="colorControlActivated">#FFCC00</item>
     </style>
+
     <style name="Translucent" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="windowNoTitle">true</item>
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -135,6 +148,7 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
+
     <style name="TranslucentBackground" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="windowNoTitle">true</item>
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -142,6 +156,7 @@
         <item name="colorAccent">#4fa881</item>
         <item name="android:windowBackground">@drawable/bg</item>
     </style>
+
     <style name="AppTheme.Transparent" parent="AppTheme">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>

@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+       final Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if(getSupportActionBar() != null) {
             //getSupportActionBar().setTitle(R.string.app_name);
@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(true);
         }
 
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        floatButton = (FloatingActionButton) findViewById(R.id.fabmainatv);
+        viewPager =  findViewById(R.id.viewpager);
+        floatButton =  findViewById(R.id.fabmainatv);
         initTab();
         initFirebase();
         // Obtain the FirebaseAnalytics instance.
@@ -144,7 +144,11 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFrag(new UserProfileFragment(), STR_INFO_FRAGMENT);
         floatButton.setOnClickListener(((FriendsFragment) adapter.getItem(0)).onClickFloatButton.getInstance(this));
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(3);
+        //viewPager.setOffscreenPageLimit(3);
+        int limit = (adapter.getCount() > 1 ? adapter.getCount() - 1 : 1);
+        //adapter.notifyDataSetChanged(); if u choose 1 it will again load only one tab at a time( by deafult its take 1 as limit value)
+        //ConnectionAbhikr.getInstance(getApplicationContext()).ABhiToast(String.valueOf(limit));
+        viewPager.setOffscreenPageLimit(limit);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

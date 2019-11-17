@@ -103,10 +103,12 @@ public class HomeFragment extends Fragment {
         abhi.loadUrl("http://www.abhikr.com/");
         Toast.makeText(getActivity(), "welcome to abhishek kumar personal profile - ", Toast.LENGTH_SHORT).show();
         abhi.setWebViewClient(new abhikr());// not to make client with class.clientnme
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+        /*mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
-                R.color.colorPrimaryDark);
+                R.color.colorPrimaryDark);*/
+        mSwipeRefreshLayout.setColorSchemeColors(getResources().getIntArray(R.array.swipe_colors));
+
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
