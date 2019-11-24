@@ -100,4 +100,5 @@
         <item>@color/grey_500</item>
         <item>@color/blue_grey_500</item>
     </array>
+    <string name="title_activity_work_store">WorkStore</string>
 </resources>

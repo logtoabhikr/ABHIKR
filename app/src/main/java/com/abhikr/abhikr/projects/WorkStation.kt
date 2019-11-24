@@ -1,30 +1,33 @@
 package com.abhikr.abhikr.projects
 
+import android.app.ActivityOptions
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
-import com.google.android.material.snackbar.Snackbar
+import android.view.*
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import kotlinx.android.synthetic.main.activity_work_station.*
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.google.firebase.firestore.FirebaseFirestoreException
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter
-import android.net.Uri
-import android.provider.Settings
-import android.view.*
-import android.view.animation.AnimationUtils
 import com.abhikr.abhikr.ABHIWeb
 import com.abhikr.abhikr.R
 import com.abhikr.abhikr.firepush.GlideApp
+import com.abhikr.abhikr.firepush.SharedPrefManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.appbar.AppBarLayout
-import kotlinx.android.synthetic.main.workdesign.view.*
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.Query
+import kotlinx.android.synthetic.main.activity_work_station.*
 import kotlinx.android.synthetic.main.content_work_station.*
+import kotlinx.android.synthetic.main.workdesign.view.*
 
 
 class WorkStation : AppCompatActivity(),View.OnClickListener {
@@ -43,8 +46,8 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
         {
             R.id.workfab->
             {
-                Snackbar.make(v, "Working on it..(--", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show()
+                startActivity(Intent(this@WorkStation,WorkStore::class.java),
+                        ActivityOptions.makeSceneTransitionAnimation(this@WorkStation).toBundle())
             }
         }
     }
@@ -58,27 +61,7 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
         workfab.setOnClickListener(this@WorkStation)
         // Access a Cloud Firestore instance from your Activity
 
-        // Create a new user with a first and last name
-        /*val projects = hashMapOf(
-                "Title" to "WePayTax",
-                "Description" to "Apppl Combine Ongoing Projects",
-                "Duration" to "3 Months",
-                "Play Store" to "https://play.google.com/store/apps/details?id=com.apppl.wepaytax&hl=en",
-                "Website" to "https://www.wepaytax.org/",
-                "Client" to "Apppl Combine, New Delhi",
-                "Logo" to "https://lh3.googleusercontent.com/NZPB7-dN9Qcw50ld87HHdqfu2rAX9b9Kf8KtVCJcXgP_3fJPOwzDLsxRn_h9vm2Ilxc=s180-rw",
-                "TimeStamp" to  SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
 
-        )
-// Add a new document with a generated ID
-        firebaseDB.collection("Projects")
-                .add(projects)
-                .addOnSuccessListener { documentReference ->
-                    Log.d("WorkStation", "DocumentSnapshot added with ID: ${documentReference.id}")
-                }
-                .addOnFailureListener { e ->
-                    Log.w("WorkStation", "Error adding document", e)
-                }*/
         /*firebaseDB.collection("Projects")
                 .get()
                 .addOnSuccessListener { result ->
@@ -99,14 +82,14 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
         }
         catch (e:Exception)
         {
-            e.localizedMessage
+            Log.d(TAG,"Workstation fetch error :"+e.message)
         }
         workapp_bar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
-            internal var scrollRange = -1
 
             override fun onOffsetChanged(appBarLayout: AppBarLayout,      verticalOffset: Int) {
                 //Initialize the size of the scroll
-            /*    if (scrollRange == -1) {
+            /*  internal var scrollRange = -1
+            if (scrollRange == -1) {
                     scrollRange = appBarLayout.totalScrollRange
                 }
 
@@ -122,18 +105,18 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
                 //Log.d(AbhiCompleteMain.class.getSimpleName(), "onOffsetChanged: verticalOffset: " + verticalOffset);
 
                 //  Vertical offset == 0 indicates appBar is fully expanded.
-                if (Math.abs(verticalOffset) > 199) {
+                if (Math.abs(verticalOffset) > 156) {
                     appBarExpanded = false
-                    //invalidateOptionsMenu();
-                    supportInvalidateOptionsMenu()
+                    invalidateOptionsMenu()
+                    //supportInvalidateOptionsMenu()
                 } else {
                     appBarExpanded = true
-                    //invalidateOptionsMenu();
-                    supportInvalidateOptionsMenu()
+                    invalidateOptionsMenu();
+                    //supportInvalidateOptionsMenu()
                 }
-
             }
         })
+        Log.d(TAG,"abhikr token: "+SharedPrefManager.getInstance(this@WorkStation).deviceToken)
 
     }
     private fun GetWork()
@@ -145,7 +128,7 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
                 .build()
         adaptor = object : FirestoreRecyclerAdapter<WorkModal, ViewHolder>(response) {
             override fun onBindViewHolder(holder: ViewHolder, position: Int, model: WorkModal) {
-                System.out.println("onbind running")
+
                 holder.itemView.worktitle.text = model.Title
                 holder.itemView.workdesc.text = model.Description
                 holder.itemView.workclient.text = model.Client
@@ -185,10 +168,16 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
                     }
 
                 }
-                holder.itemView.workcardview.setOnClickListener({ v ->
-                    Snackbar.make(v, model.Title+", "+model.Description+" at "+model.Client, Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show()
-                })
+                //model.TimeStamp!!.toDate()
+                holder.itemView.workcardview.setOnClickListener { v ->
+                    val snapshot:DocumentSnapshot=snapshots.getSnapshot(holder.adapterPosition)
+                    val intent=Intent(this@WorkStation,WorkStore::class.java)
+                    intent.putExtra("projects",snapshot.id)
+                    intent.putExtra("projects_item", model)
+                    startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(this@WorkStation).toBundle())
+                    /*Snackbar.make(v, model.Title+", "+model.Description+" at "+model.Client+" id : "+snapshot.id, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()*/
+                }
                 val animation = AnimationUtils.loadAnimation(this@WorkStation, if (position > lastPosition) R.anim.up_from_bottom else R.anim.down_from_top)
                 holder.itemView.startAnimation(animation)
                 lastPosition = position
@@ -196,6 +185,12 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
                 return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.workdesign, parent, false))
             }
+
+            override fun onViewDetachedFromWindow(holder: ViewHolder) {
+                super.onViewDetachedFromWindow(holder)
+                holder.itemView.clearAnimation()
+            }
+
             override fun onDataChanged() {
                 super.onDataChanged()
             }

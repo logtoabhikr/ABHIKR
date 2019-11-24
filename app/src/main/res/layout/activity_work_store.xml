@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".projects.WorkStore">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_workstore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_workstore"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Work Store"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        style="@style/TextInputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:boxCornerRadiusBottomEnd="@dimen/activity_vertical_margin"
+        app:boxCornerRadiusTopStart="@dimen/activity_vertical_margin"
+        app:counterEnabled="true"
+        app:counterMaxLength="30"
+        app:endIconMode="clear_text"
+        app:endIconTint="@color/grey_200"
+        app:errorEnabled="true"
+        app:errorTextAppearance="@style/HintText"
+        app:helperText="Project full name"
+        app:helperTextEnabled="true"
+        app:helperTextTextColor="@color/grey_200"
+        app:hintAnimationEnabled="true"
+        app:hintEnabled="true"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/titleworkstore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Title"
+            android:imeOptions="actionNext"
+            android:inputType="textPersonName"
+            android:maxLength="49" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/TextInputLayout"
+        app:boxCornerRadiusBottomStart="@dimen/activity_vertical_margin"
+        app:boxCornerRadiusTopEnd="@dimen/activity_vertical_margin"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:endIconMode="clear_text"
+        app:endIconTint="@color/grey_200"
+        app:errorEnabled="true"
+        app:errorTextAppearance="@style/HintText"
+        app:helperText="Project Client"
+        app:helperTextEnabled="true"
+        app:helperTextTextColor="@color/grey_200"
+        app:hintAnimationEnabled="true"
+        app:hintEnabled="true"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/clientworkstore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Client"
+            android:imeOptions="actionNext"
+            android:inputType="textAutoCorrect" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/TextInputLayout"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:boxCornerRadiusBottomEnd="@dimen/activity_vertical_margin"
+        app:boxCornerRadiusTopStart="@dimen/activity_vertical_margin"
+        app:counterEnabled="true"
+        app:counterMaxLength="99"
+        app:endIconMode="clear_text"
+        app:endIconTint="@color/grey_200"
+        app:errorEnabled="true"
+        app:errorTextAppearance="@style/HintText"
+        app:helperText="Project Description"
+        app:helperTextEnabled="true"
+        android:visibility="visible"
+        app:helperTextTextColor="@color/grey_200"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/descriptionworkstore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Description"
+            android:imeOptions="actionNext"
+            android:inputType="textAutoComplete" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/TextInputLayout"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:boxCornerRadiusBottomEnd="@dimen/activity_vertical_margin"
+        app:boxCornerRadiusTopStart="@dimen/activity_vertical_margin"
+        app:counterEnabled="true"
+        app:counterMaxLength="29"
+        app:endIconMode="clear_text"
+        app:endIconTint="@color/grey_200"
+        app:errorEnabled="true"
+        app:errorTextAppearance="@style/HintText"
+        app:helperText="Project Duration"
+        app:helperTextEnabled="true"
+        android:visibility="visible"
+        app:helperTextTextColor="@color/grey_200"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/durationworkstore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Duration"
+            android:imeOptions="actionNext"
+            android:inputType="textAutoComplete" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/TextInputLayout"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:boxCornerRadiusBottomEnd="@dimen/activity_vertical_margin"
+        app:boxCornerRadiusTopStart="@dimen/activity_vertical_margin"
+        app:endIconMode="clear_text"
+        app:endIconTint="@color/grey_200"
+        app:errorEnabled="true"
+        app:errorTextAppearance="@style/HintText"
+        app:helperText="Project Logo"
+        app:helperTextEnabled="true"
+        android:visibility="visible"
+        app:helperTextTextColor="@color/grey_200"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout4">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/logoworkstore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Logo"
+            android:imeOptions="actionNext"
+            android:inputType="textAutoComplete" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout6"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/TextInputLayout"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:boxCornerRadiusBottomEnd="@dimen/activity_vertical_margin"
+        app:boxCornerRadiusTopStart="@dimen/activity_vertical_margin"
+        app:endIconMode="clear_text"
+        app:endIconTint="@color/grey_200"
+        app:errorEnabled="true"
+        app:errorTextAppearance="@style/HintText"
+        app:helperText="Project Play Store"
+        app:helperTextEnabled="true"
+        android:visibility="visible"
+        app:helperTextTextColor="@color/grey_200"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout5">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/playstoreworkstore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Play Store"
+            android:imeOptions="actionNext"
+            android:inputType="textAutoComplete" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout7"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/TextInputLayout"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:boxCornerRadiusBottomEnd="@dimen/activity_vertical_margin"
+        app:boxCornerRadiusTopStart="@dimen/activity_vertical_margin"
+        app:endIconMode="clear_text"
+        app:endIconTint="@color/grey_200"
+        app:errorEnabled="true"
+        app:errorTextAppearance="@style/HintText"
+        app:helperText="Project Play Store"
+        app:helperTextEnabled="true"
+        android:visibility="visible"
+        app:helperTextTextColor="@color/grey_200"
+        app:layout_constraintBottom_toTopOf="@+id/goupload"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout6">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/websiteworkstore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Website"
+            android:imeOptions="actionDone"
+            android:inputType="textAutoComplete" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/goupload"
+        style="@style/Widget.Wpt.Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Upload Work"
+        android:visibility="visible"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout7" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_workstore"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:backgroundTint="@color/windowBackground"
+        app:tint="@null"
+        app:useCompatPadding="true"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_gravity="bottom|end"
+        app:srcCompat="@drawable/ic_project_management" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
