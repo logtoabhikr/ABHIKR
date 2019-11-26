@@ -280,16 +280,24 @@
 </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab_workstore"
-        style="@style/Widget.MaterialComponents.FloatingActionButton"
+        style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:backgroundTint="@color/windowBackground"
-        app:tint="@null"
         app:useCompatPadding="true"
         android:layout_margin="@dimen/fab_margin"
-        android:layout_gravity="bottom|end"
-        app:srcCompat="@drawable/ic_project_management" />
+        android:contentDescription="Update workstore"
+        android:text="Update workstore"
+        android:textColor="@color/colorPrimary"
+        app:icon="@drawable/ic_project_management"
+        app:iconTintMode="screen"
+        app:iconPadding="8dp"
+        app:strokeColor="@color/grey_200"
+        app:strokeWidth="0.5dp"
+        android:layout_gravity="center|bottom"
+        app:rippleColor="@color/colorPrimaryDark"
+         />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

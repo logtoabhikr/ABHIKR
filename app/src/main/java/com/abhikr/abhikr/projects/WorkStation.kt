@@ -21,6 +21,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
@@ -46,9 +47,19 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
         {
             R.id.workfab->
             {
-                startActivity(Intent(this@WorkStation,WorkStore::class.java),
-                        ActivityOptions.makeSceneTransitionAnimation(this@WorkStation).toBundle())
-            }
+                if(FirebaseAuth.getInstance().currentUser!!.email!="logtoabhikr@gmail.com")
+                {
+                    Snackbar.make(findViewById(android.R.id.content), "For admin use only..", Snackbar.LENGTH_LONG)
+                            .setAction("Dismiss", null).show()
+
+                }
+                else
+                {
+                    startActivity(Intent(this@WorkStation,WorkStore::class.java),
+                            ActivityOptions.makeSceneTransitionAnimation(this@WorkStation).toBundle())
+
+                }
+                    }
         }
     }
 
@@ -128,6 +139,7 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
                 .build()
         adaptor = object : FirestoreRecyclerAdapter<WorkModal, ViewHolder>(response) {
             override fun onBindViewHolder(holder: ViewHolder, position: Int, model: WorkModal) {
+                //Log.d(TAG,"all data"+model);
 
                 holder.itemView.worktitle.text = model.Title
                 holder.itemView.workdesc.text = model.Description
@@ -170,14 +182,21 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
                 }
                 //model.TimeStamp!!.toDate()
                 holder.itemView.workcardview.setOnClickListener { v ->
-                    val snapshot:DocumentSnapshot=snapshots.getSnapshot(holder.adapterPosition)
-                    val intent=Intent(this@WorkStation,WorkStore::class.java)
-                    intent.putExtra("projects",snapshot.id)
-                    intent.putExtra("projects_item", model)
-                    startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(this@WorkStation).toBundle())
-                    /*Snackbar.make(v, model.Title+", "+model.Description+" at "+model.Client+" id : "+snapshot.id, Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show()*/
-                }
+                    if(FirebaseAuth.getInstance().currentUser!!.email!="logtoabhikr@gmail.com")
+                    {
+                        Snackbar.make(findViewById(android.R.id.content), model.Title+" says: Click on play store button", Snackbar.LENGTH_LONG)
+                                .setAction("Dismiss", null).show()
+                    }
+                    else
+                    {
+                        val snapshot: DocumentSnapshot =snapshots.getSnapshot(holder.adapterPosition)
+                        val intent=Intent(this@WorkStation,WorkStore::class.java)
+                        intent.putExtra("projects",snapshot.id)
+                        intent.putExtra("projects_item", model)
+                        startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(this@WorkStation).toBundle())
+
+                    }
+                      }
                 val animation = AnimationUtils.loadAnimation(this@WorkStation, if (position > lastPosition) R.anim.up_from_bottom else R.anim.down_from_top)
                 holder.itemView.startAnimation(animation)
                 lastPosition = position

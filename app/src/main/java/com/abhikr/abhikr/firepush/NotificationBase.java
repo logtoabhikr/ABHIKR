@@ -20,9 +20,9 @@ import android.text.Html;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
-import com.abhikr.abhikr.BaseActivity;
 import com.abhikr.abhikr.MainActivity;
 import com.abhikr.abhikr.R;
+import com.abhikr.abhikr.SampleActivity;
 import com.abhikr.abhikr.projects.WorkStation;
 
 import java.io.IOException;
@@ -49,7 +49,7 @@ public class NotificationBase {
     public NotificationBase(Context mContext) {
         this.mContext = mContext;
         //Populate activity map
-        activityMap.put("Home", BaseActivity.class);
+        activityMap.put("Home", SampleActivity.class);
         activityMap.put("AbhiMain", MainActivity.class);
         activityMap.put("workstation", WorkStation.class);
     }

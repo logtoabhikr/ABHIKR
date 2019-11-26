@@ -112,8 +112,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_logo" />
-                            <entry key="sourceFile" value="B:\AbhiKr Personal Profile\Logo.psd" />
+                            <entry key="outputName" value="ic_project_management" />
+                            <entry key="sourceFile" value="B:\abhikr app publish\project-management.svg" />
                           </map>
                         </option>
                       </PersistentState>

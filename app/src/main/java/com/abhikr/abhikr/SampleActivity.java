@@ -7,12 +7,21 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.abhikr.abhikr.firepush.NotificationBase;
 import com.abhikr.abhikr.firepush.NotificationVO;
@@ -50,16 +59,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 
 import java.util.Arrays;
-
-import androidx.annotation.ColorInt;
-import androidx.annotation.ColorRes;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import javax.annotation.Nonnull;
 
@@ -397,13 +396,8 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
     public boolean onOptionsItemSelected(MenuItem item) {
         int id=item.getItemId();
         if(id==R.id.hom)
-        {    //FirebaseAuth mAuth = FirebaseAuth.getInstance();
-            //mAuth.signOut();
-            //startActivity(new Intent(SampleActivity.this,SampleActivity.class));
-            Intent a=new Intent(getApplicationContext(),MainActivity.class);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                startActivity(a, ActivityOptions.makeSceneTransitionAnimation(SampleActivity.this).toBundle());
-            }
+        {
+         startActivity(new Intent(SampleActivity.this,MainActivity.class), ActivityOptions.makeSceneTransitionAnimation(SampleActivity.this).toBundle());
         }
         if(id==R.id.user)
         {

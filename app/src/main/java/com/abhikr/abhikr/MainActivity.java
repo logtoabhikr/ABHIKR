@@ -1,5 +1,6 @@
 package com.abhikr.abhikr;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,7 +9,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.abhikr.abhikr.data.StaticConfig;
+import com.abhikr.abhikr.projects.WorkStation;
 import com.abhikr.abhikr.service.ServiceUtils;
 import com.abhikr.abhikr.ui.FriendsFragment;
 import com.abhikr.abhikr.ui.GroupFragment;
@@ -22,14 +32,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -105,6 +107,12 @@ public class MainActivity extends AppCompatActivity {
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        supportFinishAfterTransition();
     }
 
     @Override
@@ -195,26 +203,27 @@ public class MainActivity extends AppCompatActivity {
 //    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.about) {
-            Toast.makeText(this, "Abhichat version 1.0", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.app_name)+" Version "+BuildConfig.VERSION_NAME, Toast.LENGTH_LONG).show();
             return true;
         }
         if(id==R.id.home_call)
         {
-            startActivity(new Intent(MainActivity.this,SampleActivity.class));
+            supportFinishAfterTransition();
+        }
+        if(id==R.id.about_home)
+        {
+            startActivity(new Intent(MainActivity.this, WorkStation.class), ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
+
         }
 
         return super.onOptionsItemSelected(item);

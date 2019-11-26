@@ -21,6 +21,12 @@
         android:title="@string/about"
         android:icon="@drawable/ic_notify_group"
         app:showAsAction="never" />
+            <item
+                android:id="@+id/about_home"
+                android:orderInCategory="103"
+                android:title="@string/title_activity_work_station"
+                android:icon="@drawable/ic_project_management"
+                app:showAsAction="never" />
         </menu>
     </item>
 </menu>

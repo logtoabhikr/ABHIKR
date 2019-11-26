@@ -28,6 +28,7 @@ class WorkStore : AppCompatActivity(),View.OnClickListener {
         {
             R.id.fab_workstore ->
             {
+
                 when { storeUid.isNullOrEmpty()-> Snackbar.make(v, "Document id found empty or null $storeUid", Snackbar.LENGTH_LONG)
                         .setAction("Dismiss", null).show()
                     TextUtils.isEmpty(titleworkstore.text.toString()) -> textInputLayout.error="Project Title can't be empty"
@@ -40,6 +41,14 @@ class WorkStore : AppCompatActivity(),View.OnClickListener {
                 else ->
                     try {
                         UpdateStore()
+                        if(fab_workstore.isExtended)
+                        {
+                            fab_workstore.shrink()
+                        }
+                        else
+                        {
+                            fab_workstore.extend()
+                        }
                     }
                     catch (e:Exception)
                     {
@@ -91,31 +100,38 @@ class WorkStore : AppCompatActivity(),View.OnClickListener {
                 descriptionworkstore.setText(workModal?.Description)
                 durationworkstore.setText(workModal?.Duration)
                 playstoreworkstore.setText(workModal?.PlayStore)
+                Log.d(TAG,"play store"+workModal?.PlayStore)
                 websiteworkstore.setText(workModal?.Website)
                 clientworkstore.setText(workModal?.Client)
                 logoworkstore.setText(workModal!!.Logo)
             }
             goupload.isEnabled=false
+            goupload.visibility=View.GONE
             fab_workstore.isEnabled=true
+            fab_workstore.visibility=View.VISIBLE
         }
         else
         {
             goupload.isEnabled=true
+            goupload.visibility=View.VISIBLE
             fab_workstore.isEnabled=false
+            fab_workstore.visibility=View.GONE
         }
     }
     private fun UploadWork()
     {
         spotsdialog?.show()
         spotsdialog?.setMessage("Uploading Projects..")
-        val uploadModal:WorkModal= WorkModal(titleworkstore.text.toString(),
+        val uploadModal = WorkModal(
                 clientworkstore.text.toString(),
                 descriptionworkstore.text.toString(),
                 durationworkstore.text.toString(),
-                playstoreworkstore.text.toString(),
-                websiteworkstore.text.toString(),
                 logoworkstore.text.toString(),
-                Timestamp.now())
+                playstoreworkstore.text.toString(),
+                Timestamp.now(),
+                titleworkstore.text.toString(),
+                websiteworkstore.text.toString()
+                )
 // Adding a new document with a generated ID
        firebaseDB.collection("Projects")
                .add(uploadModal)
@@ -142,18 +158,20 @@ class WorkStore : AppCompatActivity(),View.OnClickListener {
                 "Client" to "Apppl Combine, New Delhi",
                 "Logo" to "https://lh3.googleusercontent.com/gvsqZRoRWfS_XXG6_IacZkHv7UEjTvgdQzP6WvEIMXU-8qDjBrRB5piwdP85JVyn4g=s180-rw",
                 "TimeStamp" to  FieldValue.serverTimestamp())*/
-        val updatemodel:WorkModal= WorkModal(titleworkstore.text.toString(),
+        val updatemodel = WorkModal(
                 clientworkstore.text.toString(),
                 descriptionworkstore.text.toString(),
                 durationworkstore.text.toString(),
-                playstoreworkstore.text.toString(),
-                websiteworkstore.text.toString(),
                 logoworkstore.text.toString(),
-                Timestamp.now())
+                playstoreworkstore.text.toString(),
+                Timestamp.now(),
+                titleworkstore.text.toString(),
+                websiteworkstore.text.toString())
         firebaseDB.collection("Projects").document(storeUid!!).set(updatemodel).addOnCompleteListener(object : OnCompleteListener<Void> {
             override fun onComplete(task: Task<Void>) {
                 if (task.isSuccessful) {
                     spotsdialog?.dismiss()
+                    fab_workstore.extend()
                     Snackbar.make(findViewById(android.R.id.content), "WorkStore projects update", Snackbar.LENGTH_LONG)
                             .setAction("Dismiss", null).show()
                 } else {
