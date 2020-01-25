@@ -101,4 +101,5 @@
         <item>@color/blue_grey_500</item>
     </array>
     <string name="title_activity_work_store">WorkStore</string>
+    <string name="asset_statements" translatable="false">[{ \"include\": \"https://www.abhikr.com/.well-known/assetlinks.json\" }]</string>
 </resources>
