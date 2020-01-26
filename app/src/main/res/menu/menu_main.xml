@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.android.abhichat.MainActivity">
     <item
-        android:id="@+id/action_call_abhi"
         android:orderInCategory="100"
         android:title="@string/app_name"
         android:icon="@drawable/ic_btn_more"

@@ -4,7 +4,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     tools:context="com.android.abhichat.MainActivity">
     <item
-        android:id="@+id/action_call_home"
         android:orderInCategory="100"
         android:title="@string/app_name"
         android:icon="@drawable/ic_btn_more"
@@ -13,19 +12,19 @@
         <item
         android:id="@+id/hom"
         android:orderInCategory="101"
-        android:title="Home"
+        android:title="@string/home"
         android:icon="@drawable/ic_action_home"
             app:showAsAction="never"/>
 
     <item android:id="@+id/user"
         android:orderInCategory="102"
-        android:title="Dev profile"
+        android:title="@string/dev_profile"
         android:icon="@drawable/ic_notify_group"
         app:showAsAction="never"/>
     <item
         android:id="@+id/logout"
         android:orderInCategory="104"
-        android:title="Logout"
+        android:title="@string/logout"
         android:icon="@mipmap/ic_power_settings"
         app:showAsAction="never"
         />

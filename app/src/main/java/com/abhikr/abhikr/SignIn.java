@@ -78,7 +78,7 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener,Go
 //            finish();
 //            //opening profile activity
 //            startActivity(new Intent(getApplicationContext(), MainActivity_old.class));
-                 /*   Intent i = new Intent(SignIn.this, SampleActivity.class);
+                 /*   Intent i = new Intent(SignIn.this, Home.class);
 
                     // Closing all the Activities
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -238,7 +238,7 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener,Go
                         if(task.isSuccessful()){
                             //start the profile activity
                             finish();
-                            startActivity(new Intent(getApplicationContext(), SampleActivity.class));
+                            startActivity(new Intent(getApplicationContext(), Home.class));
                             spotsdialog.show();
                         }
                         else

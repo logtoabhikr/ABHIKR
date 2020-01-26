@@ -1,5 +1,6 @@
 package com.abhikr.abhikr;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -15,11 +16,12 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.AppCompatTextView;
 import dmax.dialog.SpotsDialog;
 
 public class EXP extends Activity implements View.OnClickListener {
@@ -35,6 +37,7 @@ private AppCompatImageView abhikr;
    private AlertDialog spotsdialog;
 
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +93,7 @@ private AppCompatImageView abhikr;
         ak.setSupportZoom(true);
         ak.setBuiltInZoomControls(true); // allow pinch to zooom
         ak.setDisplayZoomControls(false); // disable the default zoom controls on the page
-        abhi.loadUrl("http://www.abhikr.com/");
+        abhi.loadUrl("https://www.abhikr.com/");
         Toast.makeText(this, "To View Developer profile click on top - ", Toast.LENGTH_SHORT).show();
         abhi.setWebViewClient(new abhikr1());
 

@@ -2,6 +2,7 @@
 <resources>
 
     <string-array name="ld_activityScreenTitles">
+        <item>PORTFOLIO</item>
         <item>HOME</item>
         <item>FRIENDS</item>
         <item>GROUPS</item>
@@ -16,6 +17,7 @@
     </string-array>
 
     <array name="ld_activityScreenIcons">
+        <item>@drawable/ic_portfolio</item>
         <item>@drawable/ic_action_home</item>
         <item>@drawable/ic_explicit_black_24dp</item>
         <item>@drawable/ic_explicit_black_24dp</item>

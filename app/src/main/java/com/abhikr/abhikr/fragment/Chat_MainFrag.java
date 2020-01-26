@@ -1,28 +1,11 @@
 package com.abhikr.abhikr.fragment;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.abhikr.abhikr.R;
-import com.abhikr.abhikr.data.StaticConfig;
-import com.abhikr.abhikr.service.ServiceUtils;
-import com.abhikr.abhikr.ui.FriendsFragment;
-import com.abhikr.abhikr.ui.GroupFragment;
-import com.abhikr.abhikr.ui.LoginActivity;
-import com.abhikr.abhikr.ui.UserProfileFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -30,10 +13,24 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.abhikr.abhikr.R;
+import com.abhikr.abhikr.data.StaticConfig;
+import com.abhikr.abhikr.service.ServiceUtils;
+import com.abhikr.abhikr.ui.FriendsFragment;
+import com.abhikr.abhikr.ui.GroupFragment;
+import com.abhikr.abhikr.ui.UserProfileFragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Chat_MainFrag extends Fragment {
 
-    private static String TAG = "MainActivity";
+    private static String TAG = "ChatActivity";
     private ViewPager viewPager;
     private TabLayout tabLayout = null;
     public static String STR_FRIEND_FRAGMENT = "FRIEND";

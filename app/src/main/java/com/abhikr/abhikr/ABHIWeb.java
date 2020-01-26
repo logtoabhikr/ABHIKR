@@ -233,7 +233,7 @@ public class ABHIWeb {
             ClipData data = ClipData.newPlainText("Link", url);
             clipboardManager.setPrimaryClip(data);*/
 
-            Intent iak=new Intent(context.getApplicationContext(),SampleActivity.class);
+            Intent iak=new Intent(context.getApplicationContext(), Home.class);
             iak.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(iak);
             //Toast.makeText(context, "Copied " + intent.getDataString(), Toast.LENGTH_SHORT).show();

@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.abhikr.abhikr.firepush.NotificationBase;
 import com.abhikr.abhikr.firepush.NotificationVO;
+import com.abhikr.abhikr.fragment.AbhiKrFragment;
 import com.abhikr.abhikr.fragment.Chat_MainFrag;
 import com.abhikr.abhikr.menu.DrawerAdapter;
 import com.abhikr.abhikr.menu.DrawerItem;
@@ -59,20 +60,22 @@ import com.google.firebase.auth.FirebaseUser;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
 import type.CreateTodoInput;
 
-public class SampleActivity extends AppCompatActivity implements DrawerAdapter.OnItemSelectedListener {
+public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelectedListener {
 
-    private static final int POS_DASHBOARD = 0;
-    private static final int POS_FRIENDS = 1;
-    private static final int POS_GROUP = 2;
-    private static final int POS_PROFILE = 3;
-    private static final int POS_WORKSTATION =4;
-    private static final int POS_SHARE = 5;
-    private static final int POS_LOGOUT=7;
+    private static final int POS_ABHIKR=0;
+    private static final int POS_DASHBOARD = 1;
+    private static final int POS_FRIENDS = 2;
+    private static final int POS_GROUP = 3;
+    private static final int POS_PROFILE = 4;
+    private static final int POS_WORKSTATION =5;
+    private static final int POS_SHARE = 6;
+    private static final int POS_LOGOUT=8;
 
     private String[] screenTitles;
     private Drawable[] screenIcons;
@@ -120,8 +123,8 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);*/
 
                     // Staring Login Activity
-                    startActivity(i, ActivityOptions.makeSceneTransitionAnimation(SampleActivity.this).toBundle());
-                    supportFinishAfterTransition();
+                    //startActivity(i, ActivityOptions.makeSceneTransitionAnimation(Home.this).toBundle());
+                    //supportFinishAfterTransition();
                 }
             }
         };
@@ -131,7 +134,7 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
         user = mAuth.getCurrentUser();
         if (user != null) {
             // Obtain the FirebaseAnalytics instance.
-            //mFirebaseAnalytics = FirebaseAnalytics.getInstance(SampleActivity.this);
+            //mFirebaseAnalytics = FirebaseAnalytics.getInstance(Home.this);
             getSupportActionBar().setTitle("Welcome " + user.getEmail());
             MobileAds.initialize(this, getString(R.string.YOUR_ADMOB_APP_ID));
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -173,7 +176,8 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
         screenTitles = loadScreenTitles();
 
         DrawerAdapter adapter = new DrawerAdapter(Arrays.asList(
-                createItemFor(POS_DASHBOARD).setChecked(true),
+                createItemFor(POS_ABHIKR).setChecked(true),
+                createItemFor(POS_DASHBOARD),
                 createItemFor(POS_FRIENDS),
                 createItemFor(POS_GROUP),
                 createItemFor(POS_PROFILE),
@@ -188,7 +192,7 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(adapter);
 
-        adapter.setSelected(POS_DASHBOARD);
+        adapter.setSelected(POS_ABHIKR);
         mAWSAppSyncClient = AWSAppSyncClient.builder()
                 .context(getApplicationContext())
                 .awsConfiguration(new AWSConfiguration(getApplicationContext()))
@@ -202,125 +206,71 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
     public Action getIndexApiAction() {
         return Actions.newView("ABHIKR Home", "http://www.dealcometrue.com/");
     }
-    public void runMutation(){
-        CreateTodoInput createTodoInput = CreateTodoInput.builder().
-                name("Use AppSync").
-                description("Realtime and Offline").
-                build();
 
-        mAWSAppSyncClient.mutate(CreateTodoMutation.builder().input(createTodoInput).build())
-                .enqueue(mutationCallback);
-    }
-
-    private GraphQLCall.Callback<CreateTodoMutation.Data> mutationCallback = new GraphQLCall.Callback<CreateTodoMutation.Data>() {
-        @Override
-        public void onResponse(@Nonnull Response<CreateTodoMutation.Data> response) {
-            Log.i("Results", "Added Todo");
-        }
-
-        @Override
-        public void onFailure(@Nonnull ApolloException e) {
-            Log.e("Error", e.toString());
-        }
-    };
-    public void runQuery(){
-        mAWSAppSyncClient.query(ListTodosQuery.builder().build())
-                .responseFetcher(AppSyncResponseFetchers.CACHE_AND_NETWORK)
-                .enqueue(todosCallback);
-    }
-
-    private GraphQLCall.Callback<ListTodosQuery.Data> todosCallback = new GraphQLCall.Callback<ListTodosQuery.Data>() {
-        @Override
-        public void onResponse(@Nonnull Response<ListTodosQuery.Data> response) {
-            Log.i("Results", response.data().listTodos().items().toString());
-        }
-
-        @Override
-        public void onFailure(@Nonnull ApolloException e) {
-            Log.e("ERROR", e.toString());
-        }
-    };
-    private AppSyncSubscriptionCall subscriptionWatcher;
-
-    private void subscribe(){
-        OnCreateTodoSubscription subscription = OnCreateTodoSubscription.builder().build();
-        subscriptionWatcher = mAWSAppSyncClient.subscribe(subscription);
-        subscriptionWatcher.execute(subCallback);
-    }
-
-    private AppSyncSubscriptionCall.Callback subCallback = new AppSyncSubscriptionCall.Callback() {
-        @Override
-        public void onResponse(@Nonnull Response response) {
-            Log.i("Response", response.data().toString());
-        }
-
-        @Override
-        public void onFailure(@Nonnull ApolloException e) {
-            Log.e("Error", e.toString());
-        }
-
-        @Override
-        public void onCompleted() {
-            Log.i("Completed", "Subscription completed");
-        }
-    };
     @Override
     public void onItemSelected(int position) {
+        if(position==POS_ABHIKR)
+        {
+            AbhiKrFragment abhiKrFragment=new AbhiKrFragment();
+            FragmentManager manager=getSupportFragmentManager();
+            manager.beginTransaction().replace(R.id.container,abhiKrFragment,"abhikr").commit();
+            Objects.requireNonNull(getSupportActionBar()).setTitle(screenTitles[POS_ABHIKR]);
+        }
         if(position == POS_DASHBOARD)
         {
             //getSupportActionBar().setTitle(screenTitles[POS_DASHBOARD]);
             Chat_MainFrag homeFragment=new Chat_MainFrag();
             FragmentManager manager=getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.container,homeFragment,"abhi").commit();
-            getSupportActionBar().setTitle(screenTitles[POS_DASHBOARD]);
+            manager.beginTransaction().replace(R.id.container,homeFragment,"abhikr").commit();
+            Objects.requireNonNull(getSupportActionBar()).setTitle(screenTitles[POS_DASHBOARD]);
         }
         if(position== POS_FRIENDS)
         {
             FriendsFragment fragment1=new FriendsFragment();
             FragmentManager manager=getSupportFragmentManager();
             manager.beginTransaction().replace(R.id.container,fragment1,"FRIEND").commit();
-            getSupportActionBar().setTitle(screenTitles[POS_FRIENDS]);
+            Objects.requireNonNull(getSupportActionBar()).setTitle(screenTitles[POS_FRIENDS]);
 
         }
         if(position== POS_PROFILE)
         {
-            //startActivity(new Intent(SampleActivity.this,Main2Activity.class));
+            //startActivity(new Intent(Home.this,Main2Activity.class));
             //Address_location fragment1=new Address_location();
             UserProfileFragment userProfileFragment=new UserProfileFragment();
             FragmentManager manager=getSupportFragmentManager();
             manager.beginTransaction().replace(R.id.container,userProfileFragment,"PROFILE").commit();
-            getSupportActionBar().setTitle(screenTitles[POS_PROFILE]);
+            Objects.requireNonNull(getSupportActionBar()).setTitle(screenTitles[POS_PROFILE]);
         }
-
         if(position== POS_GROUP)
         {
-            //startActivity(new Intent(SampleActivity.this,Main2Activity.class));
+            //startActivity(new Intent(Home.this,Main2Activity.class));
             //gerg_explist fragment=new gerg_explist();
             GroupFragment fragment=new GroupFragment();
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(R.id.container,fragment,"GROUP").commit();
-            getSupportActionBar().setTitle(screenTitles[POS_GROUP]);// for set titles
+            Objects.requireNonNull(getSupportActionBar()).setTitle(screenTitles[POS_GROUP]);// for set titles
 //            new SlidingRootNavBuilder(this)
 //                    .wi
         }
         if (position == POS_WORKSTATION) {
-            startActivity(new Intent(this,WorkStation.class),ActivityOptions.makeSceneTransitionAnimation(SampleActivity.this).toBundle());
+            startActivity(new Intent(this,WorkStation.class),ActivityOptions.makeSceneTransitionAnimation(Home.this).toBundle());
             /*Product_loadbar fram=new Product_loadbar();
             FragmentManager manager=getSupportFragmentManager();
             manager.beginTransaction().replace(R.id.container,fram,"abhi").commit();*/
-            getSupportActionBar().setTitle(screenTitles[POS_WORKSTATION]);
+            Objects.requireNonNull(getSupportActionBar()).setTitle(screenTitles[POS_WORKSTATION]);
         }
         if (position == POS_SHARE) {
             Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
             sharingIntent.setType("text/plain");
-            String shareBody = "Hi, This is abhishek Kumar. I just created a app for secure personal/family chat application with some unique featur.Hope i will live soon! ";
-            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "AbhiKr Coming Soon");
+            String shareBody = "Hi, This is abhishek Kumar. I just created an android app to present my portfolio with add on simple text messaging with " +
+                    "family & friends. i hope you will love, like and enjoy this app features - download link given below\n\n"+"https://abhikr.page.link/akma";
+            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "AbhiKr - Portfolio");
             sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
             startActivity(Intent.createChooser(sharingIntent, "Share via"));
            /* Sms_Verify frag=new Sms_Verify();
             FragmentManager manager=getSupportFragmentManager();
             manager.beginTransaction().replace(R.id.container,frag,"SMS").commit();*/
-            getSupportActionBar().setTitle(screenTitles[POS_SHARE]);
+            Objects.requireNonNull(getSupportActionBar()).setTitle(screenTitles[POS_SHARE]);
         }
         if (position == POS_LOGOUT) {
             //mAuth.signOut();
@@ -341,7 +291,7 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
         notificationVO.setAction("activity");
         notificationVO.setActionDestination("Cashback");
 
-        Intent resultIntent = new Intent(getApplicationContext(), SampleActivity.class);
+        Intent resultIntent = new Intent(getApplicationContext(), Home.class);
 
         NotificationBase notificationUtils = new NotificationBase(getApplicationContext());
         notificationUtils.displayNotification(notificationVO, resultIntent);
@@ -397,7 +347,8 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
         int id=item.getItemId();
         if(id==R.id.hom)
         {
-         startActivity(new Intent(SampleActivity.this,MainActivity.class), ActivityOptions.makeSceneTransitionAnimation(SampleActivity.this).toBundle());
+         startActivity(new Intent(Home.this,MainActivity.class),
+                 ActivityOptions.makeSceneTransitionAnimation(Home.this).toBundle());
         }
         if(id==R.id.user)
         {
@@ -405,7 +356,7 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
             /*if(user!=null)
             getSupportActionBar().setTitle(user.getEmail());*/
             Intent a=new Intent(getApplicationContext(),EXP.class);
-                startActivity(a, ActivityOptions.makeSceneTransitionAnimation(SampleActivity.this).toBundle());
+                startActivity(a, ActivityOptions.makeSceneTransitionAnimation(Home.this).toBundle());
         }
         if(id==R.id.logout)
         {            //logging out the user
@@ -416,7 +367,7 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
         if(id==R.id.about_home)
         {
             Intent aaa=new Intent(getApplicationContext(), WorkStation.class);
-            startActivity(aaa, ActivityOptions.makeSceneTransitionAnimation(SampleActivity.this).toBundle());
+            startActivity(aaa, ActivityOptions.makeSceneTransitionAnimation(Home.this).toBundle());
             //Toast.makeText(this, "AbhiKr version 1.3", Toast.LENGTH_LONG).show();
             return true;
         }
@@ -440,7 +391,7 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
                 }).setNegativeButton(getString(android.R.string.no), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(SampleActivity.this, "Welcome back : "+user.getEmail(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Home.this, "Welcome back : "+user.getEmail(), Toast.LENGTH_SHORT).show();
             }
         }).show();
     }
@@ -448,25 +399,87 @@ public class SampleActivity extends AppCompatActivity implements DrawerAdapter.O
     @Override
     public void onBackPressed() {
         // super.onBackPressed(); removing for not showing error solution
-        MaterialAlertDialogBuilder ald=new MaterialAlertDialogBuilder(SampleActivity.this);
+        MaterialAlertDialogBuilder ald=new MaterialAlertDialogBuilder(Home.this);
 
         ald.setIcon(R.mipmap.ic_launcher).setTitle("ABHIKR SAYS").setMessage("Are you sure You want to exit").setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(SampleActivity.this, "Welcome back", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Home.this, "Welcome back", Toast.LENGTH_SHORT).show();
             }
         });
         ald.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(SampleActivity.this, "Thanks for Visiting", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Home.this, "Thanks for Visiting", Toast.LENGTH_SHORT).show();
                 finishAfterTransition();
 
             }
         }).setCancelable(true).show();
 
     }
+//aws amplify work here
+public void runMutation(){
+    CreateTodoInput createTodoInput = CreateTodoInput.builder().
+            name("Use AppSync").
+            description("Realtime and Offline").
+            build();
 
+    mAWSAppSyncClient.mutate(CreateTodoMutation.builder().input(createTodoInput).build())
+            .enqueue(mutationCallback);
+}
+
+    private GraphQLCall.Callback<CreateTodoMutation.Data> mutationCallback = new GraphQLCall.Callback<CreateTodoMutation.Data>() {
+        @Override
+        public void onResponse(@Nonnull Response<CreateTodoMutation.Data> response) {
+            Log.i("Results", "Added Todo");
+        }
+
+        @Override
+        public void onFailure(@Nonnull ApolloException e) {
+            Log.e("Error", e.toString());
+        }
+    };
+    public void runQuery(){
+        mAWSAppSyncClient.query(ListTodosQuery.builder().build())
+                .responseFetcher(AppSyncResponseFetchers.CACHE_AND_NETWORK)
+                .enqueue(todosCallback);
+    }
+
+    private GraphQLCall.Callback<ListTodosQuery.Data> todosCallback = new GraphQLCall.Callback<ListTodosQuery.Data>() {
+        @Override
+        public void onResponse(@Nonnull Response<ListTodosQuery.Data> response) {
+            Log.i("Results", response.data().listTodos().items().toString());
+        }
+
+        @Override
+        public void onFailure(@Nonnull ApolloException e) {
+            Log.e("ERROR", e.toString());
+        }
+    };
+    private AppSyncSubscriptionCall subscriptionWatcher;
+
+    private void subscribe(){
+        OnCreateTodoSubscription subscription = OnCreateTodoSubscription.builder().build();
+        subscriptionWatcher = mAWSAppSyncClient.subscribe(subscription);
+        subscriptionWatcher.execute(subCallback);
+    }
+
+    private AppSyncSubscriptionCall.Callback subCallback = new AppSyncSubscriptionCall.Callback() {
+        @Override
+        public void onResponse(@Nonnull Response response) {
+            Log.i("Response", response.data().toString());
+        }
+
+        @Override
+        public void onFailure(@Nonnull ApolloException e) {
+            Log.e("Error", e.toString());
+        }
+
+        @Override
+        public void onCompleted() {
+            Log.i("Completed", "Subscription completed");
+        }
+    };
     @Override
     protected void onStop() {
         super.onStop();

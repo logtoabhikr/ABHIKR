@@ -208,7 +208,7 @@ public class HomeFragment extends Fragment {
         if(id==R.id.phone)
         {    //FirebaseAuth mAuth = FirebaseAuth.getInstance();
             //mAuth.signOut();
-            startActivity(new Intent(getActivity(),SampleActivity.class));
+            startActivity(new Intent(getActivity(),Home.class));
         }
 
         return super.onOptionsItemSelected(item);

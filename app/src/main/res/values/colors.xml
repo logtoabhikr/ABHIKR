@@ -16,13 +16,10 @@
 
 
     <color name="colorAccent">#FF4081</color>
-    <color name="transparent1">#00FFFFFF</color>
-    <color name="abhi">#00000000</color>
     <color name="spots_dialog_color">@color/colorSecondary</color>
     <color name="textColorPrimary">#212121</color>
     <color name="textColorSecondary">#757575</color>
     <color name="colorIndivateTab">#FFFFFF</color>
-    <color name="transparent">#00000000</color>
     <color name="colorCardView">#f7f7f7</color>
     <color name="grey_200">#EEEEEE</color>
     <color name="grey_100">#F5F5F5</color>

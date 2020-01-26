@@ -5,7 +5,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.abhikr.abhikr.SampleActivity;
+import com.abhikr.abhikr.Home;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -64,7 +64,7 @@ public class AbhiFirebaseMessagingService extends FirebaseMessagingService {
         notificationVO.setTitle(title);
         notificationVO.setMessage(message);
 
-        Intent resultIntent = new Intent(getApplicationContext(), SampleActivity.class);
+        Intent resultIntent = new Intent(getApplicationContext(), Home.class);
         NotificationBase notificationUtils = new NotificationBase(getApplicationContext());
         notificationUtils.displayNotification(notificationVO, resultIntent);
         //notificationUtils.playNotificationSound();
@@ -83,7 +83,7 @@ public class AbhiFirebaseMessagingService extends FirebaseMessagingService {
         notificationVO.setAction(action);
         notificationVO.setActionDestination(actionDestination);
 
-        Intent resultIntent = new Intent(getApplicationContext(), SampleActivity.class);
+        Intent resultIntent = new Intent(getApplicationContext(), Home.class);
 
         NotificationBase notificationUtils = new NotificationBase(getApplicationContext());
         notificationUtils.displayNotification(notificationVO, resultIntent);

@@ -99,7 +99,6 @@
                 android:gravity="center">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/bt_go"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     style="@style/Widget.MaterialComponents.Button"

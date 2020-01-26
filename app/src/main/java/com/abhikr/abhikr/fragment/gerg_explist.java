@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+
 import com.abhikr.abhikr.R;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -15,8 +17,6 @@ import com.google.android.gms.ads.AdView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import androidx.fragment.app.Fragment;
 
 public class gerg_explist extends Fragment {
 
@@ -98,8 +98,9 @@ public class gerg_explist extends Fragment {
                 return false;
             }
         });
-        //https://developers.google.com/admob/android/banner
+
         mAdView = rootView.findViewById(R.id.adView);
+        //https://developers.google.com/admob/android/banner
         //mAdView.setAdSize(AdSize.SMART_BANNER);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);

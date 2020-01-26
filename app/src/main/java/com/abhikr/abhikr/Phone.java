@@ -1,6 +1,5 @@
 package com.abhikr.abhikr;
 
-import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Build;
@@ -54,7 +53,7 @@ public class Phone extends AppCompatActivity implements
         FirebaseUser currentUser = mAuth.getCurrentUser();
        /* if (currentUser != null) {
             spotsdialog.dismiss();
-            startActivity(new Intent(Phone.this, SampleActivity.class));
+            startActivity(new Intent(Phone.this, Home.class));
             finish();
         }*/
        mAuth.addAuthStateListener(mAuthStateListener);
@@ -90,7 +89,7 @@ public class Phone extends AppCompatActivity implements
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser()!=null)
                 {
-                    /*Intent i1=new Intent(Phone.this,SampleActivity.class);
+                    /*Intent i1=new Intent(Phone.this,Home.class);
                     startActivity(i1, ActivityOptions.makeSceneTransitionAnimation(Phone.this).toBundle());
                     finish();*/
                     spotsdialog.dismiss();
@@ -135,7 +134,7 @@ public class Phone extends AppCompatActivity implements
                         if (task.isSuccessful()) {
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = task.getResult().getUser();
-                            startActivity(new Intent(Phone.this, SampleActivity.class));
+                            startActivity(new Intent(Phone.this, Home.class));
                             //spotsdialog.show();
                         } else {
                             Log.w(TAG, "signInWithCredential:failure", task.getException());

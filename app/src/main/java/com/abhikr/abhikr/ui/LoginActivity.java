@@ -14,9 +14,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
 
+import com.abhikr.abhikr.Home;
 import com.abhikr.abhikr.R;
-import com.abhikr.abhikr.SampleActivity;
-import com.abhikr.abhikr.SignIn;
 import com.abhikr.abhikr.data.SharedPreferenceHelper;
 import com.abhikr.abhikr.data.StaticConfig;
 import com.abhikr.abhikr.model.User;
@@ -44,10 +43,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.yarolegovich.lovelydialog.LovelyInfoDialog;
 import com.yarolegovich.lovelydialog.LovelyProgressDialog;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -133,7 +129,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     StaticConfig.UID = user.getUid();
                     //Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                     if (firstTimeAccess) {
-                        startActivity(new Intent(LoginActivity.this, SampleActivity.class));
+                        startActivity(new Intent(LoginActivity.this, Home.class));
                         LoginActivity.this.finish();
                     }
                 } else {
@@ -220,7 +216,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                 Toast.makeText(LoginActivity.this, "Authentication Successfull.",
                                         Toast.LENGTH_SHORT).show();
                                 Toast.makeText(LoginActivity.this, "signInWithCredential: Successfull :"+task.getResult(), Toast.LENGTH_LONG).show();
-                                startActivity(new Intent(LoginActivity.this, SampleActivity.class));
+                                startActivity(new Intent(LoginActivity.this, Home.class));
                                 LoginActivity.this.finish();
                             }
                             else
@@ -363,7 +359,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             } else {
                                 initNewUserInfo();
                                 Toast.makeText(LoginActivity.this, "Register and Login success", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(LoginActivity.this, SampleActivity.class));
+                                startActivity(new Intent(LoginActivity.this, Home.class));
                                 LoginActivity.this.finish();
                             }
                         }
@@ -421,7 +417,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                         .show();
                             } else {
                                 saveUserInfo();
-                                startActivity(new Intent(LoginActivity.this, SampleActivity.class));
+                                startActivity(new Intent(LoginActivity.this, Home.class));
                                 LoginActivity.this.finish();
                             }
                         }
