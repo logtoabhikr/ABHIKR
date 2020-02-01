@@ -3,6 +3,7 @@ package com.abhikr.abhikr.fragment
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,11 +12,12 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.abhikr.abhikr.Appstatus
 import com.abhikr.abhikr.R
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.abhi_kr_fragment.view.*
 
 class AbhiKrFragment : Fragment() {
@@ -33,6 +35,11 @@ class AbhiKrFragment : Fragment() {
         contexta=context
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        MobileAds.initialize(context) {}
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.abhi_kr_fragment, container, false)
@@ -40,8 +47,7 @@ class AbhiKrFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(AbhiKrViewModel::class.java)
-        view.webview_abhikr
+        viewModel = ViewModelProvider(this).get(AbhiKrViewModel::class.java)
         //pg.setMessage("Loading ...");
         val ak: WebSettings = view.webview_abhikr.settings
         ak.loadsImagesAutomatically = true
@@ -82,24 +88,40 @@ class AbhiKrFragment : Fragment() {
 //mAdView.setAdSize(AdSize.SMART_BANNER);
         val adRequest = AdRequest.Builder().build()
         view.adView_abhikr.loadAd(adRequest)
-        view.adView_abhikr.adListener = object : AdListener() {
-            override fun onAdLoaded() { // Code to be executed when an ad finishes loading.
+        view.adView_abhikr.adListener = object: AdListener() {
+            override fun onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+                Log.d(TAG,"ads imp : ad loaded")
             }
 
-            override fun onAdFailedToLoad(errorCode: Int) { // Code to be executed when an ad request fails.
+            override fun onAdFailedToLoad(errorCode : Int) {
+                // Code to be executed when an ad request fails.
+                Log.d(TAG,"ads imp : ad loaded $errorCode")
             }
 
-            override fun onAdOpened() { // Code to be executed when an ad opens an overlay that
-// covers the screen.
+            override fun onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+                Log.d(TAG,"ads imp : ad opened")
+
             }
 
-            override fun onAdLeftApplication() { // Code to be executed when the user has left the app.
+            override fun onAdClicked() {
+                Log.d(TAG,"ads imp : ad clicked")
+                Toast.makeText(contexta,"ads clicked",Toast.LENGTH_SHORT).show()
+                // Code to be executed when the user clicks on an ad.
             }
 
-            override fun onAdClosed() { // Code to be executed when when the user is about to return
-// to the app after tapping on an ad.
+            override fun onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+                Log.d(TAG,"ads imp : ad left by user")
+            }
+
+            override fun onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+                Log.d(TAG,"ads imp : ad closed")
             }
         }
-
     }
 }

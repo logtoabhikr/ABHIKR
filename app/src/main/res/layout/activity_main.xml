@@ -27,10 +27,10 @@
             android:id="@+id/toolbar" />
 
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
+            android:id="@+id/tabs_main"
             style="@style/Widget.Design.TabLayout"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="?android:attr/selectableItemBackground"
             app:tabIndicatorColor="@color/yello_800"

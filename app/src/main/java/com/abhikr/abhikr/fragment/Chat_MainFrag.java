@@ -26,16 +26,23 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class Chat_MainFrag extends Fragment {
 
     private static String TAG = "ChatActivity";
     private ViewPager viewPager;
-    private TabLayout tabLayout = null;
-    public static String STR_FRIEND_FRAGMENT = "FRIEND";
-    public static String STR_GROUP_FRAGMENT = "GROUP";
-    public static String STR_INFO_FRAGMENT = "INFO";
+    private TabLayout tabLayout;
+    private int[] tabIcons = {
+            R.drawable.ic_tab_person,
+            R.drawable.ic_tab_group,
+            R.drawable.ic_tab_infor
+    };
+
+    private static String STR_FRIEND_FRAGMENT = "FRIEND";
+    private static String STR_GROUP_FRAGMENT = "GROUP";
+    private static String STR_INFO_FRAGMENT = "INFO";
 
     private FloatingActionButton floatButton;
     private Chat_MainFrag.ViewPagerAdapter adapter;
@@ -115,7 +122,7 @@ public class Chat_MainFrag extends Fragment {
      */
     private void initTab(View view) {
         tabLayout =  view.findViewById(R.id.tabs);
-        tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorIndivateTab));
+        //tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorIndivateTab));
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
@@ -123,15 +130,9 @@ public class Chat_MainFrag extends Fragment {
 
 
     private void setupTabIcons() {
-        int[] tabIcons = {
-                R.drawable.ic_tab_person,
-                R.drawable.ic_tab_group,
-                R.drawable.ic_tab_infor
-        };
-
-        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
-        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
-        tabLayout.getTabAt(2).setIcon(tabIcons[2]);
+        Objects.requireNonNull(tabLayout.getTabAt(0)).setIcon(tabIcons[0]);
+        Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(tabIcons[1]);
+        Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(tabIcons[2]);
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -199,9 +200,10 @@ public class Chat_MainFrag extends Fragment {
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
         public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
+            super(manager,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
 
+        @NonNull
         @Override
         public Fragment getItem(int position) {
             return mFragmentList.get(position);
@@ -221,7 +223,8 @@ public class Chat_MainFrag extends Fragment {
         public CharSequence getPageTitle(int position) {
 
             // return null to display only the icon
-            return null;
+            //return null;
+            return mFragmentTitleList.get(position);
         }
     }
 

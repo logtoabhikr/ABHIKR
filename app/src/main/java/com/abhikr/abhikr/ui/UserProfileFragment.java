@@ -13,11 +13,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.abhikr.abhikr.R;
 import com.abhikr.abhikr.data.FriendDB;
@@ -31,6 +37,8 @@ import com.abhikr.abhikr.util.ImageUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -44,13 +52,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import java.util.Objects;
 
 
 public class UserProfileFragment extends Fragment {
@@ -90,7 +92,7 @@ public class UserProfileFragment extends Fragment {
             listConfig.clear();
             myAccount = dataSnapshot.getValue(User.class);
 
-            setupArrayListInfo(myAccount);
+            setupArrayListInfo(Objects.requireNonNull(myAccount));
             if(infoAdapter != null){
                 infoAdapter.notifyDataSetChanged();
             }
@@ -304,17 +306,18 @@ public class UserProfileFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     if(config.getLabel().equals(SIGNOUT_LABEL)){
-                        FirebaseAuth.getInstance().signOut();
-                        FriendDB.getInstance(getContext()).dropDB();
-                        GroupDB.getInstance(getContext()).dropDB();
-                        ServiceUtils.stopServiceFriendChat(getContext().getApplicationContext(), true);
-                        getActivity().finish();
+                        ABHI_LOGOUT();
+                       /* FirebaseAuth.getInstance().signOut();
+                        FriendDB.getInstance(context).dropDB();
+                        GroupDB.getInstance(context).dropDB();
+                        ServiceUtils.stopServiceFriendChat(holder.itemView.getContext(), true);
+                        getActivity().finish();*/
                     }
 
                     if(config.getLabel().equals(USERNAME_LABEL)){
                         View vewInflater = LayoutInflater.from(context)
                                 .inflate(R.layout.dialog_edit_username,  (ViewGroup) getView(), false);
-                        final EditText input = (EditText)vewInflater.findViewById(R.id.edit_username);
+                        final TextInputEditText input = vewInflater.findViewById(R.id.edit_username);
                         input.setText(myAccount.name);
                         /*Hiển thị dialog với dEitText cho phép người dùng nhập username mới*/
                         new AlertDialog.Builder(context)
@@ -365,14 +368,26 @@ public class UserProfileFragment extends Fragment {
          */
         private void changeUserName(String newName){
             userDB.child("name").setValue(newName);
-
-
             myAccount.name = newName;
             SharedPreferenceHelper prefHelper = SharedPreferenceHelper.getInstance(context);
             prefHelper.saveUserInfo(myAccount);
 
             tvUserName.setText(newName);
             setupArrayListInfo(myAccount);
+        }
+        private void ABHI_LOGOUT() {
+            MaterialAlertDialogBuilder materialAlertDialogBuilder=new MaterialAlertDialogBuilder(context);
+            materialAlertDialogBuilder.setIcon(R.drawable.ic_notify_group).setTitle("Abhikr Says : ").setMessage("Are you sure want to logout.")
+                    .setPositiveButton(getString(android.R.string.yes), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //FirebaseAuth.getInstance().signOut();
+                            mAuth.signOut();
+                            FriendDB.getInstance(context).dropDB();
+                            GroupDB.getInstance(context).dropDB();
+                            ServiceUtils.stopServiceFriendChat(context, true);
+                        }
+                    }).setNegativeButton(getString(android.R.string.no), (dialog, which) -> Toast.makeText(context, "Welcome back", Toast.LENGTH_SHORT).show()).show();
         }
 
         void resetPassword(final String email) {

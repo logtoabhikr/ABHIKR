@@ -23,6 +23,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.abhikr.abhikr.data.FriendDB;
+import com.abhikr.abhikr.data.GroupDB;
 import com.abhikr.abhikr.firepush.NotificationBase;
 import com.abhikr.abhikr.firepush.NotificationVO;
 import com.abhikr.abhikr.fragment.AbhiKrFragment;
@@ -32,6 +34,7 @@ import com.abhikr.abhikr.menu.DrawerItem;
 import com.abhikr.abhikr.menu.SimpleItem;
 import com.abhikr.abhikr.menu.SpaceItem;
 import com.abhikr.abhikr.projects.WorkStation;
+import com.abhikr.abhikr.service.ServiceUtils;
 import com.abhikr.abhikr.ui.FriendsFragment;
 import com.abhikr.abhikr.ui.GroupFragment;
 import com.abhikr.abhikr.ui.LoginActivity;
@@ -46,7 +49,6 @@ import com.amazonaws.mobileconnectors.appsync.fetcher.AppSyncResponseFetchers;
 import com.apollographql.apollo.GraphQLCall;
 import com.apollographql.apollo.api.Response;
 import com.apollographql.apollo.exception.ApolloException;
-import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -91,7 +93,7 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthStateListener);
-        FirebaseAppIndex.getInstance().update(new Indexable.Builder().setName(getString(R.string.app_name)).setUrl("http://www.abhikr.com/").build());
+        FirebaseAppIndex.getInstance().update(new Indexable.Builder().setName(getString(R.string.app_name)).setUrl("https://www.abhikr.com/").build());
         FirebaseUserActions.getInstance().start(getIndexApiAction());
     }
 
@@ -115,28 +117,26 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
                 //if the user is not logged in
                 //that means current user will return null
                 if (firebaseAuth.getCurrentUser() == null) {
-                    Intent i = new Intent(getApplicationContext(), LoginActivity.class);
-                    /*// Closing all the Activities
+                    Intent i = new Intent(Home.this, LoginActivity.class);
+                    // Closing all the Activities
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
                     // Add new Flag to start new Activity
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);*/
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                     // Staring Login Activity
-                    //startActivity(i, ActivityOptions.makeSceneTransitionAnimation(Home.this).toBundle());
-                    //supportFinishAfterTransition();
+                    startActivity(i, ActivityOptions.makeSceneTransitionAnimation(Home.this).toBundle());
+                    supportFinishAfterTransition();
                 }
             }
         };
-
-
         //getting current user
         user = mAuth.getCurrentUser();
         if (user != null) {
             // Obtain the FirebaseAnalytics instance.
             //mFirebaseAnalytics = FirebaseAnalytics.getInstance(Home.this);
             getSupportActionBar().setTitle("Welcome " + user.getEmail());
-            MobileAds.initialize(this, getString(R.string.YOUR_ADMOB_APP_ID));
+            //MobileAds.initialize(this, getString(R.string.YOUR_ADMOB_APP_ID));
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
             try {
                     //Sets the user ID property.
@@ -204,7 +204,7 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
         Uri appLinkData = appLinkIntent.getData();
     }
     public Action getIndexApiAction() {
-        return Actions.newView("ABHIKR Home", "http://www.dealcometrue.com/");
+        return Actions.newView("ABHIKR Home", "https://www.abhikr.com/");
     }
 
     @Override
@@ -384,16 +384,11 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
                     public void onClick(DialogInterface dialog, int which) {
                         //FirebaseAuth.getInstance().signOut();
                         mAuth.signOut();
-                        //closing activity
-                        //finish();
-                        //starting login activity
+                        FriendDB.getInstance(Home.this).dropDB();
+                        GroupDB.getInstance(Home.this).dropDB();
+                        ServiceUtils.stopServiceFriendChat(Home.this, true);
                     }
-                }).setNegativeButton(getString(android.R.string.no), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(Home.this, "Welcome back : "+user.getEmail(), Toast.LENGTH_SHORT).show();
-            }
-        }).show();
+                }).setNegativeButton(getString(android.R.string.no), (dialog, which) -> Toast.makeText(Home.this, "Welcome back : "+user.getEmail(), Toast.LENGTH_SHORT).show()).show();
     }
 
     @Override

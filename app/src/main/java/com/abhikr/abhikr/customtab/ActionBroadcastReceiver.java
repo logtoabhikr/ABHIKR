@@ -25,7 +25,7 @@ import com.abhikr.abhikr.R;
  * in a Toast.
  */
 public class ActionBroadcastReceiver extends BroadcastReceiver {
-    public static final String KEY_ACTION_SOURCE = "com.apppl.dealcometrue.ACTION_SOURCE";
+    public static final String KEY_ACTION_SOURCE = "com.abhikr.abhikr.ACTION_SOURCE";
     public static final int ACTION_ACTION_BUTTON = 1;
     public static final int ACTION_MENU_ITEM = 2;
     public static final int ACTION_TOOLBAR = 3;

@@ -141,13 +141,13 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
             override fun onBindViewHolder(holder: ViewHolder, position: Int, model: WorkModal) {
                 //Log.d(TAG,"all data"+model);
 
-                holder.itemView.worktitle.text = model.Title
-                holder.itemView.workdesc.text = model.Description
-                holder.itemView.workclient.text = model.Client
-                holder.itemView.workduration.text = model.Duration
+                holder.itemView.worktitle.text = model.title
+                holder.itemView.workdesc.text = model.description
+                holder.itemView.workclient.text = model.client
+                holder.itemView.workduration.text = model.duration
                 //holder.itemView.worklogo.setImageURI(Uri.parse(model.Logo))
                 GlideApp.with(this@WorkStation)
-                        .load(model.Logo)
+                        .load(model.logo)
                         .placeholder(R.mipmap.ic_launcher)
                         .error(R.mipmap.favicon)
                         .centerCrop()
@@ -158,7 +158,7 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
                 holder.itemView.workplaystore.setOnClickListener { v ->
                     try {
                         val playintent = Intent("android.intent.action.VIEW",
-                                Uri.parse(model.PlayStore))
+                                Uri.parse(model.playStore))
                         startActivity(playintent)
                     } catch (e: Exception) {
                         Snackbar.make(v,"Unable to Connect With play store...",
@@ -171,7 +171,7 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
                         /*val webintent = Intent(Intent.ACTION_VIEW, Uri.parse(model.Website))
                         startActivity(webintent)*/
                         val abhiweb=ABHIWeb(this@WorkStation)
-                        abhiweb.redirectUsingCustomTab(model.Website)
+                        abhiweb.redirectUsingCustomTab(model.website)
                     }
                     catch (e:Exception)
                     {
@@ -184,7 +184,7 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
                 holder.itemView.workcardview.setOnClickListener { v ->
                     if(FirebaseAuth.getInstance().currentUser!!.email!="logtoabhikr@gmail.com")
                     {
-                        Snackbar.make(findViewById(android.R.id.content), model.Title+" says: Click on play store button", Snackbar.LENGTH_LONG)
+                        Snackbar.make(findViewById(android.R.id.content), model.title+" says: Click on play store button", Snackbar.LENGTH_LONG)
                                 .setAction("Dismiss", null).show()
                     }
                     else

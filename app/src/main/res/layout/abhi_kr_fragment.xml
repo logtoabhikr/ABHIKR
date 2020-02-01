@@ -17,7 +17,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             ads:adSize="SMART_BANNER"
-            ads:adUnitId="@string/banner_ad_unit_id"
+            ads:adUnitId="@string/banner_ad_unit_id_simple"
             android:background="@color/windowBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -33,14 +33,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/adView_abhikr" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <TextView
-        android:id="@+id/abhikr_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="hi"
         android:textSize="16sp"
         android:visibility="gone"
-        tools:text="This is fallback text... "
-        />
+        tools:text="This is fallback text... " />
 
 </FrameLayout>

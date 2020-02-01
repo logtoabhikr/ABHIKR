@@ -96,14 +96,14 @@ class WorkStore : AppCompatActivity(),View.OnClickListener {
 // Do something with the item (example: set Item title and price)
             if(workModal!=null)
             {
-                titleworkstore.setText(workModal?.Title)
-                descriptionworkstore.setText(workModal?.Description)
-                durationworkstore.setText(workModal?.Duration)
-                playstoreworkstore.setText(workModal?.PlayStore)
-                Log.d(TAG,"play store"+workModal?.PlayStore)
-                websiteworkstore.setText(workModal?.Website)
-                clientworkstore.setText(workModal?.Client)
-                logoworkstore.setText(workModal!!.Logo)
+                titleworkstore.setText(workModal?.title)
+                descriptionworkstore.setText(workModal?.description)
+                durationworkstore.setText(workModal?.duration)
+                playstoreworkstore.setText(workModal?.playStore)
+                Log.d(TAG,"play store"+workModal?.playStore)
+                websiteworkstore.setText(workModal?.website)
+                clientworkstore.setText(workModal?.client)
+                logoworkstore.setText(workModal!!.logo)
             }
             goupload.isEnabled=false
             goupload.visibility=View.GONE

@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.abhikr.abhikr.data.StaticConfig;
@@ -32,6 +32,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -41,7 +42,11 @@ public class MainActivity extends AppCompatActivity {
     public static String STR_FRIEND_FRAGMENT = "FRIEND";
     public static String STR_GROUP_FRAGMENT = "GROUP";
     public static String STR_INFO_FRAGMENT = "INFO";
-
+    int[] tabIcons = {
+            R.drawable.ic_tab_person,
+            R.drawable.ic_tab_group,
+            R.drawable.ic_tab_infor
+    };
     private FloatingActionButton floatButton;
     private ViewPagerAdapter adapter;
 
@@ -66,15 +71,15 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager =  findViewById(R.id.viewpager);
         floatButton =  findViewById(R.id.fabmainatv);
-        initTab();
+
         initFirebase();
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        initTab();
     }
 
     private void initFirebase() {
-        //Khoi tao thanh phan de dang nhap, dang ky
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -125,8 +130,8 @@ public class MainActivity extends AppCompatActivity {
      * Khoi tao 3 tab
      */
     private void initTab() {
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorIndivateTab));
+        tabLayout = findViewById(R.id.tabs_main);
+        //tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorIndivateTab));
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
@@ -134,15 +139,27 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setupTabIcons() {
-        int[] tabIcons = {
-                R.drawable.ic_tab_person,
-                R.drawable.ic_tab_group,
-                R.drawable.ic_tab_infor
-        };
 
-        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
-        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
-        tabLayout.getTabAt(2).setIcon(tabIcons[2]);
+        Objects.requireNonNull(tabLayout.getTabAt(0)).setIcon(tabIcons[0]);
+        Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(tabIcons[1]);
+        Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(tabIcons[2]);
+       /* TextView tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tablay, null);
+        tabOne.setText(STR_FRIEND_FRAGMENT);
+        tabOne.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_tab_person, 0, 0);
+        tabOne.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+        Objects.requireNonNull(tabLayout.getTabAt(0)).setCustomView(tabOne);
+
+        TextView tabTwo = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tablay, null);
+        tabTwo.setText(STR_GROUP_FRAGMENT);
+        tabTwo.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_tab_group, 0, 0);
+        //tabTwo.setTextColor(getResources().getColor(R.color.colorPrimary));
+        Objects.requireNonNull(tabLayout.getTabAt(1)).setCustomView(tabTwo);
+
+        TextView tabThree = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tablay, null);
+        tabThree.setText(STR_INFO_FRAGMENT);
+        tabThree.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_tab_infor, 0, 0);
+        tabThree.setTextColor(getResources().getColor(android.R.color.black));
+        Objects.requireNonNull(tabLayout.getTabAt(2)).setCustomView(tabThree);*/
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -229,19 +246,29 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Adapter hien thi tab
-     */
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+    // abhi_internet checking end here
+    //fragmentpageradaptor loads all fragment in memory stack but fragmentstatepageradaptor works with heavy data fragment like images
+    private static class ViewPagerAdapter extends FragmentStatePagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
         public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
+            super(manager,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
 
+        @NonNull
         @Override
         public Fragment getItem(int position) {
+           /* switch (position) {
+                case 0:
+                    return new Coupon_Fragment();
+                case 1:
+                    return new Deal_fragment();
+                case 2:
+                    return new Store_fragment();
+                default:
+                    return null;
+            }*/
             return mFragmentList.get(position);
         }
 
@@ -258,8 +285,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public CharSequence getPageTitle(int position) {
 
-            // return null to display only the icon
-            return null;
+            //return null;// this icon only not text
+            return mFragmentTitleList.get(position); // custom text with above icon
         }
     }
 }

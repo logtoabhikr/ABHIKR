@@ -12,12 +12,12 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @IgnoreExtraProperties
 @Keep
-data class WorkModal (var Client:String?=null,
-                      var Description:String?=null,
-                      var Duration:String?=null,
-                      var Logo:String?=null,
-                      var PlayStore:String?=null,
-                      @ServerTimestamp var TimeStamp: Timestamp?=null,
-                      var Title:String?=null,
-                      var Website:String?=null
+data class WorkModal (var client:String?=null,
+                      var description:String?=null,
+                      var duration:String?=null,
+                      var logo:String?=null,
+                      var playStore:String?=null,
+                      @ServerTimestamp var timeStamp: Timestamp?=null,
+                      var title:String?=null,
+                      var website:String?=null
                      ) : Parcelable
