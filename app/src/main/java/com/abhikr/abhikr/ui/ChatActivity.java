@@ -5,14 +5,25 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageButton;
+import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
+import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.Fade;
+import androidx.transition.TransitionManager;
 
 import com.abhikr.abhikr.R;
 import com.abhikr.abhikr.data.SharedPreferenceHelper;
@@ -29,9 +40,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -43,8 +51,9 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private String roomId;
     private ArrayList<CharSequence> idFriend;
     private Consersation consersation;
-    private ImageButton btnSend;
-    private EditText editWriteMessage;
+    private AppCompatAutoCompleteTextView editWriteMessage;
+    private Fade mFade;
+    private AppCompatImageButton btnSend,btnclear;
     private LinearLayoutManager linearLayoutManager;
     public static HashMap<String, Bitmap> bitmapAvataFriend;
     public Bitmap bitmapAvataUser;
@@ -60,8 +69,13 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         String nameFriend = intentData.getStringExtra(StaticConfig.INTENT_KEY_CHAT_FRIEND);
 
         consersation = new Consersation();
-        btnSend = (ImageButton) findViewById(R.id.btnSend);
+        editWriteMessage = findViewById(R.id.editWriteMessage);
+        final ViewGroup transitionsContainer = findViewById(R.id.homemainframe);
+        mFade=new Fade();
+        btnSend =  transitionsContainer.findViewById(R.id.btnSend);
+        btnclear =  transitionsContainer.findViewById(R.id.btnclear);
         btnSend.setOnClickListener(this);
+        btnclear.setOnClickListener(this);
 
         String base64AvataUser = SharedPreferenceHelper.getInstance(this).getUserInfo().avata;
         if (!base64AvataUser.equals(StaticConfig.STR_DEFAULT_BASE64)) {
@@ -71,7 +85,49 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             bitmapAvataUser = null;
         }
 
-        editWriteMessage = (EditText) findViewById(R.id.editWriteMessage);
+        editWriteMessage.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                TransitionManager.beginDelayedTransition(transitionsContainer, mFade);
+                if (s.length() != 0)
+                {
+                    btnclear.setVisibility(View.VISIBLE);
+                }
+                else {
+                    btnclear.setVisibility(View.INVISIBLE);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        editWriteMessage.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                String content = editWriteMessage.getText().toString().trim();
+                if (content.length() > 0) {
+                    editWriteMessage.setText("");
+                    editWriteMessage.requestFocus();
+                    Message newMessage = new Message();
+                    newMessage.text = content;
+                    newMessage.idSender = StaticConfig.UID;
+                    newMessage.idReceiver = roomId;
+                    newMessage.timestamp = System.currentTimeMillis();
+                    FirebaseDatabase.getInstance().getReference().child("message/" + roomId).push().setValue(newMessage);
+                }
+                else
+                {
+                    Toast.makeText(this, "msg can't be empty", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            }
+            return false;
+        });
         if (idFriend != null && nameFriend != null) {
             getSupportActionBar().setTitle(nameFriend);
             linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -80,7 +136,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             adapter = new ListMessageAdapter(this, consersation, bitmapAvataFriend, bitmapAvataUser);
             FirebaseDatabase.getInstance().getReference().child("message/" + roomId).addChildEventListener(new ChildEventListener() {
                 @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
                     if (dataSnapshot.getValue() != null) {
                         HashMap mapMessage = (HashMap) dataSnapshot.getValue();
                         Message newMessage = new Message();
@@ -95,22 +151,22 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
 
                 }
 
                 @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
                 }
 
                 @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
 
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
             });
@@ -143,6 +199,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             String content = editWriteMessage.getText().toString().trim();
             if (content.length() > 0) {
                 editWriteMessage.setText("");
+                editWriteMessage.requestFocus();
                 Message newMessage = new Message();
                 newMessage.text = content;
                 newMessage.idSender = StaticConfig.UID;
@@ -150,6 +207,16 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 newMessage.timestamp = System.currentTimeMillis();
                 FirebaseDatabase.getInstance().getReference().child("message/" + roomId).push().setValue(newMessage);
             }
+            else
+            {
+                Toast.makeText(this, "msg can't be empty", Toast.LENGTH_SHORT).show();
+            }
+        }
+        if(view.getId()==R.id.btnclear)
+        {
+            editWriteMessage.clearComposingText();
+            editWriteMessage.setText("");
+            editWriteMessage.requestFocus();
         }
     }
 }

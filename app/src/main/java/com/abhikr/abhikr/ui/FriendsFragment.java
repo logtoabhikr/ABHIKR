@@ -17,6 +17,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.abhikr.abhikr.R;
 import com.abhikr.abhikr.data.FriendDB;
@@ -42,17 +50,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -81,7 +82,7 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         detectFriendOnline = new CountDownTimer(System.currentTimeMillis(), StaticConfig.TIME_TO_REFRESH) {
             @Override
@@ -122,7 +123,14 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     .setTitle("Get all friend....")
                     .setTopColorRes(R.color.colorPrimary)
                     .show();
-            getListFriendUId();
+            try {
+                getListFriendUId();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
         }
 
         deleteFriendReceiver = new BroadcastReceiver() {
@@ -141,7 +149,7 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
         };
 
         IntentFilter intentFilter = new IntentFilter(ACTION_DELETE_FRIEND);
-        getContext().registerReceiver(deleteFriendReceiver, intentFilter);
+        requireActivity().registerReceiver(deleteFriendReceiver, intentFilter);
 
         return layout;
     }
@@ -149,8 +157,7 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
     @Override
     public void onDestroyView (){
         super.onDestroyView();
-
-        getContext().unregisterReceiver(deleteFriendReceiver);
+        requireActivity().unregisterReceiver(deleteFriendReceiver);
     }
 
     @Override
@@ -163,12 +170,18 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
 
     @Override
     public void onRefresh() {
-        listFriendID.clear();
-        dataListFriend.getListFriend().clear();
-        adapter.notifyDataSetChanged();
-        FriendDB.getInstance(getContext()).dropDB();
-        detectFriendOnline.cancel();
-        getListFriendUId();
+        try {
+            listFriendID.clear();
+            dataListFriend.getListFriend().clear();
+            adapter.notifyDataSetChanged();
+            FriendDB.getInstance(getContext()).dropDB();
+            detectFriendOnline.cancel();
+            getListFriendUId();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public class FragFriendClickFloatButton implements View.OnClickListener {
@@ -226,7 +239,7 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     .show();
             FirebaseDatabase.getInstance().getReference().child("user").orderByChild("email").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     dialogWait.dismiss();
                     if (dataSnapshot.getValue() == null) {
                         //email not found
@@ -259,8 +272,8 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
-
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    Toast.makeText(context, "Error: "+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -359,17 +372,16 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     /**
-     * Lay danh sach ban be tren server
+     * getting list of friend from server
      */
     private void getListFriendUId() {
         FirebaseDatabase.getInstance().getReference().child("friend/" + StaticConfig.UID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
                     HashMap mapRecord = (HashMap) dataSnapshot.getValue();
-                    Iterator listKey = mapRecord.keySet().iterator();
-                    while (listKey.hasNext()) {
-                        String key = listKey.next().toString();
+                    for (Object o : mapRecord.keySet()) {
+                        String key = o.toString();
                         listFriendID.add(mapRecord.get(key).toString());
                     }
                     getAllFriendInfo(0);
@@ -379,7 +391,8 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }
@@ -398,7 +411,7 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
             final String id = listFriendID.get(index);
             FirebaseDatabase.getInstance().getReference().child("user/" + id).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.getValue() != null) {
                         Friend user = new Friend();
                         HashMap mapUserInfo = (HashMap) dataSnapshot.getValue();
@@ -414,8 +427,7 @@ public class FriendsFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
-
+                public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
             });
         }
@@ -446,21 +458,22 @@ class ListFriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         dialogWaitDeleting = new LovelyProgressDialog(context);
     }
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.rc_item_friend, parent, false);
         return new ItemFriendViewHolder(context, view);
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
         final String name = listFriend.getListFriend().get(position).name;
         final String id = listFriend.getListFriend().get(position).id;
         final String idRoom = listFriend.getListFriend().get(position).idRoom;
         final String avata = listFriend.getListFriend().get(position).avata;
         ((ItemFriendViewHolder) holder).txtName.setText(name);
 
-        ((View) ((ItemFriendViewHolder) holder).txtName.getParent().getParent().getParent())
+        ((View) ((ItemFriendViewHolder) holder).txtName.getParent().getParent())
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -486,7 +499,7 @@ class ListFriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 });
 
         //nhấn giữ để xóa bạn
-        ((View) ((ItemFriendViewHolder) holder).txtName.getParent().getParent().getParent())
+        ((View) ((ItemFriendViewHolder) holder).txtName.getParent().getParent())
                 .setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View view) {
@@ -563,22 +576,22 @@ class ListFriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     }
 
                     @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
 
                     }
 
                     @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
                     }
 
                     @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
 
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
                     }
                 });
@@ -603,7 +616,7 @@ class ListFriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             mapQueryOnline.put(id, FirebaseDatabase.getInstance().getReference().child("user/" + id+"/status"));
             mapChildListenerOnline.put(id, new ChildEventListener() {
                 @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String s) {
                     if(dataSnapshot.getValue() != null && dataSnapshot.getKey().equals("isOnline")) {
                         Log.d("FriendsFragment add " + id,  (boolean)dataSnapshot.getValue() +"");
                         listFriend.getListFriend().get(position).status.isOnline = (boolean)dataSnapshot.getValue();
@@ -612,7 +625,7 @@ class ListFriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 }
 
                 @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, String s) {
                     if(dataSnapshot.getValue() != null&& dataSnapshot.getKey().equals("isOnline")) {
                         Log.d("FriendsFragment change " + id,  (boolean)dataSnapshot.getValue() +"");
                         listFriend.getListFriend().get(position).status.isOnline = (boolean)dataSnapshot.getValue();
@@ -621,17 +634,17 @@ class ListFriendsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 }
 
                 @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
                 }
 
                 @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, String s) {
 
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
             });

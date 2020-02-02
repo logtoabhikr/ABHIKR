@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -32,31 +33,32 @@ import java.util.Objects;
 public class Chat_MainFrag extends Fragment {
 
     private static String TAG = "ChatActivity";
-    private ViewPager viewPager;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseUser user;
+
     private TabLayout tabLayout;
+    private static String STR_FRIEND_FRAGMENT = "FRIEND";
+    private static String STR_GROUP_FRAGMENT = "GROUP";
+    private static String STR_INFO_FRAGMENT = "INFO";
+    private FloatingActionButton floatButton;
     private int[] tabIcons = {
             R.drawable.ic_tab_person,
             R.drawable.ic_tab_group,
             R.drawable.ic_tab_infor
     };
-
-    private static String STR_FRIEND_FRAGMENT = "FRIEND";
-    private static String STR_GROUP_FRAGMENT = "GROUP";
-    private static String STR_INFO_FRAGMENT = "INFO";
-
-    private FloatingActionButton floatButton;
     private Chat_MainFrag.ViewPagerAdapter adapter;
-
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
-    private FirebaseUser user;
-
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+        ServiceUtils.stopServiceFriendChat(requireContext(), false);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_chat__main, container, false);
+        return inflater.inflate(R.layout.fragment_chat__main, container, false);
         /*final Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if(getSupportActionBar() != null) {
@@ -65,67 +67,70 @@ public class Chat_MainFrag extends Fragment {
             getSupportActionBar().setHomeButtonEnabled(true);*//*
             getSupportActionBar().setDisplayShowTitleEnabled(true);
         }*/
-
-        viewPager =  view.findViewById(R.id.viewpager);
-        floatButton =  view.findViewById(R.id.fabchatmain);
-
-            initTab(view);
-            initFirebase();
-
-        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-        return view;
     }
-    private void initFirebase() {
-        //Khoi tao thanh phan de dang nhap, dang ky
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         mAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    StaticConfig.UID = user.getUid();
-                } else {
-                    //getActivity().finish();
-                    // User is signed in
-                    //startActivity(new Intent(getContext(), LoginActivity.class));
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-                // ...
+        mAuthListener = firebaseAuth -> {
+            user = firebaseAuth.getCurrentUser();
+            if (user != null) {
+                StaticConfig.UID = user.getUid();
+            } else {
+                //getActivity().finish();
+                // User is signed in
+                //startActivity(new Intent(getContext(), LoginActivity.class));
+                Log.d(TAG, "onAuthStateChanged:signed_out");
             }
+            // ...
         };
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-        ServiceUtils.stopServiceFriendChat(getContext(), false);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        ServiceUtils.startServiceFriendChat(getContext());
-        super.onDestroy();
-    }
-
-    /**
-     * Khoi tao 3 tab
-     */
-    private void initTab(View view) {
-        tabLayout =  view.findViewById(R.id.tabs);
-        //tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorIndivateTab));
+        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        floatButton =  view.findViewById(R.id.fabchatmain);
+        final ViewPager viewPager =view.findViewById(R.id.viewpager);
         setupViewPager(viewPager);
+        tabLayout = view.findViewById(R.id.tabs);
+        //tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorIndivateTab));
         tabLayout.setupWithViewPager(viewPager);
-        setupTabIcons();
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+          /*      Log.d(TAG, "onTabSelected: pos: " + tab.getPosition());
+
+                switch (tab.getPosition()) {
+                    case 0:
+                        //Toast.makeText(MainActivity.this, "Loading coupons..", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG,"Loading coupons..");
+                        break;
+                    case 1:
+                        //Toast.makeText(MainActivity.this, "Loading deals..", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG,"Loading deals..");
+                        break;
+                    case 2:
+                        //Toast.makeText(MainActivity.this, "Loading coupons & deals by store..", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG,"Loading coupons & deals by store..");
+                        break;
+                }*/
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        try {
+            setupTabIcons();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
 
@@ -155,7 +160,7 @@ public class Chat_MainFrag extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                ServiceUtils.stopServiceFriendChat(getContext().getApplicationContext(), false);
+                ServiceUtils.stopServiceFriendChat(requireContext(), false);
                 if (adapter.getItem(position) instanceof FriendsFragment) {
                     floatButton.setVisibility(View.VISIBLE);
                     floatButton.setOnClickListener(((FriendsFragment) adapter.getItem(position)).onClickFloatButton.getInstance(getContext()));
@@ -227,5 +232,17 @@ public class Chat_MainFrag extends Fragment {
             return mFragmentTitleList.get(position);
         }
     }
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
+    }
 
+    @Override
+    public void onDestroy() {
+        ServiceUtils.startServiceFriendChat(getContext());
+        super.onDestroy();
+    }
 }

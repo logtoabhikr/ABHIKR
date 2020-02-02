@@ -1,7 +1,11 @@
 package com.abhikr.abhikr.model;
 
 
+import androidx.annotation.Keep;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+@IgnoreExtraProperties
+@Keep
 public class User {
     public String name;
     public String email;

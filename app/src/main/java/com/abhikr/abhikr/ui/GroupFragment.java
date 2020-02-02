@@ -18,6 +18,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.abhikr.abhikr.R;
 import com.abhikr.abhikr.data.FriendDB;
 import com.abhikr.abhikr.data.GroupDB;
@@ -36,13 +42,6 @@ import com.yarolegovich.lovelydialog.LovelyProgressDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 
 public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
@@ -80,7 +79,7 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         mSwipeRefreshLayout.setOnRefreshListener(this);
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         recyclerListGroups.setLayoutManager(layoutManager);
-        adapter = new ListGroupsAdapter(getContext(), listGroup);
+        adapter = new ListGroupsAdapter(requireContext(), listGroup);
         recyclerListGroups.setAdapter(adapter);
         onClickFloatButton = new FragGroupClickFloatButton();
         progressDialog = new LovelyProgressDialog(getContext())
@@ -98,7 +97,14 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         if(listGroup.size() == 0){
             //Ket noi server hien thi group
             mSwipeRefreshLayout.setRefreshing(true);
-            getListGroup();
+            try {
+                getListGroup();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
         }
         return layout;
     }
@@ -106,12 +112,11 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     private void getListGroup(){
         FirebaseDatabase.getInstance().getReference().child("user/"+ StaticConfig.UID+"/group").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue() != null) {
                     HashMap mapListGroup = (HashMap) dataSnapshot.getValue();
-                    Iterator iterator = mapListGroup.keySet().iterator();
-                    while (iterator.hasNext()){
-                        String idGroup = (String) mapListGroup.get(iterator.next().toString());
+                    for (Object o : mapListGroup.keySet()) {
+                        String idGroup = (String) mapListGroup.get(o.toString());
                         Group newGroup = new Group();
                         newGroup.id = idGroup;
                         listGroup.add(newGroup);
@@ -124,7 +129,7 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -148,7 +153,7 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         }else {
             FirebaseDatabase.getInstance().getReference().child("group/"+listGroup.get(indexGroup).id).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if(dataSnapshot.getValue() != null){
                         HashMap mapGroup = (HashMap) dataSnapshot.getValue();
                         ArrayList<String> member = (ArrayList<String>) mapGroup.get("member");
@@ -165,7 +170,7 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError) {
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
             });

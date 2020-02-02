@@ -49,6 +49,15 @@
             android:value="@string/YOUR_ADMOB_APP_ID" />
 
         <activity
+            android:name=".Splash_Reveal"
+            android:theme="@style/AppTheme.Transparent">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".ui.LoginActivity"
             android:configChanges="keyboardHidden|screenLayout|screenSize|orientation"
             android:launchMode="singleTop"
@@ -175,15 +184,6 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity
-            android:name=".Splash_Reveal"
-            android:theme="@style/AppTheme.Transparent">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>

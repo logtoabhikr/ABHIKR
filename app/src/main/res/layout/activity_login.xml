@@ -15,7 +15,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cv"
         android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_height="320dp"
         android:layout_centerInParent="true"
         app:cardCornerRadius="6dp"
         app:cardElevation="3dp"

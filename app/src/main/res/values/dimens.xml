@@ -6,4 +6,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="abhikr_margin">8dp</dimen>
     <dimen name="app_bar_height1">256dp</dimen>
+    <dimen name="abhi_home_feature">40dp</dimen>
 </resources>

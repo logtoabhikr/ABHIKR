@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -111,23 +110,19 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
         }
         mAuth = FirebaseAuth.getInstance();
         //user=FirebaseAuth.getInstance().getCurrentUser();
-        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                //if the user is not logged in
-                //that means current user will return null
-                if (firebaseAuth.getCurrentUser() == null) {
-                    Intent i = new Intent(Home.this, LoginActivity.class);
-                    // Closing all the Activities
-                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        mAuthStateListener = firebaseAuth -> {
+            //if the user is not logged in
+            //that means current user will return null
+            if (firebaseAuth.getCurrentUser() == null) {
+                Intent i = new Intent(Home.this, LoginActivity.class);
+                // Closing all the Activities
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-                    // Add new Flag to start new Activity
-                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                    // Staring Login Activity
-                    startActivity(i, ActivityOptions.makeSceneTransitionAnimation(Home.this).toBundle());
-                    supportFinishAfterTransition();
-                }
+                // Add new Flag to start new Activity
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                // Staring Login Activity
+                startActivity(i, ActivityOptions.makeSceneTransitionAnimation(Home.this).toBundle());
+                supportFinishAfterTransition();
             }
         };
         //getting current user

@@ -24,7 +24,7 @@
             android:minHeight="?android:attr/actionBarSize"
             android:background="?android:attr/colorPrimary"
             android:fitsSystemWindows="true"
-            android:id="@+id/toolbar" />
+            android:id="@+id/toolbar_main" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs_main"
@@ -33,8 +33,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="?android:attr/selectableItemBackground"
-            app:tabIndicatorColor="@color/yello_800"
-            app:tabSelectedTextColor="@color/green_800"
+            app:tabIndicatorColor="@color/colorSecondary"
+            app:tabSelectedTextColor="@color/windowBackground"
             app:tabGravity="fill"
             app:tabMode="fixed" />
 
@@ -44,10 +44,12 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabmainatv"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        app:useCompatPadding="true"
         app:srcCompat="@drawable/ic_float_button"
         app:backgroundTint="@color/colorPrimary1"
         app:rippleColor="@color/green_800"

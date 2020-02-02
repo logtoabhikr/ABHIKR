@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@color/colorIndivateTab">
 
@@ -9,8 +10,8 @@
         android:id="@+id/btnAddGroup"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/grey_500"
-        android:gravity="center|right"
+        android:background="@color/colorAccent"
+        android:gravity="center|end"
         android:orientation="horizontal"
         android:paddingRight="20dp">
 
@@ -18,7 +19,8 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:padding="7dp"
-            android:src="@drawable/ic_accept_cr_group" />
+            android:src="@drawable/ic_accept_cr_group"
+            android:contentDescription="@string/enter_group_name" />
 
         <TextView
             android:id="@+id/txtActionName"
@@ -46,7 +48,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_textview"
             android:gravity="center"
-            android:text="R"
+            tools:text="R"
             android:textColor="@android:color/white"
             android:textSize="30sp" />
 

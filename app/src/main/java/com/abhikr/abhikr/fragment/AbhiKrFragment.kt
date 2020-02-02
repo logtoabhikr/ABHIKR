@@ -124,4 +124,8 @@ class AbhiKrFragment : Fragment() {
             }
         }
     }
+
+    override fun onDetach() {
+        super.onDetach()
+    }
 }

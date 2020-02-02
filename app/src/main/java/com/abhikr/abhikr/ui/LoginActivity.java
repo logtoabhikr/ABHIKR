@@ -5,8 +5,6 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,12 +12,16 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.app.ActivityCompat;
+
 import com.abhikr.abhikr.Home;
 import com.abhikr.abhikr.R;
 import com.abhikr.abhikr.data.SharedPreferenceHelper;
 import com.abhikr.abhikr.data.StaticConfig;
 import com.abhikr.abhikr.model.User;
-import com.abhikr.abhikr.util.ImageUtils;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -43,15 +45,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.yarolegovich.lovelydialog.LovelyInfoDialog;
 import com.yarolegovich.lovelydialog.LovelyProgressDialog;
 
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.core.app.ActivityCompat;
 
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener{
@@ -84,7 +80,35 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         editTextUsername =  findViewById(R.id.et_username);
         editTextPassword = findViewById(R.id.et_password);
         firstTimeAccess = true;
-        initFirebase();
+        mAuth = FirebaseAuth.getInstance();
+        authUtils = new AuthUtils();
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    StaticConfig.UID = user.getUid();
+                    //Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                   // if (firstTimeAccess)
+                    Intent i = new Intent(LoginActivity.this, Home.class);
+                    // Closing all the Activities
+                    //i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                    // Add new Flag to start new Activity
+                    //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    // Staring Login Activity
+                    startActivity(i, ActivityOptions.makeSceneTransitionAnimation(LoginActivity.this).toBundle());
+                    supportFinishAfterTransition();
+                } else {
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+                firstTimeAccess = false;
+            }
+        };
+
+        //Khoi tao dialog waiting khi dang nhap
+        waitingDialog = new LovelyProgressDialog(this).setCancelable(false);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -117,31 +141,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         });
     }
 
-    private void initFirebase() {
-        mAuth = FirebaseAuth.getInstance();
-        authUtils = new AuthUtils();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    StaticConfig.UID = user.getUid();
-                    //Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    if (firstTimeAccess) {
-                        startActivity(new Intent(LoginActivity.this, Home.class));
-                        LoginActivity.this.finish();
-                    }
-                } else {
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-                firstTimeAccess = false;
-            }
-        };
-
-        //Khoi tao dialog waiting khi dang nhap
-        waitingDialog = new LovelyProgressDialog(this).setCancelable(false);
-    }
     public static boolean hasPermissions(Context context, String... permissions) {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
             for (String permission : permissions) {
@@ -194,34 +193,30 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                 User newUser = new User();
                                 newUser.email = user.getEmail();
                                 newUser.name = user.getEmail().substring(0, user.getEmail().indexOf("@"));
+                                newUser.avata = StaticConfig.STR_DEFAULT_BASE64;
+                                FirebaseDatabase.getInstance().getReference().child("user/" + user.getUid()).setValue(newUser);
+
                                 //Toast.makeText(LoginActivity.this, ""+user.getPhotoUrl(), Toast.LENGTH_SHORT).show();
                                 //newUser.avata = StaticConfig.STR_DEFAULT_BASE64; google signin will also give image
                                 try {
-                                    InputStream inputStream = getContentResolver().openInputStream(user.getPhotoUrl());
-
-                                    Bitmap imgBitmap = BitmapFactory.decodeStream(inputStream);
-                                    imgBitmap = ImageUtils.cropToSquare(imgBitmap);
-                                    InputStream is = ImageUtils.convertBitmapToInputStream(imgBitmap);
-                                    final Bitmap liteImage = ImageUtils.makeImageLite(is,
-                                            imgBitmap.getWidth(), imgBitmap.getHeight(),
-                                            ImageUtils.AVATAR_WIDTH, ImageUtils.AVATAR_HEIGHT);
-
-                                    newUser.avata = ImageUtils.encodeBase64(liteImage);
                                     FirebaseDatabase.getInstance().getReference().child("user/" + user.getUid()).setValue(newUser);
+                                    Toast.makeText(LoginActivity.this, "Authentication Successfull."+task.getResult(),
+                                            Toast.LENGTH_SHORT).show();
                                 } catch (Exception e) {
+                                    Log.w(TAG, "signInWithCredential:failure", task.getException());
+                                    Toast.makeText(LoginActivity.this, "Authentication Successfull."+task.getException(),
+                                            Toast.LENGTH_SHORT).show();
                                     e.printStackTrace();
                                 }
                                 // If sign in fails, display a message to the user.
-                                Log.w(TAG, "signInWithCredential:failure", task.getException());
-                                Toast.makeText(LoginActivity.this, "Authentication Successfull.",
-                                        Toast.LENGTH_SHORT).show();
-                                Toast.makeText(LoginActivity.this, "signInWithCredential: Successfull :"+task.getResult(), Toast.LENGTH_LONG).show();
-                                startActivity(new Intent(LoginActivity.this, Home.class));
-                                LoginActivity.this.finish();
+                                //Toast.makeText(LoginActivity.this, "signInWithCredential: Successfull :"+task.getResult(), Toast.LENGTH_LONG).show();
+                                //startActivity(new Intent(LoginActivity.this, Home.class));
+                                //LoginActivity.this.finish();
+                                firstTimeAccess=true;
                             }
                             else
                             {
-                                Toast.makeText(LoginActivity.this, "Signin failur due to user data null", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "Signin failure "+task.getException(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -359,8 +354,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             } else {
                                 initNewUserInfo();
                                 Toast.makeText(LoginActivity.this, "Register and Login success", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(LoginActivity.this, Home.class));
-                                LoginActivity.this.finish();
+                                //startActivity(new Intent(LoginActivity.this, Home.class));
+                                //LoginActivity.this.finish();
                             }
                         }
                     })

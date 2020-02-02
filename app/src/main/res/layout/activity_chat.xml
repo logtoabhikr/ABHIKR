@@ -2,52 +2,123 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/colorIndivateTab">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
-
-    <ImageButton
+ <!--   <ImageButton
         android:id="@+id/btnSend"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:background="#00000000"
+        android:background="@drawable/rounded_rect"
         android:padding="10dp"
+        android:layout_marginBottom="4dp"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_send" />
+        android:src="@drawable/ic_send" />-->
 
     <View
         android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/grey_200"
-        android:layout_above="@id/btnSend"/>
+        android:layout_above="@id/autorellay"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerChat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/line">
+        android:background="@drawable/backdrop_shape"
+        android:layout_above="@id/line"
+        tools:listitem="@layout/rc_item_message_friend"/>
 
-    </androidx.recyclerview.widget.RecyclerView>
-
-    <EditText
+   <!-- <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editWriteMessage"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_margin="4dp"
         android:layout_toStartOf="@id/btnSend"
-        android:background="@drawable/edittext_boder"
-        android:drawablePadding="20dp"
+        android:background="@drawable/sugg"
+        android:drawableStart="@drawable/favicondrawable"
+        android:drawablePadding="8dp"
         android:inputType="textLongMessage"
         android:maxLines="1"
         android:paddingLeft="7dp"
         android:paddingRight="7dp"
+        android:hint="Says words"
         android:textColorHint="#aeafaf"
-        android:textSize="15sp" />
+        android:textSize="15sp" />-->
+    <RelativeLayout
+        android:id="@+id/autorellay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
 
+        android:windowSoftInputMode="stateHidden"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
+
+        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            android:id="@+id/editWriteMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="4dp"
+            android:background="@drawable/shapewidget"
+            android:hint="@string/says_words"
+            android:imeActionLabel="Send"
+            android:imeOptions="actionSend"
+            android:inputType="textAutoCorrect"
+            android:textAlignment="textStart"
+            android:textColor="@color/colorSecondary"
+            android:textColorHint="@color/grey_500"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:fontFamily="@font/poppins"
+            android:focusable="true"
+            android:transitionName="robotdeal"
+            />
+
+        <FrameLayout
+            android:id="@+id/homemainframe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/editWriteMessage"
+            android:layout_alignBottom="@+id/editWriteMessage"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="2dp"
+            android:padding="0dp"
+            android:visibility="visible">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/btnclear"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="@dimen/abhi_home_feature"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_quick_shop_cross" />
+
+           <!-- <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/search_voice"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="@dimen/abhi_home_feature"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/abhi_home_feature"
+                app:srcCompat="@drawable/ic_voice" />-->
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/btnSend"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="@dimen/abhi_home_feature"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/abhi_home_feature"
+                android:visibility="visible"
+                app:srcCompat="@drawable/ic_send" />
+
+        </FrameLayout>
+    </RelativeLayout>
 </RelativeLayout>

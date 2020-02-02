@@ -3,6 +3,7 @@ package com.abhikr.abhikr;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,8 +12,6 @@ import android.view.ViewAnimationUtils;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.LinearLayout;
-
-import com.abhikr.abhikr.ui.LoginActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -71,17 +70,17 @@ LinearLayout Splash_lay;
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
                     //Splash_lay.setVisibility(View.INVISIBLE)
-                    startActivity(new Intent(Splash_Reveal.this,LoginActivity.class));
+                    //startActivity(new Intent(Splash_Reveal.this,Home.class));
                     // val i = Intent(this@SplashScreen,MainActivity::class.java)
-                    // startActivity(i, ActivityOptions.makeSceneTransitionAnimation(this@SplashScreen).toBundle())
+                     startActivity(new Intent(Splash_Reveal.this,Home.class), ActivityOptions.makeSceneTransitionAnimation(Splash_Reveal.this).toBundle());
                     //presentActivity(v)
-                    finish();
+                    supportFinishAfterTransition();
                 }
             });
             circularReveal.start();
         } else {
-            startActivity(new Intent(Splash_Reveal.this,LoginActivity.class));
-            finish();
+            startActivity(new Intent(Splash_Reveal.this,Home.class), ActivityOptions.makeSceneTransitionAnimation(Splash_Reveal.this).toBundle());
+            supportFinishAfterTransition();
         }
     }
   /*  fun presentActivity(view: View) {

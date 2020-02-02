@@ -37,8 +37,7 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private static String TAG = "MainActivity";
-    private ViewPager viewPager;
-    private TabLayout tabLayout = null;
+    private TabLayout tabLayout;
     public static String STR_FRIEND_FRAGMENT = "FRIEND";
     public static String STR_GROUP_FRAGMENT = "GROUP";
     public static String STR_INFO_FRAGMENT = "INFO";
@@ -54,13 +53,18 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseUser user;
     private FirebaseAnalytics mFirebaseAnalytics;
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+        ServiceUtils.stopServiceFriendChat(getApplicationContext(), false);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       final Toolbar toolbar =  findViewById(R.id.toolbar);
+       final Toolbar toolbar =  findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
         if(getSupportActionBar() != null) {
             //getSupportActionBar().setTitle(R.string.app_name);
@@ -69,17 +73,6 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(true);
         }
 
-        viewPager =  findViewById(R.id.viewpager);
-        floatButton =  findViewById(R.id.fabmainatv);
-
-        initFirebase();
-        // Obtain the FirebaseAnalytics instance.
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-        initTab();
-    }
-
-    private void initFirebase() {
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -96,45 +89,53 @@ public class MainActivity extends AppCompatActivity {
                 // ...
             }
         };
-    }
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-        ServiceUtils.stopServiceFriendChat(getApplicationContext(), false);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        supportFinishAfterTransition();
-    }
-
-    @Override
-    protected void onDestroy() {
-        ServiceUtils.startServiceFriendChat(getApplicationContext());
-        super.onDestroy();
-    }
-
-    /**
-     * Khoi tao 3 tab
-     */
-    private void initTab() {
-        tabLayout = findViewById(R.id.tabs_main);
-        //tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorIndivateTab));
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        floatButton =  findViewById(R.id.fabmainatv);
+        final ViewPager viewPager = findViewById(R.id.viewpager);
         setupViewPager(viewPager);
+        tabLayout = findViewById(R.id.tabs_main);
         tabLayout.setupWithViewPager(viewPager);
-        setupTabIcons();
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+          /*      Log.d(TAG, "onTabSelected: pos: " + tab.getPosition());
+
+                switch (tab.getPosition()) {
+                    case 0:
+                        //Toast.makeText(MainActivity.this, "Loading coupons..", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG,"Loading coupons..");
+                        break;
+                    case 1:
+                        //Toast.makeText(MainActivity.this, "Loading deals..", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG,"Loading deals..");
+                        break;
+                    case 2:
+                        //Toast.makeText(MainActivity.this, "Loading coupons & deals by store..", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG,"Loading coupons & deals by store..");
+                        break;
+                }*/
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        try {
+            setupTabIcons();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -143,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         Objects.requireNonNull(tabLayout.getTabAt(0)).setIcon(tabIcons[0]);
         Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(tabIcons[1]);
         Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(tabIcons[2]);
-       /* TextView tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tablay, null);
+        /*TextView tabOne = (TextView) LayoutInflater.from(this).inflate(R.layout.custom_tablay, null);
         tabOne.setText(STR_FRIEND_FRAGMENT);
         tabOne.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.ic_tab_person, 0, 0);
         tabOne.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
@@ -182,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                ServiceUtils.stopServiceFriendChat(MainActivity.this.getApplicationContext(), false);
+                ServiceUtils.stopServiceFriendChat(getApplicationContext(), false);
                 if (adapter.getItem(position) instanceof FriendsFragment) {
                     floatButton.setVisibility(View.VISIBLE);
                     floatButton.setOnClickListener(((FriendsFragment) adapter.getItem(position)).onClickFloatButton.getInstance(MainActivity.this));
@@ -246,6 +247,25 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        supportFinishAfterTransition();
+    }
+
+    @Override
+    protected void onDestroy() {
+        ServiceUtils.startServiceFriendChat(getApplicationContext());
+        super.onDestroy();
+    }
     // abhi_internet checking end here
     //fragmentpageradaptor loads all fragment in memory stack but fragmentstatepageradaptor works with heavy data fragment like images
     private static class ViewPagerAdapter extends FragmentStatePagerAdapter {

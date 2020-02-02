@@ -1,7 +1,12 @@
 package com.abhikr.abhikr.model;
 
 
+import androidx.annotation.Keep;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
+@IgnoreExtraProperties
+@Keep
 public class Configuration {
     private String label;
     private String  value;

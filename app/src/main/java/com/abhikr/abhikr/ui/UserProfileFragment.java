@@ -52,7 +52,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 public class UserProfileFragment extends Fragment {
@@ -70,11 +69,11 @@ public class UserProfileFragment extends Fragment {
 
     private static final int PICK_IMAGE = 1994;
     private LovelyProgressDialog waitingDialog;
-
+    private Context context;
     private DatabaseReference userDB;
     private FirebaseAuth mAuth;
     private User myAccount;
-    private Context context;
+
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -92,7 +91,7 @@ public class UserProfileFragment extends Fragment {
             listConfig.clear();
             myAccount = dataSnapshot.getValue(User.class);
 
-            setupArrayListInfo(Objects.requireNonNull(myAccount));
+            setupArrayListInfo(myAccount);
             if(infoAdapter != null){
                 infoAdapter.notifyDataSetChanged();
             }
@@ -108,7 +107,7 @@ public class UserProfileFragment extends Fragment {
 
         @Override
         public void onCancelled(DatabaseError databaseError) {
-            //Có lỗi xảy ra, không lấy đc dữ liệu
+
             Log.e(UserProfileFragment.class.getName(), "loadPost:onCancelled", databaseError.toException());
         }
     };
@@ -116,24 +115,30 @@ public class UserProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        userDB = FirebaseDatabase.getInstance().getReference().child("user").child(StaticConfig.UID);
-        userDB.addListenerForSingleValueEvent(userListener);
-        mAuth = FirebaseAuth.getInstance();
-
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_info, container, false);
         context = view.getContext();
-        avatar = (ImageView) view.findViewById(R.id.img_avatar);
-        avatar.setOnClickListener(onAvatarClick);
-        tvUserName = (TextView)view.findViewById(R.id.tv_username);
+        mAuth = FirebaseAuth.getInstance();
+        try {
+            userDB = FirebaseDatabase.getInstance().getReference().child("user").child(StaticConfig.UID);
+            userDB.addListenerForSingleValueEvent(userListener);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
-        SharedPreferenceHelper prefHelper = SharedPreferenceHelper.getInstance(context);
+        avatar =  view.findViewById(R.id.img_avatar);
+        avatar.setOnClickListener(onAvatarClick);
+        tvUserName = view.findViewById(R.id.tv_username);
+
+        SharedPreferenceHelper prefHelper = SharedPreferenceHelper.getInstance(requireContext());
         myAccount = prefHelper.getUserInfo();
         setupArrayListInfo(myAccount);
-        setImageAvatar(context, myAccount.avata);
+        setImageAvatar(getContext(), myAccount.avata);
         tvUserName.setText(myAccount.name);
 
-        recyclerView = (RecyclerView)view.findViewById(R.id.info_recycler_view);
+        recyclerView = view.findViewById(R.id.info_recycler_view);
         infoAdapter = new UserInfoAdapter(listConfig);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(view.getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -178,7 +183,7 @@ public class UserProfileFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
             if (data == null) {
-                Toast.makeText(context, "Có lỗi xảy ra, vui lòng thử lại", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "Something wrong for image...", Toast.LENGTH_LONG).show();
                 return;
             }
             try {
@@ -269,6 +274,7 @@ public class UserProfileFragment extends Fragment {
 
             avatar.setImageDrawable(ImageUtils.roundedImage(context, src));
         }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -289,6 +295,7 @@ public class UserProfileFragment extends Fragment {
             this.profileConfig = profileConfig;
         }
 
+        @NonNull
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
@@ -451,9 +458,9 @@ public class UserProfileFragment extends Fragment {
             public ImageView icon;
             public ViewHolder(View view) {
                 super(view);
-                label = (TextView)view.findViewById(R.id.tv_title);
-                value = (TextView)view.findViewById(R.id.tv_detail);
-                icon = (ImageView)view.findViewById(R.id.img_icon);
+                label = view.findViewById(R.id.tv_title);
+                value = view.findViewById(R.id.tv_detail);
+                icon = view.findViewById(R.id.img_icon);
             }
         }
 

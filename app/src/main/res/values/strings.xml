@@ -76,4 +76,5 @@
     <string name="home">Home</string>
     <string name="dev_profile">Dev profile</string>
     <string name="logout">Logout</string>
+    <string name="says_words">Says something..</string>
 </resources>

@@ -29,9 +29,9 @@
                 style="@style/Widget.Design.TabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                app:tabIndicatorColor="@color/yello_800"
-                app:tabSelectedTextColor="@color/green_800"
+                android:background="?android:attr/selectableItemBackground"
+                app:tabIndicatorColor="@color/colorSecondary"
+                app:tabSelectedTextColor="@color/windowBackground"
                 app:tabGravity="fill"
                 app:tabMode="fixed" />
 
@@ -41,6 +41,7 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabchatmain"
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
@@ -48,6 +49,7 @@
             app:srcCompat="@drawable/ic_float_button"
             app:backgroundTint="@color/colorPrimary1"
             app:tint="@null"
+            app:useCompatPadding="true"
             app:rippleColor="@color/green_800"
             />
 
