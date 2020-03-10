@@ -60,7 +60,7 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
                             ActivityOptions.makeSceneTransitionAnimation(this@WorkStation).toBundle())
 
                 }
-                    }
+            }
         }
     }
 
@@ -259,13 +259,18 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
 
         }
         if (item.title === getString(R.string.title_activity_work_station)) {
-            Snackbar.make(findViewById(android.R.id.content), "Working on it..(--", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-            /*Intent ik=new Intent(getApplicationContext(),Home.class);
-            //ik.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            // Add new Flag to start new Activity below code will clear all stack activity
-            ik.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(ik, ActivityOptions.makeSceneTransitionAnimation(AbhiCompleteMain.this).toBundle());*/
+            if(FirebaseAuth.getInstance().currentUser!!.email!="logtoabhikr@gmail.com")
+            {
+                Snackbar.make(findViewById(android.R.id.content), "For admin use only..", Snackbar.LENGTH_LONG)
+                    .setAction("Dismiss", null).show()
+
+            }
+            else
+            {
+                startActivity(Intent(this@WorkStation,WorkStore::class.java),
+                    ActivityOptions.makeSceneTransitionAnimation(this@WorkStation).toBundle())
+
+            }
         }
         return super.onOptionsItemSelected(item)
     }
