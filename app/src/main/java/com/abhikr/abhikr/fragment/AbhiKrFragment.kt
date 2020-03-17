@@ -17,6 +17,7 @@ import com.abhikr.abhikr.Appstatus
 import com.abhikr.abhikr.R
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import kotlinx.android.synthetic.main.abhi_kr_fragment.view.*
 
@@ -28,7 +29,8 @@ class AbhiKrFragment : Fragment() {
     }
 
     private lateinit var viewModel: AbhiKrViewModel
-    private lateinit var contexta:Context
+    private var contexta:Context?=null
+    private lateinit var abhiAds:AdView
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -37,7 +39,6 @@ class AbhiKrFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MobileAds.initialize(context) {}
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +49,7 @@ class AbhiKrFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(AbhiKrViewModel::class.java)
+        abhiAds=view.findViewById(R.id.adView_abhikr)
         //pg.setMessage("Loading ...");
         val ak: WebSettings = view.webview_abhikr.settings
         ak.loadsImagesAutomatically = true
@@ -86,9 +88,10 @@ class AbhiKrFragment : Fragment() {
         //mAdView.setAdSize(AdSize.SMART_BANNER);
         //https://developers.google.com/admob/android/banner
 //mAdView.setAdSize(AdSize.SMART_BANNER);
+        MobileAds.initialize(contexta)
         val adRequest = AdRequest.Builder().build()
-        view.adView_abhikr.loadAd(adRequest)
-        view.adView_abhikr.adListener = object: AdListener() {
+        abhiAds.loadAd(adRequest)
+        abhiAds.adListener = object: AdListener() {
             override fun onAdLoaded() {
                 // Code to be executed when an ad finishes loading.
                 Log.d(TAG,"ads imp : ad loaded")
@@ -125,7 +128,21 @@ class AbhiKrFragment : Fragment() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        abhiAds.pause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        abhiAds.resume()
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        abhiAds.destroy()
+    }
     override fun onDetach() {
         super.onDetach()
+        contexta=null
     }
 }

@@ -81,10 +81,11 @@ public class MainActivity extends AppCompatActivity {
                 if (user != null) {
                     StaticConfig.UID = user.getUid();
                 } else {
-                    MainActivity.this.finish();
                     // User is signed in
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     Log.d(TAG, "onAuthStateChanged:signed_out");
+                    finishAfterTransition();
+                    // MainActivity.this.finish();
                 }
                 // ...
             }
