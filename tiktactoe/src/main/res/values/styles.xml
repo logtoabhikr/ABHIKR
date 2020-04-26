@@ -1,0 +1,11 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryld</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkld</item>
+        <item name="colorAccent">@color/colorAccentld</item>
+    </style>
+
+</resources>

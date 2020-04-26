@@ -21,19 +21,25 @@
         android:title="@string/dev_profile"
         android:icon="@drawable/ic_notify_group"
         app:showAsAction="never"/>
-    <item
-        android:id="@+id/logout"
-        android:orderInCategory="104"
-        android:title="@string/logout"
-        android:icon="@mipmap/ic_power_settings"
-        app:showAsAction="never"
-        />
+
+     <item
+         android:id="@+id/about_home"
+         android:orderInCategory="103"
+         android:title="@string/title_activity_work_station"
+         android:icon="@mipmap/favicon"
+         app:showAsAction="never" />
+            <item android:id="@+id/lockdown"
+                android:orderInCategory="104"
+                android:title="@string/app_namegame"
+                android:icon="@drawable/ic_tictactoe"
+                app:showAsAction="never"/>
             <item
-                android:id="@+id/about_home"
-                android:orderInCategory="103"
-                android:title="@string/title_activity_work_station"
-                android:icon="@mipmap/favicon"
-                app:showAsAction="never" />
+                android:id="@+id/logout"
+                android:orderInCategory="105"
+                android:title="@string/logout"
+                android:icon="@mipmap/ic_power_settings"
+                app:showAsAction="never"
+                />
         </menu>
     </item>
 </menu>

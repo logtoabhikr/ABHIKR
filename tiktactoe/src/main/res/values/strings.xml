@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_namegame">Tic Tac Toe</string>
+    <string name="restart">&#160;Restart&#160;</string>
+    <string name="download_our_main_app"><u>Download our main app</u></string>
+    <string name="app_won">AI Won</string>
+    <string name="user_won">You Won! Voila</string>
+    <string name="game_tied">Game Tied</string>
+</resources>

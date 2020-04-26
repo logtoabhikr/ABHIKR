@@ -138,12 +138,14 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
     {
         var lastPosition = -1
         val query:Query=firebaseDB.collection("Projects")
+        Log.d(TAG, "all data $query")
         val response = FirestoreRecyclerOptions.Builder<WorkModal>()
                 .setQuery(query, WorkModal::class.java)
                 .build()
+        Log.d(TAG, "all data $response")
         adaptor = object : FirestoreRecyclerAdapter<WorkModal, ViewHolder>(response) {
             override fun onBindViewHolder(holder: ViewHolder, position: Int, model: WorkModal) {
-                //Log.d(TAG,"all data"+model);
+                Log.d(TAG, "all data $model")
 
                 holder.itemView.worktitle.text = model.title
                 holder.itemView.workdesc.text = model.description
@@ -185,7 +187,7 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
 
                 }
                 //model.TimeStamp!!.toDate()
-                holder.itemView.workcardview.setOnClickListener { v ->
+                holder.itemView.workcardview.setOnClickListener {
                     if(FirebaseAuth.getInstance().currentUser!!.email!="logtoabhikr@gmail.com")
                     {
                         Snackbar.make(findViewById(android.R.id.content), model.title+" says: Click on play store button", Snackbar.LENGTH_LONG)
@@ -222,7 +224,7 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
                 super.updateOptions(options)
             }
             override fun onError(e: FirebaseFirestoreException) {
-                Log.e(TAG, e.message)
+                Log.e(TAG, e.message.toString())
             }
         }
         adaptor!!.notifyDataSetChanged()

@@ -37,6 +37,7 @@ import com.abhikr.abhikr.ui.FriendsFragment;
 import com.abhikr.abhikr.ui.GroupFragment;
 import com.abhikr.abhikr.ui.LoginActivity;
 import com.abhikr.abhikr.ui.UserProfileFragment;
+import com.abhikr.tictactoe.TicTacToeHome;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -345,7 +346,12 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
             //Toast.makeText(this, "AbhiKr version 1.3", Toast.LENGTH_LONG).show();
             return true;
         }
-
+        if(id==R.id.lockdown)
+        {
+            Intent aaa=new Intent(getApplicationContext(), TicTacToeHome.class);
+            startActivity(aaa, ActivityOptions.makeSceneTransitionAnimation(Home.this).toBundle());
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
