@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#121212</color>
+    <color name="colorPrimary1">#0097A7</color>
+
+    <color name="colorPrimaryVariant">#4dcfe1</color><!--lighter varient-->
+    <color name="colorPrimaryDark">#C043D5</color><!--400-->
+    <color name="colorOnPrimary">#62eeff</color>
+    <color name="colorSecondary">#b316cd</color><!--500-->
+    <color name="colorSecondryVarient">#cb68dd</color><!--lighter 300-->
+    <color name="colorOnSecondary">#000000</color>
+
+    <!-- material design theming -->
+    <color name="windowBackground">#121212</color>
+    <color name="navigationBarColor">#030100</color>
+
+
+    <color name="colorAccent">#FF4081</color>
+    <color name="spots_dialog_color">@color/colorSecondary</color>
+    <color name="textColorPrimary">#212121</color>
+    <color name="textColorSecondary">#757575</color>
+    <color name="colorIndivateTab">#FFFFFF</color>
+    <color name="colorCardView">#f7f7f7</color>
+    <color name="grey_200">#EEEEEE</color>
+    <color name="grey_100">#F5F5F5</color>
+    <color name="grey_800">#212121</color>
+    <color name="green_800">#2fa881</color>
+
+    <!--Material colors 500 -->
+    <color name="red_500">#e51c23</color>
+    <color name="pink_500" type="color">#e91e63</color>
+    <color name="purple_500" type="color">#9c27b0</color>
+    <color name="deep_purple_500" type="color">#673ab7</color>
+    <color name="indigo_500" type="color">#3f51b5</color>
+    <color name="blue_500" type="color">#5677fc</color>
+    <color name="light_blue_500" type="color">#03a9f4</color>
+    <color name="cyan_500" type="color">#00bcd4</color>
+    <color name="teal_500" type="color">#009688</color>
+    <color name="green_500" type="color">#259b24</color>
+    <color name="light_green_500" type="color">#8bc34a</color>
+    <color name="lime_500" type="color">#cddc39</color>
+    <color name="yellow_500" type="color">#ffeb3b</color>
+    <color name="orange_500" type="color">#ff9800</color>
+    <color name="deep_orange_500" type="color">#ff5722</color>
+    <color name="brown_500" type="color">#795548</color>
+    <color name="grey_500" type="color">#9e9e9e</color>
+    <color name="blue_grey_500" type="color">#607d8b</color>
+</resources>

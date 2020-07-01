@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.abhikr.abhikr.Appstatus
 import com.abhikr.abhikr.R
+import com.abhikr.abhikr.service.AppCrash
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
@@ -74,9 +75,9 @@ class AbhiKrFragment : Fragment() {
                 return true
             }
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                if (!Appstatus.getInstance(contexta).isOnline) {
+                if (!Appstatus.getInstance(AppCrash.getInstance().applicationContext).isOnline) {
                     //Toast.makeText(EXP.this, "Internet detected ! Go ahead", Toast.LENGTH_SHORT).show();
-                    Toast.makeText(contexta,"Connect with Internet to hide this window !!!! Loading cache file",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(AppCrash.getInstance().applicationContext,"Connect with Internet to hide this window !!!! Loading cache file",Toast.LENGTH_SHORT).show()
 
                     //Toast.makeText(contexta, "Connect with internet to hide dialog message", Toast.LENGTH_SHORT).show()
                 }
@@ -88,7 +89,7 @@ class AbhiKrFragment : Fragment() {
         //mAdView.setAdSize(AdSize.SMART_BANNER);
         //https://developers.google.com/admob/android/banner
 //mAdView.setAdSize(AdSize.SMART_BANNER);
-        MobileAds.initialize(contexta)
+        MobileAds.initialize(requireContext())
         val adRequest = AdRequest.Builder().build()
         abhiAds.loadAd(adRequest)
         abhiAds.adListener = object: AdListener() {
@@ -111,7 +112,7 @@ class AbhiKrFragment : Fragment() {
 
             override fun onAdClicked() {
                 Log.d(TAG,"ads imp : ad clicked")
-                Toast.makeText(contexta,"ads clicked",Toast.LENGTH_SHORT).show()
+                //Toast.makeText(contexta,"ads clicked",Toast.LENGTH_SHORT).show()
                 // Code to be executed when the user clicks on an ad.
             }
 

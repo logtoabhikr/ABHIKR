@@ -1,9 +1,11 @@
 package com.abhikr.abhikr.service;
 
 import android.app.Application;
-import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
+
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.abhikr.abhikr.firepush.SharedPrefManager;
 import com.android.volley.Request;
@@ -14,22 +16,31 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
-import androidx.appcompat.app.AppCompatDelegate;
 import io.fabric.sdk.android.Fabric;
 
 
 public class AppCrash extends Application {
 
     public  static final String TAG = AppCrash.class.getSimpleName();
-    private static AppCrash mInstance;
+
     private RequestQueue mRequestQueue;
     private FirebaseUser user;
-    private static Context mContext;
+    public static final String NIGHT_MODE = "NIGHT_MODE";
+    private boolean isNightModeEnabled = false;
+    private static AppCrash mInstance = null;
+
+    public static AppCrash getInstance() {
+
+        if(mInstance == null)
+        {
+            mInstance = new AppCrash();
+        }
+        return mInstance;
+    }
     @Override
     public void onCreate() {
         super.onCreate();
-        mInstance = this;
-        mContext=getApplicationContext();
+        mInstance=this;
         Fabric.with(this, new Crashlytics());
         user= FirebaseAuth.getInstance().getCurrentUser();
        /* Crashlytics.setUserName("");
@@ -46,12 +57,8 @@ public class AppCrash extends Application {
        }
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         SharedPrefManager.InitABHIKRPref(this);
-    }
-    public static Context getAppContext() {
-        return mContext;
-    }
-    public static synchronized AppCrash getInstance() {
-        return mInstance;
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        this.isNightModeEnabled = mPrefs.getBoolean(NIGHT_MODE, false);
     }
 
     public RequestQueue getRequestQueue() {
@@ -97,5 +104,17 @@ public class AppCrash extends Application {
                     e.printStackTrace();
                 }
             }
+    }
+    public boolean isNightModeEnabled() {
+        return isNightModeEnabled;
+    }
+
+    public void setIsNightModeEnabled(boolean isNightModeEnabled) {
+        this.isNightModeEnabled = isNightModeEnabled;
+
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = mPrefs.edit();
+        editor.putBoolean(NIGHT_MODE, isNightModeEnabled);
+        editor.apply();
     }
 }

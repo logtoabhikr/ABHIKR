@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <!--<item name="colorAccent">@color/colorAccent</item>-->
+        <item name="colorAccent">@color/colorAccent</item>
 
         <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
@@ -22,7 +22,13 @@
         <item name="android:colorBackground">@color/windowBackground</item>
         <item name="colorOnBackground">#212121</item>
 
+        <item name="android:textColorPrimary">@color/colorSecondary</item>
+        <item name="android:textColor">@color/colorSecondary</item>
+        <!-- Secondary text color i.e. descriptions and subtitles of lists etc -->
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
         <item name="android:textColorHint">@color/colorOnSecondary</item>
+        <item name="colorControlNormal">@color/colorAccent</item>
+
         <item name="colorControlActivated">@color/colorSecondryVarient</item>
         <item name="colorControlHighlight">?android:attr/colorAccent</item>
         <item name="android:windowBackground">@color/windowBackground</item>

@@ -16,15 +16,16 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.abhikr.abhikr.Appstatus;
 import com.abhikr.abhikr.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import dmax.dialog.SpotsDialog;
 
 public class HomeFragment extends Fragment {
@@ -146,20 +147,16 @@ public class HomeFragment extends Fragment {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             //pg.show();
-            if(Appstatus.getInstance(getActivity()).isOnline())
+            if(!Appstatus.getInstance(requireActivity()).isOnline())
             {
+                pg.setMessage("Connect with Internet to hide this window !!!! Loading cache file ");
+                pg.show();
                 //spotsdialog.show();
                 //new SpotsDialog(MainActivity_old.this).show();
                 /*if(pg.isShowing())
                 {
                     pg.show();
                 }*/
-            }
-            else
-            {
-                pg.setMessage("Connect with Internet to hide this window !!!! Loading cache file ");
-                pg.show();
-
             }
             super.onPageStarted(view, url, favicon);
         }

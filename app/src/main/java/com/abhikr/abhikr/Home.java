@@ -16,6 +16,7 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,6 +33,7 @@ import com.abhikr.abhikr.menu.DrawerItem;
 import com.abhikr.abhikr.menu.SimpleItem;
 import com.abhikr.abhikr.menu.SpaceItem;
 import com.abhikr.abhikr.projects.WorkStation;
+import com.abhikr.abhikr.service.AppCrash;
 import com.abhikr.abhikr.service.ServiceUtils;
 import com.abhikr.abhikr.ui.FriendsFragment;
 import com.abhikr.abhikr.ui.GroupFragment;
@@ -73,6 +75,7 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private FirebaseAnalytics mFirebaseAnalytics;
+    int counter=0;
     @Override
     protected void onStart() {
         super.onStart();
@@ -84,6 +87,12 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (AppCrash.getInstance().isNightModeEnabled()) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         setContentView(R.layout.activity_sample);
         final MaterialToolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -283,7 +292,7 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
 
     private DrawerItem createItemFor(int position) {
         return new SimpleItem(screenIcons[position], screenTitles[position])
-                .withTextTint(color(R.color.colorPrimary))
+                .withTextTint(color(R.color.colorOnPrimary))
                 .withSelectedIconTint(color(R.color.colorSecondary))
                 .withSelectedTextTint(color(R.color.colorSecondryVarient));
     }
@@ -330,8 +339,29 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
             //setTitle(user.getEmail());
             /*if(user!=null)
             getSupportActionBar().setTitle(user.getEmail());*/
-            Intent a=new Intent(getApplicationContext(),EXP.class);
-                startActivity(a, ActivityOptions.makeSceneTransitionAnimation(Home.this).toBundle());
+           /* Intent a=new Intent(getApplicationContext(),EXP.class);
+                startActivity(a, ActivityOptions.makeSceneTransitionAnimation(Home.this).toBundle());*/
+           counter++;
+            //if(counter%2==0)// this will not work coz variable state loss on restart
+            if(AppCrash.getInstance().isNightModeEnabled())
+            {
+                AppCrash.getInstance().setIsNightModeEnabled(false);
+                Intent intent = getIntent();
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                finish();
+                startActivity(intent);
+
+                Toast.makeText(this, "Night mode off: "+counter, Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                AppCrash.getInstance().setIsNightModeEnabled(true);
+                Intent intent = getIntent();
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                finish();
+                startActivity(intent);
+                Toast.makeText(this, "Night mode ON: "+counter, Toast.LENGTH_SHORT).show();
+            }
         }
         if(id==R.id.logout)
         {            //logging out the user
