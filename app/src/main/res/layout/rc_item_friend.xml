@@ -51,7 +51,7 @@
             app:layout_constraintStart_toEndOf="@+id/icon_avata"
             app:layout_constraintEnd_toStartOf="@+id/txtTime"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/username_text"
+            tools:text="username"
             />
 
         <TextView

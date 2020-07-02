@@ -9,9 +9,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/cv"
+        android:layout_above="@+id/divider"
         android:layout_gravity="center|center_horizontal"
-        android:layout_margin="@dimen/activity_horizontal_margin" />
+        android:layout_marginBottom="@dimen/abhikr_margin" />
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/cv"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/line_gradient_secondry"
+        android:layout_margin="@dimen/activity_horizontal_margin"/>
     <androidx.cardview.widget.CardView
         android:id="@+id/cv"
         android:layout_width="300dp"
@@ -145,4 +153,6 @@
         android:padding="0.5dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true" />
+
+
 </RelativeLayout>

@@ -1,8 +1,9 @@
-<androidx.percentlayout.widget.PercentRelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.percentlayout.widget.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/windowBackground">
 
     <RelativeLayout
         android:id="@+id/profile"
@@ -27,14 +28,16 @@
                 android:src="@drawable/default_avata"
                 android:background="#00000000"
                 android:contentDescription="@string/app_name" />
+
             <TextView
-                android:layout_gravity="center"
-                android:textSize="24sp"
-                android:textColor="@android:color/black"
-                android:layout_marginTop="32dp"
                 android:id="@+id/tv_username"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="32dp"
+                android:textColor="?android:attr/colorPrimary"
+                android:textSize="24sp"
+                tools:text="Username"/>
         </LinearLayout>
     </RelativeLayout>
 
@@ -43,6 +46,9 @@
         android:id="@+id/info_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="vertical" />
+        android:scrollbars="none"
+        android:orientation="vertical"
+        android:clipToPadding="false"
+        tools:listitem="@layout/list_info_item_layout"/>
 
 </androidx.percentlayout.widget.PercentRelativeLayout>

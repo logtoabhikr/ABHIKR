@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/Splash_lay"
-    android:background="@color/colorPrimary"
+    android:background="?android:attr/colorPrimary"
     android:gravity="center"
     tools:context=".SplashOnBoarding">
 <androidx.appcompat.widget.AppCompatImageView

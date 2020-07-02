@@ -29,7 +29,15 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_work_station.*
 import kotlinx.android.synthetic.main.content_work_station.*
-import kotlinx.android.synthetic.main.workdesign.view.*
+import kotlinx.android.synthetic.main.workdesign_item.view.workcardview
+import kotlinx.android.synthetic.main.workdesign_item.view.workclient
+import kotlinx.android.synthetic.main.workdesign_item.view.workdesc
+import kotlinx.android.synthetic.main.workdesign_item.view.workduration
+import kotlinx.android.synthetic.main.workdesign_item.view.worklogo
+import kotlinx.android.synthetic.main.workdesign_item.view.workplaystore
+import kotlinx.android.synthetic.main.workdesign_item.view.worktitle
+import kotlinx.android.synthetic.main.workdesign_item.view.workwebsite
+import kotlinx.android.synthetic.main.workdesign_item.view.*
 
 
 class WorkStation : AppCompatActivity(),View.OnClickListener {
@@ -151,6 +159,7 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
                 holder.itemView.workdesc.text = model.description
                 holder.itemView.workclient.text = model.client
                 holder.itemView.workduration.text = model.duration
+                holder.itemView.work_notes_time.text= model.timeStamp.toString()
                 //holder.itemView.worklogo.setImageURI(Uri.parse(model.Logo))
                 GlideApp.with(this@WorkStation)
                         .load(model.logo)
@@ -208,7 +217,7 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
                 lastPosition = position
             }
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-                return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.workdesign, parent, false))
+                return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.workdesign_item, parent, false))
             }
 
             override fun onViewDetachedFromWindow(holder: ViewHolder) {

@@ -876,6 +876,7 @@ com.google.android.material.textfield.MaterialAutoCompleteTextView:
     private static final int MAX_ITEMS_MEASURED
 androidx.constraintlayout.solver.Pools
 com.abhikr.abhikr.fragment.AbhiKrFragment:
+    public static final synthetic void access$setWebview$p(com.abhikr.abhikr.fragment.AbhiKrFragment,android.webkit.WebView)
     public android.view.View _$_findCachedViewById(int)
     public static final java.lang.String TAG
 com.google.android.gms.internal.icing.zzga
@@ -9116,11 +9117,9 @@ androidx.fragment.app.FragmentTransaction:
     public androidx.fragment.app.FragmentTransaction setPrimaryNavigationFragment(androidx.fragment.app.Fragment)
     public boolean isEmpty()
     public androidx.fragment.app.FragmentTransaction setCustomAnimations(int,int)
-    public androidx.fragment.app.FragmentTransaction setCustomAnimations(int,int,int,int)
     public androidx.fragment.app.FragmentTransaction addSharedElement(android.view.View,java.lang.String)
     public androidx.fragment.app.FragmentTransaction setTransition(int)
     public androidx.fragment.app.FragmentTransaction setTransitionStyle(int)
-    public androidx.fragment.app.FragmentTransaction addToBackStack(java.lang.String)
     public boolean isAddToBackStackAllowed()
     public androidx.fragment.app.FragmentTransaction setBreadCrumbTitle(int)
     public androidx.fragment.app.FragmentTransaction setBreadCrumbTitle(java.lang.CharSequence)
@@ -22837,7 +22836,6 @@ com.abhikr.abhikr.Home:
     private static final int POS_WORKSTATION
     private static final int POS_SHARE
     private static final int POS_LOGOUT
-    private static final java.lang.String TAG
 io.opencensus.metrics.data.package-info
 com.google.firebase.analytics.FirebaseAnalytics$UserProperty
 androidx.media.VolumeProviderCompatApi21$Delegate
@@ -32980,7 +32978,6 @@ com.google.android.gms.internal.ads.zzdmp:
 androidx.fragment.app.FragmentTransaction:
     public final androidx.fragment.app.FragmentFactory mFragmentFactory
     public final java.lang.ClassLoader mClassLoader
-    public boolean mAllowAddToBackStack
 androidx.media.MediaBrowserServiceCompat$ServiceCallbacksCompat:
     public void onConnect(java.lang.String,android.support.v4.media.session.MediaSessionCompat$Token,android.os.Bundle)
 io.grpc.StatusRuntimeException:
@@ -34338,6 +34335,8 @@ com.google.android.gms.internal.ads.zzdqb:
 io.grpc.InternalChannelz$Security:
     public final io.grpc.InternalChannelz$Tls tls
     public final io.grpc.InternalChannelz$OtherSecurity other
+com.abhikr.abhikr.Home:
+    public static final java.lang.String TAG
 com.google.protobuf.ByteString:
     public static final synthetic boolean $assertionsDisabled
 io.grpc.internal.RetriableStream$1DecompressorRegistryEntry:

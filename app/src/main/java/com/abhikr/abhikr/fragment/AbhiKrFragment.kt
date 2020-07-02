@@ -3,10 +3,10 @@ package com.abhikr.abhikr.fragment
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -20,7 +20,7 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
-import kotlinx.android.synthetic.main.abhi_kr_fragment.view.*
+
 
 class AbhiKrFragment : Fragment() {
 
@@ -32,6 +32,7 @@ class AbhiKrFragment : Fragment() {
     private lateinit var viewModel: AbhiKrViewModel
     private var contexta:Context?=null
     private lateinit var abhiAds:AdView
+    private lateinit var webview:WebView
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -41,7 +42,15 @@ class AbhiKrFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
-
+    private val handler: Handler = object : Handler() {
+        override fun handleMessage(message: Message) {
+            when (message.what) {
+                1 -> {
+                    webViewGoBack()
+                }
+            }
+        }
+    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.abhi_kr_fragment, container, false)
@@ -50,26 +59,23 @@ class AbhiKrFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(AbhiKrViewModel::class.java)
+        webview=view.findViewById(R.id.webview_abhikr)
         abhiAds=view.findViewById(R.id.adView_abhikr)
         //pg.setMessage("Loading ...");
-        val ak: WebSettings = view.webview_abhikr.settings
+        val ak: WebSettings = webview.settings
         ak.loadsImagesAutomatically = true
-        view.webview_abhikr.scrollBarStyle = View.SCROLLBARS_INSIDE_OVERLAY
+        webview.scrollBarStyle = View.SCROLLBARS_INSIDE_OVERLAY
         ak.javaScriptEnabled = true
         // Enable responsive layout
-        // Enable responsive layout
         ak.useWideViewPort = true
-        // Zoom out if the content width is greater than the width of the viewport
         // Zoom out if the content width is greater than the width of the viewport
         ak.loadWithOverviewMode = true
         ak.setSupportZoom(true)
         ak.builtInZoomControls = true // allow pinch to zooom
-
         ak.displayZoomControls = false // disable the default zoom controls on the page
 
-
         //Toast.makeText(context, "To View Developer profile click on top - ", Toast.LENGTH_SHORT).show()
-        view.webview_abhikr.webViewClient = object : WebViewClient() {
+        webview.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                 view?.loadUrl(url)
                 return true
@@ -84,7 +90,22 @@ class AbhiKrFragment : Fragment() {
                 super.onPageStarted(view, url, favicon)
             }
         }
-        view.webview_abhikr.loadUrl("https://www.abhikr.com/")
+        webview.loadUrl("https://www.abhikr.com/")
+        webview.setOnKeyListener(object : View.OnKeyListener {
+            override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
+                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == MotionEvent.ACTION_UP && webview.canGoBack()) {
+                    handler.sendEmptyMessage(1)
+                    return true
+                }
+               /* if (keyCode == KeyEvent.KEYCODE_BACK
+                    && event.getAction() == MotionEvent.ACTION_UP
+                    && webview.canGoBack()) {
+                    webview.goBack()
+                    return true;
+                }*/
+                return false
+            }
+        })
         //https://developers.google.com/admob/android/banner
         //mAdView.setAdSize(AdSize.SMART_BANNER);
         //https://developers.google.com/admob/android/banner
@@ -127,6 +148,10 @@ class AbhiKrFragment : Fragment() {
                 Log.d(TAG,"ads imp : ad closed")
             }
         }
+    }
+
+    private fun webViewGoBack() {
+        if (webview.canGoBack()) webview.goBack() // if there is previous page open it
     }
 
     override fun onPause() {

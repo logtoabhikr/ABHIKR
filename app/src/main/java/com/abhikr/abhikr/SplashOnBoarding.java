@@ -15,13 +15,20 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
+import com.abhikr.abhikr.service.AppCrash;
 import com.scottyab.rootbeer.RootBeer;
 
 public class SplashOnBoarding extends AppCompatActivity {
 LinearLayout Splash_lay;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (AppCrash.getInstance().isNightModeEnabled()) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash__reveal);
         Splash_lay=findViewById(R.id.Splash_lay);

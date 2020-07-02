@@ -29,7 +29,7 @@
         <TextView
             android:id="@+id/tv_title"
             android:textSize="14dp"
-            android:textColor="@color/grey_800"
+            android:textColor="?android:attr/textColorSecondary"
             android:layout_toEndOf="@+id/img_icon"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"

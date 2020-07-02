@@ -207,6 +207,7 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 if(((String)listGroup.get(posGroup1).groupInfo.get("admin")).equals(StaticConfig.UID)) {
                     Intent intent = new Intent(getContext(), AddGroupActivity.class);
                     intent.putExtra("groupId", listGroup.get(posGroup1).id);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivityForResult(intent, REQUEST_EDIT_GROUP);
                 }else{
                     Toast.makeText(getActivity(), "You are not admin", Toast.LENGTH_LONG).show();
@@ -289,7 +290,7 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 .orderByValue().equalTo(StaticConfig.UID)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                         if (dataSnapshot.getValue() == null) {
                             //email not found
@@ -342,7 +343,7 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
                         //email not found
                         waitingLeavingGroup.dismiss();
                         new LovelyInfoDialog(getContext())

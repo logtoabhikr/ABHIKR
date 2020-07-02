@@ -7,6 +7,10 @@ apply plugin: 'io.fabric'
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+def versionMajor = 3
+def versionMinor = 0
+def versionPatch = 0
+def versionBuild = 8 // bump for builds, public betas, etc.
 android {
     signingConfigs {
         config {
@@ -22,8 +26,10 @@ android {
         applicationId "com.abhikr.abhikr"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 7
-        versionName "1.0.7"
+        //versionCode 8
+        //versionName "1.0.8"
+        versionCode versionMajor * 1000000 + versionMinor * 10000 + versionPatch * 100 + versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}.${versionBuild}"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -62,6 +68,11 @@ android {
             debuggable false
             minifyEnabled true
             shrinkResources true
+            versionNameSuffix ".Alpha"
+            resValue "string", "app_version",
+                    "${defaultConfig.versionName}${versionNameSuffix}"
+            resValue "string", "app_version",
+                    "${defaultConfig.versionName}"
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             project.ext.set("archivesBaseName", rootProject.getName() + "-" + defaultConfig.versionName)
             signingConfig signingConfigs.config
@@ -75,6 +86,8 @@ android {
             signingConfig signingConfigs.config
             //pseudoLocalesEnabled true
             //zipAlignEnabled true
+            resValue "string", "app_version",
+                    "${defaultConfig.versionName}"
         }
     }
 

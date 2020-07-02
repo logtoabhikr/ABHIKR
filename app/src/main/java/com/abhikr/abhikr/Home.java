@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -68,7 +69,7 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
 
     private String[] screenTitles;
     private Drawable[] screenIcons;
-    private static final String TAG = "PhoneAuthActivity";
+    private static final String TAG = Home.class.getSimpleName();
     //private FirebaseAuth mAuth;
     //firebase auth object
     private FirebaseUser user;
@@ -86,12 +87,12 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         if (AppCrash.getInstance().isNightModeEnabled()) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+        super.onCreate(savedInstanceState);
         //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         setContentView(R.layout.activity_sample);
         final MaterialToolbar toolbar = findViewById(R.id.toolbar);
@@ -196,23 +197,24 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
         if(position==POS_ABHIKR)
         {
             AbhiKrFragment abhiKrFragment=new AbhiKrFragment();
-            FragmentManager manager=getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.container,abhiKrFragment,"abhikr").commit();
+            ABHIKRCall(abhiKrFragment,false);
             Objects.requireNonNull(getSupportActionBar()).setTitle(screenTitles[POS_ABHIKR]);
+           /* FragmentManager fragmentManager = getSupportFragmentManager();
+            while (fragmentManager.getBackStackEntryCount() > 1) {
+                fragmentManager.popBackStackImmediate();
+            }*/
         }
         if(position == POS_DASHBOARD)
         {
             //getSupportActionBar().setTitle(screenTitles[POS_DASHBOARD]);
             Chat_MainFrag homeFragment=new Chat_MainFrag();
-            FragmentManager manager=getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.container,homeFragment,"abhikr").commit();
+            ABHIKRCall(homeFragment,false);
             Objects.requireNonNull(getSupportActionBar()).setTitle(screenTitles[POS_DASHBOARD]);
         }
         if(position== POS_FRIENDS)
         {
             FriendsFragment fragment1=new FriendsFragment();
-            FragmentManager manager=getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.container,fragment1,"FRIEND").commit();
+            ABHIKRCall(fragment1,false);
             Objects.requireNonNull(getSupportActionBar()).setTitle(screenTitles[POS_FRIENDS]);
 
         }
@@ -221,8 +223,7 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
             //startActivity(new Intent(Home.this,Main2Activity.class));
             //Address_location fragment1=new Address_location();
             UserProfileFragment userProfileFragment=new UserProfileFragment();
-            FragmentManager manager=getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.container,userProfileFragment,"PROFILE").commit();
+            ABHIKRCall(userProfileFragment,false);
             Objects.requireNonNull(getSupportActionBar()).setTitle(screenTitles[POS_PROFILE]);
         }
         if(position== POS_GROUP)
@@ -230,8 +231,7 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
             //startActivity(new Intent(Home.this,Main2Activity.class));
             //gerg_explist fragment=new gerg_explist();
             GroupFragment fragment=new GroupFragment();
-            FragmentManager manager = getSupportFragmentManager();
-            manager.beginTransaction().replace(R.id.container,fragment,"GROUP").commit();
+            ABHIKRCall(fragment,false);
             Objects.requireNonNull(getSupportActionBar()).setTitle(screenTitles[POS_GROUP]);// for set titles
 //            new SlidingRootNavBuilder(this)
 //                    .wi
@@ -292,7 +292,7 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
 
     private DrawerItem createItemFor(int position) {
         return new SimpleItem(screenIcons[position], screenTitles[position])
-                .withTextTint(color(R.color.colorOnPrimary))
+                .withTextTint(color(R.color.colorPrimary))
                 .withSelectedIconTint(color(R.color.colorSecondary))
                 .withSelectedTextTint(color(R.color.colorSecondryVarient));
     }
@@ -319,7 +319,26 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
         return ContextCompat.getColor(this, res);
     }
 
+    public void ABHIKRCall(androidx.fragment.app.Fragment fragment, boolean isHorizontalAnim)
+    {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
 
+        if (!(fragment instanceof AbhiKrFragment)) {
+            if (!isHorizontalAnim) {
+                transaction.setCustomAnimations(R.anim.simple_grow,
+                        R.anim.simple_shrink, android.R.anim.fade_in,
+                        android.R.anim.fade_out);
+            } else {
+                transaction.setCustomAnimations(android.R.anim.fade_in,
+                        android.R.anim.fade_out, R.anim.simple_grow,
+                        R.anim.simple_shrink);
+            }
+        }
+        transaction.replace(R.id.container, fragment, fragment.getClass().getName());
+        transaction.addToBackStack(fragment.getClass().getName());
+        transaction.commit();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu,menu);
@@ -400,24 +419,27 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
 
     @Override
     public void onBackPressed() {
-        // super.onBackPressed(); removing for not showing error solution
-        MaterialAlertDialogBuilder ald=new MaterialAlertDialogBuilder(Home.this);
+        if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
+            // super.onBackPressed(); removing for not showing error solution
+            MaterialAlertDialogBuilder ald=new MaterialAlertDialogBuilder(Home.this);
 
-        ald.setIcon(R.mipmap.ic_launcher).setTitle("ABHIKR SAYS").setMessage("Are you sure You want to exit").setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(Home.this, "Welcome back", Toast.LENGTH_SHORT).show();
-            }
-        });
-        ald.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(Home.this, "Thanks for Visiting", Toast.LENGTH_SHORT).show();
-                finishAfterTransition();
+            ald.setIcon(R.mipmap.ic_launcher).setTitle("ABHIKR SAYS").setMessage("Are you sure You want to exit").setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(Home.this, "Welcome back", Toast.LENGTH_SHORT).show();
+                }
+            });
+            ald.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(Home.this, "Thanks for Visiting", Toast.LENGTH_SHORT).show();
+                    finishAfterTransition();
 
-            }
-        }).setCancelable(true).show();
-
+                }
+            }).setCancelable(true).show();
+            return;
+        }
+        super.onBackPressed();
     }
     @Override
     protected void onStop() {
