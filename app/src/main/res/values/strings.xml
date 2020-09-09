@@ -77,4 +77,6 @@
     <string name="dev_profile">Dev profile</string>
     <string name="logout">Logout</string>
     <string name="says_words">Says something..</string>
+    <string name="text_no_connectivity">No Connection</string>
+    <string name="text_connectivity">Back Online</string>
 </resources>

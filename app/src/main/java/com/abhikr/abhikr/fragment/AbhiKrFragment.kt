@@ -77,7 +77,7 @@ class AbhiKrFragment : Fragment() {
         //Toast.makeText(context, "To View Developer profile click on top - ", Toast.LENGTH_SHORT).show()
         webview.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-                view?.loadUrl(url)
+                view?.loadUrl(url!!)
                 return true
             }
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {

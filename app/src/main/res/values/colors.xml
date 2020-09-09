@@ -25,7 +25,8 @@
     <color name="grey_100">#F5F5F5</color>
     <color name="grey_800">#212121</color>
     <color name="green_800">#2fa881</color>
-
+    <color name="colorStatusConnected">#43A047</color>
+    <color name="colorStatusNotConnected">#D32F2F</color>
     <!--Material colors 500 -->
     <color name="red_500">#e51c23</color>
     <color name="pink_500" type="color">#e91e63</color>

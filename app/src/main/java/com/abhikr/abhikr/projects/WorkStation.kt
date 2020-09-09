@@ -1,5 +1,7 @@
 package com.abhikr.abhikr.projects
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.app.ActivityOptions
 import android.content.Intent
 import android.net.Uri
@@ -10,6 +12,7 @@ import android.util.Log
 import android.view.*
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.abhikr.abhikr.ABHIWeb
@@ -27,6 +30,10 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query
+import com.inspirecoding.handlenetworkstatusdemo.utils.NetworkUtils
+import com.inspirecoding.handlenetworkstatusdemo.utils.getColorRes
+import com.inspirecoding.handlenetworkstatusdemo.utils.hide
+import com.inspirecoding.handlenetworkstatusdemo.utils.show
 import kotlinx.android.synthetic.main.activity_work_station.*
 import kotlinx.android.synthetic.main.content_work_station.*
 import kotlinx.android.synthetic.main.workdesign_item.view.workcardview
@@ -47,6 +54,7 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
     private var adaptor: FirestoreRecyclerAdapter<WorkModal, ViewHolder>?=null
     private var appBarExpanded = true
     private var collapsedMenu: Menu? = null
+    private val ANIMATION_DURATION = 1000.toLong()
     override fun onStart() {
         super.onStart()
         adaptor!!.startListening()
@@ -140,7 +148,39 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
             }
         })
         Log.d(TAG,"abhikr token: "+SharedPrefManager.getInstance(this@WorkStation).deviceToken)
+        //network check
+        handleNetworkChanges()
+    }
+    private fun handleNetworkChanges()
+    {
+        NetworkUtils.getNetworkLiveData(applicationContext).observe(this, Observer { isConncted ->
+            if (!isConncted)
+            {
+                textViewNetworkStatus.text = getString(R.string.text_no_connectivity)
+                networkStatusLayout.apply {
+                    show()
+                    setBackgroundColor(getColorRes(R.color.colorStatusNotConnected))
+                }
+            }
+            else
+            {
+               textViewNetworkStatus.text = getString(R.string.text_connectivity)
+                networkStatusLayout.apply {
+                    setBackgroundColor(getColorRes(R.color.colorStatusConnected))
 
+                    animate()
+                        .alpha(1f)
+                        .setStartDelay(ANIMATION_DURATION)
+                        .setDuration(ANIMATION_DURATION)
+                        .setListener(object : AnimatorListenerAdapter() {
+                            override fun onAnimationEnd(animation: Animator?)
+                            {
+                                hide()
+                            }
+                        })
+                }
+            }
+        })
     }
     private fun GetWork()
     {

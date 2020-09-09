@@ -33,7 +33,7 @@ import com.abhikr.abhikr.data.StaticConfig;
 import com.abhikr.abhikr.model.Configuration;
 import com.abhikr.abhikr.model.User;
 import com.abhikr.abhikr.service.ServiceUtils;
-import com.abhikr.abhikr.util.ImageUtils;
+import com.abhikr.abhikr.utils.ImageUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;

@@ -4,12 +4,17 @@ import android.app.ActivityOptions;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
@@ -20,6 +25,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,6 +49,14 @@ import com.abhikr.abhikr.ui.UserProfileFragment;
 import com.abhikr.tictactoe.TicTacToeHome;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.InstallState;
+import com.google.android.play.core.install.InstallStateUpdatedListener;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.InstallStatus;
+import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.appindexing.Action;
 import com.google.firebase.appindexing.FirebaseAppIndex;
@@ -51,6 +65,7 @@ import com.google.firebase.appindexing.Indexable;
 import com.google.firebase.appindexing.builders.Actions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.inspirecoding.handlenetworkstatusdemo.utils.NetworkUtils;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 
 import java.util.Arrays;
@@ -70,19 +85,49 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
     private String[] screenTitles;
     private Drawable[] screenIcons;
     private static final String TAG = Home.class.getSimpleName();
-    //private FirebaseAuth mAuth;
     //firebase auth object
     private FirebaseUser user;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private FirebaseAnalytics mFirebaseAnalytics;
     int counter=0;
+    private AppUpdateManager mAppUpdateManager;
+    private static final int RC_APP_UPDATE = 119;
+    InstallStateUpdatedListener installStateUpdatedListener;
+    private LinearLayout networkStatusLayout;
+    private TextView textViewNetworkStatus;
     @Override
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthStateListener);
         FirebaseAppIndex.getInstance().update(new Indexable.Builder().setName(getString(R.string.app_name)).setUrl("https://www.abhikr.com/").build());
         FirebaseUserActions.getInstance().start(getIndexApiAction());
+        // app update check
+        //https://stackoverflow.com/questions/55939853/how-to-work-with-androids-in-app-update-api?answertab=active#tab-top
+        mAppUpdateManager = AppUpdateManagerFactory.create(this);
+
+        mAppUpdateManager.registerListener(installStateUpdatedListener);
+
+        mAppUpdateManager.getAppUpdateInfo().addOnSuccessListener(appUpdateInfo -> {
+
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE /*AppUpdateType.IMMEDIATE*/)){
+
+                try {
+                    mAppUpdateManager.startUpdateFlowForResult(
+                            appUpdateInfo, AppUpdateType.FLEXIBLE /*AppUpdateType.IMMEDIATE*/, Home.this, RC_APP_UPDATE);
+
+                } catch (IntentSender.SendIntentException e) {
+                    e.printStackTrace();
+                }
+
+            } else if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED){
+                //CHECK THIS if AppUpdateType.FLEXIBLE, otherwise you can skip
+                popupSnackbarForCompleteUpdate();
+            } else {
+                Log.e(TAG, "checkForAppUpdateAvailability: something else");
+            }
+        });
     }
 
     @Override
@@ -187,6 +232,46 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
         Intent appLinkIntent = getIntent();
         String appLinkAction = appLinkIntent.getAction();
         Uri appLinkData = appLinkIntent.getData();
+
+         installStateUpdatedListener = new
+                InstallStateUpdatedListener() {
+                    @Override
+                    public void onStateUpdate(InstallState state) {
+                        if (state.installStatus() == InstallStatus.DOWNLOADED){
+                            //CHECK THIS if AppUpdateType.FLEXIBLE, otherwise you can skip
+                            popupSnackbarForCompleteUpdate();
+                        } else if (state.installStatus() == InstallStatus.INSTALLED){
+                            if (mAppUpdateManager != null){
+                                mAppUpdateManager.unregisterListener(installStateUpdatedListener);
+                            }
+
+                        } else {
+                            Log.i(TAG, "InstallStateUpdatedListener: state: " + state.installStatus());
+                        }
+                    }
+                };
+
+         //network check
+        networkStatusLayout = findViewById(R.id.networkStatusLayout);
+        textViewNetworkStatus = findViewById(R.id.textViewNetworkStatus);
+        NetworkUtils.INSTANCE.getNetworkLiveData(Home.this).observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isConncted) {
+                if (!isConncted) {
+                    textViewNetworkStatus.setText(getString(R.string.text_no_connectivity));
+                    networkStatusLayout.setVisibility(View.VISIBLE);
+                    networkStatusLayout.setBackgroundColor(ContextCompat.getColor(Home.this,R.color.colorStatusNotConnected));
+                    /*networkStatusLayout.apply {
+                    show()
+                    setBackgroundColor(getColorRes(R.color.colorStatusNotConnected))*/
+                }
+                else {
+                    textViewNetworkStatus.setText(getString(R.string.text_connectivity));
+                    networkStatusLayout.setVisibility(View.GONE);
+                    networkStatusLayout.setBackgroundColor(ContextCompat.getColor(Home.this,R.color.colorStatusConnected));
+                }
+            }
+        });
     }
     public Action getIndexApiAction() {
         return Actions.newView("ABHIKR Home", "https://www.abhikr.com/");
@@ -442,6 +527,34 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
         super.onBackPressed();
     }
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_APP_UPDATE) {
+            if (resultCode != RESULT_OK) {
+                Log.e(TAG, "onActivityResult: app download failed");
+            }
+        }
+    }
+    private void popupSnackbarForCompleteUpdate() {
+
+        Snackbar snackbar =
+                Snackbar.make(
+                        findViewById(android.R.id.content),
+                        "New app is ready!",
+                        Snackbar.LENGTH_INDEFINITE);
+
+        snackbar.setAction("Install", view -> {
+            if (mAppUpdateManager != null){
+                mAppUpdateManager.completeUpdate();
+            }
+        });
+
+
+        snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
+        snackbar.show();
+    }
+    @Override
     protected void onStop() {
         super.onStop();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -450,6 +563,9 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
         if(mAuth!=null)
         {
             mAuth.removeAuthStateListener(mAuthStateListener);
+        }
+        if (mAppUpdateManager != null) {
+            mAppUpdateManager.unregisterListener(installStateUpdatedListener);
         }
     }
 
