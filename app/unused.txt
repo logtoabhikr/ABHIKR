@@ -945,7 +945,6 @@ com.google.android.gms.internal.firebase_auth.zzfj:
 com.google.common.collect.MapDifference$ValueDifference
 kotlinx.coroutines.flow.FlowKt__DelayKt$sample$2$values$1$invokeSuspend$$inlined$collect$1$1
 kotlinx.coroutines.channels.ChannelsKt__Channels_commonKt$takeWhile$1
-com.google.android.play.core.review.e
 com.google.common.collect.AbstractNavigableMap$DescendingMap
 kotlin.time.AbstractDoubleTimeSource$DoubleTimeMark
 com.google.firestore.v1.ListenRequest$TargetChangeCase
@@ -1441,7 +1440,6 @@ androidx.core.content.res.ResourcesCompat$ThemeCompat$ImplApi23:
     private void <init>()
 com.google.common.graph.AbstractNetwork$1$1$1
 android.support.v4.media.session.MediaControllerCompat$TransportControlsBase
-com.google.android.play.core.review.f
 androidx.loader.app.LoaderManagerImpl$LoaderViewModel:
     void removeLoader(int)
     boolean hasRunningLoaders()
@@ -2568,7 +2566,6 @@ io.grpc.internal.ForwardingConnectionClientTransport:
     public com.google.common.util.concurrent.ListenableFuture getStats()
 com.google.common.base.Functions$ConstantFunction
 com.google.common.collect.Tables$TransposeTable$1
-com.google.android.play.core.review.g
 com.google.protobuf.DescriptorProtos$FieldDescriptorProto$Type
 com.google.firebase.auth.PhoneAuthOptions
 com.google.common.util.concurrent.internal.InternalFutureFailureAccess:
@@ -3646,7 +3643,6 @@ androidx.appcompat.view.menu.MenuItemWrapperICS$ActionProviderWrapperJB:
 androidx.versionedparcelable.VersionedParcelize
 com.google.common.collect.AbstractRangeSet
 androidx.constraintlayout.solver.state.ConstraintReference$ConstraintReferenceFactory
-com.google.android.play.core.review.h
 com.google.common.collect.RegularImmutableTable$CellSet
 com.google.common.escape.CharEscaper
 androidx.vectordrawable.graphics.drawable.AnimatorInflaterCompat$PathDataEvaluator:
@@ -5086,8 +5082,6 @@ com.google.common.util.concurrent.ForwardingBlockingQueue
 com.google.common.collect.ArrayTable$Column
 kotlinx.coroutines.sync.SemaphoreKt
 com.google.firebase.auth.api.internal.zzby
-com.google.android.play.core.review.a:
-    void <init>(android.app.PendingIntent)
 io.grpc.InternalChannelz$ChannelTrace
 com.google.api.MetricDescriptor$ValueType$1
 com.google.firebase.auth.internal.zzak
@@ -6421,7 +6415,6 @@ com.google.api.AuthRequirement$1
 com.google.android.play.core.tasks.Task:
     public abstract java.lang.Object getResult(java.lang.Class)
     public abstract com.google.android.play.core.tasks.Task addOnFailureListener(com.google.android.play.core.tasks.OnFailureListener)
-    public abstract com.google.android.play.core.tasks.Task addOnCompleteListener(com.google.android.play.core.tasks.OnCompleteListener)
     public abstract com.google.android.play.core.tasks.Task addOnCompleteListener(java.util.concurrent.Executor,com.google.android.play.core.tasks.OnCompleteListener)
 androidx.recyclerview.widget.StableIdStorage$NoStableIdStorage
 com.google.firebase.messaging.FirebaseMessagingService:
@@ -6793,7 +6786,8 @@ androidx.core.text.TextUtilsCompat:
 androidx.core.graphics.ImageDecoderKt$decodeBitmap$1
 com.google.protobuf.DescriptorProtos$FileDescriptorSet
 com.squareup.okhttp.internal.framed.FramedConnection$7
-com.google.android.play.core.review.c
+com.google.android.play.core.review.c:
+    public final com.google.android.play.core.tasks.Task launchReviewFlow(android.app.Activity,com.google.android.play.core.review.ReviewInfo)
 kotlinx.coroutines.CoroutineExceptionHandlerImplKt
 com.google.protobuf.InvalidProtocolBufferException:
     public void <init>(java.io.IOException)
@@ -7133,7 +7127,8 @@ io.grpc.internal.AbstractStream$TransportState:
 org.intellij.lang.annotations.JdkConstants$TitledBorderJustification
 com.google.android.gms.internal.ads.zzafb
 com.google.firebase.database.DatabaseReference$2
-com.google.android.play.core.review.ReviewManager
+com.google.android.play.core.review.ReviewManager:
+    public abstract com.google.android.play.core.tasks.Task launchReviewFlow(android.app.Activity,com.google.android.play.core.review.ReviewInfo)
 kotlin.jvm.JvmOverloads
 androidx.swiperefreshlayout.widget.CircleImageView:
     public void setBackgroundColorRes(int)
@@ -7612,7 +7607,6 @@ com.bumptech.glide.Glide:
     private static final java.lang.String DEFAULT_DISK_CACHE_DIR
     private static final java.lang.String TAG
 androidx.core.animation.AnimatorKt$doOnStart$$inlined$addListener$1
-com.google.android.play.core.review.d
 com.google.android.gms.internal.location.zzai
 com.google.common.base.Suppliers$ThreadSafeSupplier
 com.google.android.gms.internal.ads.zzbwo:
@@ -8401,8 +8395,6 @@ com.bumptech.glide.manager.RequestTracker:
     private static final java.lang.String TAG
 com.google.common.util.concurrent.TrustedListenableFutureTask
 com.google.common.base.Predicates$ObjectPredicate$1
-com.google.android.play.core.internal.ad
-com.google.android.play.core.tasks.a
 com.google.common.collect.ObjectCountLinkedHashMap
 com.google.android.gms.internal.firebase_auth.zzlc
 com.google.android.gms.internal.firebase_auth.zzac
@@ -8642,7 +8634,8 @@ com.android.volley.toolbox.JsonArrayRequest
 com.google.common.collect.ImmutableMap$MapViewOfValuesAsSingletonSets$1$1
 kotlin.collections.State
 kotlin.sequences.TakeSequence
-com.google.android.play.core.review.ReviewManagerFactory
+com.google.android.play.core.review.ReviewManagerFactory:
+    private void <init>()
 android.support.v4.media.session.MediaSessionCompat$MediaSessionImplApi18
 com.google.common.collect.Collections2$TransformedCollection
 com.google.android.gms.common.util.Clock:
@@ -8859,7 +8852,6 @@ com.google.android.play.core.splitcompat.l:
 com.squareup.okhttp.Cache$2
 com.google.firebase.auth.api.internal.zzd
 io.grpc.internal.ServerImpl$JumpToApplicationThreadServerStreamListener$1Closed
-com.google.android.play.core.tasks.b
 io.grpc.internal.ServerImpl
 com.google.common.cache.LocalCache$ValueReference
 com.yarolegovich.lovelydialog.LovelyChoiceDialog$1
@@ -9316,7 +9308,6 @@ com.crashlytics.android.answers.SessionAnalyticsManager:
 androidx.fragment.app.FragmentTransition:
     static boolean supportsTransition()
     private void <init>()
-com.google.android.play.core.internal.aa
 com.bumptech.glide.disklrucache.DiskLruCache$Editor:
     private java.io.InputStream newInputStream(int)
     public java.lang.String getString(int)
@@ -10301,7 +10292,6 @@ com.google.common.hash.Hashing$Sha384Holder
 kotlinx.coroutines.EventLoopImplPlatform
 io.grpc.ServerStreamTracer$ReadOnlyServerCall
 com.google.api.MetricDescriptor$ValueType
-com.google.android.play.core.internal.ab
 com.google.protobuf.FieldOrBuilder
 androidx.recyclerview.R$attr:
     private void <init>()
@@ -11081,7 +11071,6 @@ com.google.android.material.transition.platform.MaterialContainerTransform$1
 io.grpc.internal.ServerImpl$JumpToApplicationThreadServerStreamListener$1MessagesAvailable
 com.google.android.gms.internal.firebase_auth.zzb:
     protected final void zzb(int,android.os.Parcel)
-com.google.android.play.core.internal.ac
 com.google.common.base.Predicates$ObjectPredicate$2
 com.google.firebase.analytics.connector.AnalyticsConnector$ConditionalUserProperty
 com.google.android.gms.internal.firebase_auth.zzlb
@@ -11632,8 +11621,6 @@ com.google.rpc.context.AttributeContext$Resource
 com.google.android.play.core.splitinstall.SplitInstallRequest
 androidx.annotation.NonNull
 com.google.android.gms.auth.account.zzb
-com.google.android.play.core.review.ReviewInfo:
-    public static com.google.android.play.core.review.ReviewInfo a(android.app.PendingIntent)
 io.fabric.sdk.android.services.network.HttpRequest$2
 com.google.common.util.concurrent.MoreExecutors$ScheduledListeningDecorator$NeverSuccessfulListenableFutureTask
 androidx.arch.core.executor.DefaultTaskExecutor$1:
@@ -18154,7 +18141,6 @@ io.grpc.LoadBalancer$ResolvedAddresses:
     public io.grpc.LoadBalancer$ResolvedAddresses$Builder toBuilder()
 com.google.android.gms.internal.ads.zzdlx:
     public final synthetic com.google.android.gms.internal.ads.zzdlp zzae(java.lang.Object)
-com.google.android.play.core.internal.z
 kotlinx.coroutines.flow.FlowKt__LimitKt$dropWhile$$inlined$unsafeFlow$1$lambda$1
 com.yarolegovich.slidingrootnav.R$attr
 androidx.annotation.WorkerThread
@@ -23265,7 +23251,6 @@ com.google.firebase.auth.api.internal.zzdl
 com.google.android.play.core.tasks.m:
     public final java.lang.Object getResult(java.lang.Class)
     public final com.google.android.play.core.tasks.Task addOnFailureListener(com.google.android.play.core.tasks.OnFailureListener)
-    public final com.google.android.play.core.tasks.Task addOnCompleteListener(com.google.android.play.core.tasks.OnCompleteListener)
     public final com.google.android.play.core.tasks.Task addOnCompleteListener(java.util.concurrent.Executor,com.google.android.play.core.tasks.OnCompleteListener)
 com.google.android.gms.common.api.internal.OptionalPendingResultImpl:
     public final com.google.android.gms.common.api.Result await()
@@ -29365,7 +29350,9 @@ android.support.customtabs.ICustomTabsCallback$Stub$Proxy:
     public void extraCallback(java.lang.String,android.os.Bundle)
     public void onRelationshipValidationResult(int,android.net.Uri,boolean,android.os.Bundle)
     public android.os.Bundle extraCallbackWithResult(java.lang.String,android.os.Bundle)
-com.google.android.play.core.common.PlayCoreVersion
+com.google.android.play.core.common.PlayCoreVersion:
+    public static synchronized void addVersion(java.lang.String,java.lang.String,int)
+    private void <init>()
 androidx.appcompat.view.menu.SubMenuBuilder:
     public void setShortcutsVisible(boolean)
 com.google.longrunning.WaitOperationRequest$1
@@ -30679,7 +30666,6 @@ com.google.android.gms.internal.auth.zzm
 kotlin.io.LinesSequence$iterator$1
 kotlinx.coroutines.channels.RendezvousChannel
 com.abhikr.abhikr.R$array
-com.google.android.play.core.tasks.OnCompleteListener
 kotlinx.coroutines.channels.AbstractChannel$enqueueReceive$$inlined$addLastIfPrevAndIf$1
 com.bumptech.glide.load.engine.cache.MemoryCache:
     public abstract long getCurrentSize()
@@ -33004,6 +32990,8 @@ androidx.constraintlayout.solver.LinearSystem$ValuesRow:
     public final synthetic androidx.constraintlayout.solver.LinearSystem this$0
 com.google.android.gms.internal.ads.zzsz$zzh$zzc:
     public static final com.google.android.gms.internal.ads.zzdze zzen
+com.google.android.play.core.review.c:
+    public final android.os.Handler b
 com.google.protobuf.InvalidProtocolBufferException:
     public com.google.protobuf.MessageLite unfinishedMessage
 com.google.android.gms.internal.ads.zzsz$zzl$zza
@@ -35231,6 +35219,10 @@ androidx.constraintlayout.solver.widgets.ConstraintWidgetContainer:
     public int mWrapFixedHeight
     public boolean mSkipSolver
     public int mDebugSolverPassCount
+com.google.android.play.core.common.PlayCoreVersion:
+    public static final java.util.Set a
+    public static final java.util.Set b
+    public static final com.google.android.play.core.internal.af d
 com.google.android.gms.internal.measurement.zzcj
 com.google.android.gms.internal.ads.zzwz:
     public com.google.android.gms.internal.ads.zzwu zzceq

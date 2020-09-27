@@ -57,6 +57,10 @@ import com.google.android.play.core.install.InstallStateUpdatedListener;
 import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.InstallStatus;
 import com.google.android.play.core.install.model.UpdateAvailability;
+import com.google.android.play.core.review.ReviewInfo;
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.ReviewManagerFactory;
+import com.google.android.play.core.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.appindexing.Action;
 import com.google.firebase.appindexing.FirebaseAppIndex;
@@ -270,6 +274,19 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
                     networkStatusLayout.setVisibility(View.GONE);
                     networkStatusLayout.setBackgroundColor(ContextCompat.getColor(Home.this,R.color.colorStatusConnected));
                 }
+            }
+        });
+        //In app update
+        ReviewManager manager = ReviewManagerFactory.create(this);
+        Task<ReviewInfo> request = manager.requestReviewFlow();
+        request.addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // We can get the ReviewInfo object
+                ReviewInfo reviewInfo = task.getResult();
+                Log.d(TAG,"In-App-Review Success: "+reviewInfo.toString());
+            } else {
+                // There was some problem, continue regardless of the result.
+                Log.d(TAG,"In-App-Review failed");
             }
         });
     }
@@ -541,7 +558,7 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
         Snackbar snackbar =
                 Snackbar.make(
                         findViewById(android.R.id.content),
-                        "New app is ready!",
+                        "ABHIKR New app is ready!",
                         Snackbar.LENGTH_INDEFINITE);
 
         snackbar.setAction("Install", view -> {
