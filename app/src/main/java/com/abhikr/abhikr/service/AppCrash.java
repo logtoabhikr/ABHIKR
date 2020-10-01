@@ -11,13 +11,10 @@ import com.abhikr.abhikr.firepush.SharedPrefManager;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.FirebaseDatabase;
-
-import io.fabric.sdk.android.Fabric;
-
 
 public class AppCrash extends Application {
 
@@ -41,11 +38,8 @@ public class AppCrash extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance=this;
-        Fabric.with(this, new Crashlytics());
+        //FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true);
         user= FirebaseAuth.getInstance().getCurrentUser();
-       /* Crashlytics.setUserName("");
-        Crashlytics.setUserEmail("");
-        Crashlytics.setUserIdentifier("");*/
        try
        {
            abhiprofile();
@@ -54,6 +48,7 @@ public class AppCrash extends Application {
        catch (Exception e)
        {
            e.printStackTrace();
+           FirebaseCrashlytics.getInstance().recordException(e);
        }
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         SharedPrefManager.InitABHIKRPref(this);
@@ -96,12 +91,27 @@ public class AppCrash extends Application {
         {
                 try
                 {
-                    Crashlytics.setUserName(user.getUid());
-                    Crashlytics.setUserEmail(user.getEmail());
+                    FirebaseCrashlytics crashlytics = FirebaseCrashlytics.getInstance();
+                    crashlytics.setUserId(user.getUid());
+
+                    crashlytics.log("ABHIKR: Crash happen");
+
+                    crashlytics.setCustomKey("bool_key",true);
+
+                    crashlytics.setCustomKey("double_key",42.0);
+
+                    crashlytics.setCustomKey("float_key",42.0F);
+
+                    crashlytics.setCustomKey("int_key",42);
+
+                    crashlytics.setCustomKey("long_key",42L);
+
+                    crashlytics.setCustomKey("str_key","42");
                 }
                 catch (Exception e)
                 {
                     e.printStackTrace();
+                    FirebaseCrashlytics.getInstance().recordException(e);
                 }
             }
     }

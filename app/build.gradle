@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
-//apply plugin: 'io.fabric'
 apply plugin: 'com.google.firebase.crashlytics'
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -11,7 +10,7 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 def versionMajor = 3
 def versionMinor = 0
 def versionPatch = 1
-def versionBuild = 9 // bump for builds, public betas, etc.
+def versionBuild = 10 // bump for builds, public betas, etc.
 android {
     signingConfigs {
         config {
@@ -67,6 +66,11 @@ android {
         debug {
             testCoverageEnabled false
             debuggable false
+            firebaseCrashlytics {
+                // If you don't need crash reporting for your debug build,
+                // you can speed up your build by disabling mapping file uploading.
+                mappingFileUploadEnabled false
+            }
             minifyEnabled true
             shrinkResources true
             versionNameSuffix ".Alpha"
@@ -77,6 +81,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             project.ext.set("archivesBaseName", rootProject.getName() + "-" + defaultConfig.versionName)
             signingConfig signingConfigs.config
+            manifestPlaceholders = [crashlyticsCollectionEnabled:"false"]
         }
         release {
             debuggable false
@@ -89,6 +94,7 @@ android {
             //zipAlignEnabled true
             resValue "string", "app_version",
                     "${defaultConfig.versionName}"
+            manifestPlaceholders = [crashlyticsCollectionEnabled:"true"]
         }
     }
 
@@ -127,7 +133,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:19.3.2'
     implementation 'com.google.firebase:firebase-database:19.4.0'
     implementation 'com.google.firebase:firebase-messaging:20.2.4'
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
+    implementation 'com.google.firebase:firebase-crashlytics:17.2.2'
     implementation 'com.google.firebase:firebase-firestore:21.6.0'
     implementation 'com.firebaseui:firebase-ui-firestore:6.1.0'
     implementation 'com.google.firebase:firebase-ads:19.0.0' // needs some manifest appid adding

@@ -289,6 +289,14 @@ public class Home extends AppCompatActivity implements DrawerAdapter.OnItemSelec
                 Log.d(TAG,"In-App-Review failed");
             }
         });
+       /*
+       if (FirebaseCrashlytics.getInstance().didCrashOnPreviousExecution()) {
+            // ...App code to execute if a crash occurred during previous execution.
+            //Toast.makeText(this, "hey crash happen before! contact admin...", Toast.LENGTH_SHORT).show();
+        }
+        //firbase crash forcefully
+        //throw new RuntimeException("Abhi called to pull over..");
+       */
     }
     public Action getIndexApiAction() {
         return Actions.newView("ABHIKR Home", "https://www.abhikr.com/");
