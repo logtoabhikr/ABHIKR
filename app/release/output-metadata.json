@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.abhikr.abhikr",
+  "variantName": "release",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "properties": [],
+      "versionCode": 3000110,
+      "versionName": "3.0.1.10",
+      "enabled": true,
+      "outputFile": "ABHIKR-3.0.1.10-release.apk"
+    }
+  ]
+}
