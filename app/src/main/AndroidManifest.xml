@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<manifest xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
     package="com.abhikr.abhikr">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -17,6 +18,7 @@
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
 
     <application
         android:name=".service.AppCrash"
@@ -122,25 +124,13 @@
                 android:autoVerify="true"
                 android:label="@string/app_name">
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data
-                    android:host="www.abhikr.com"
-                    android:scheme="http" />
-            </intent-filter>
-            <intent-filter
-                android:autoVerify="true"
-                android:label="@string/app_name">
-                <action android:name="android.intent.action.VIEW" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="www.abhikr.com"
-                    android:scheme="https" />
+                <data android:host="www.abhikr.com" />
             </intent-filter>
         </activity>
         <activity android:name=".menu.menu_drawer" />

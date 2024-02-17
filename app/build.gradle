@@ -10,7 +10,7 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 def versionMajor = 3
 def versionMinor = 0
 def versionPatch = 2
-def versionBuild = 11 // bump for builds, public betas, etc.
+def versionBuild = 13 // bump for builds, public betas, etc.
 android {
     signingConfigs {
         config {
@@ -42,10 +42,6 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/DEPENDENCIES.txt'
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
     }
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
