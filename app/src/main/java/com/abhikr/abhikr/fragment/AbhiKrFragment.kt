@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.Message
 import android.util.Log
 import android.view.*
@@ -19,6 +20,7 @@ import com.abhikr.abhikr.service.AppCrash
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 
 
@@ -42,7 +44,7 @@ class AbhiKrFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
-    private val handler: Handler = object : Handler() {
+    private val handler: Handler = object : Handler(Looper.getMainLooper()) {
         override fun handleMessage(message: Message) {
             when (message.what) {
                 1 -> {
@@ -119,11 +121,6 @@ class AbhiKrFragment : Fragment() {
                 Log.d(TAG,"ads imp : ad loaded")
             }
 
-            override fun onAdFailedToLoad(errorCode : Int) {
-                // Code to be executed when an ad request fails.
-                Log.d(TAG,"ads imp : ad loaded $errorCode")
-            }
-
             override fun onAdOpened() {
                 // Code to be executed when an ad opens an overlay that
                 // covers the screen.
@@ -137,15 +134,18 @@ class AbhiKrFragment : Fragment() {
                 // Code to be executed when the user clicks on an ad.
             }
 
-            override fun onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
-                Log.d(TAG,"ads imp : ad left by user")
-            }
-
             override fun onAdClosed() {
                 // Code to be executed when the user is about to return
                 // to the app after tapping on an ad.
                 Log.d(TAG,"ads imp : ad closed")
+            }
+
+            override fun onAdFailedToLoad(p0: LoadAdError) {
+                super.onAdFailedToLoad(p0)
+            }
+
+            override fun onAdImpression() {
+                super.onAdImpression()
             }
         }
     }

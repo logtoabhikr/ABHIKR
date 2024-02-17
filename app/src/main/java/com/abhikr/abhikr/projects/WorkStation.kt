@@ -173,8 +173,8 @@ class WorkStation : AppCompatActivity(),View.OnClickListener {
                         .setStartDelay(ANIMATION_DURATION)
                         .setDuration(ANIMATION_DURATION)
                         .setListener(object : AnimatorListenerAdapter() {
-                            override fun onAnimationEnd(animation: Animator?)
-                            {
+                            override fun onAnimationEnd(animation: Animator) {
+                                super.onAnimationEnd(animation)
                                 hide()
                             }
                         })

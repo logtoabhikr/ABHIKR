@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.abhikr.abhikr">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" /> <!-- To retrieve the account name (email) as part of sign-in: -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -32,13 +35,16 @@
         <activity
             android:name=".projects.WorkStore"
             android:label="@string/title_activity_work_store"
+            android:exported="true"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".projects.WorkStation"
             android:configChanges="keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/title_activity_work_station"
+            android:exported="true"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".customtab.WebviewActivity" />
+        <activity android:name=".customtab.WebviewActivity"
+            android:exported="true"/>
 
         <receiver android:name=".customtab.ActionBroadcastReceiver" />
         <receiver android:name=".ABHIWeb$CopyBroadcastReceiver" />
@@ -49,7 +55,8 @@
 
         <activity
             android:name=".SplashOnBoarding"
-            android:theme="@style/AppTheme.Transparent">
+            android:theme="@style/AppTheme.Transparent"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -61,21 +68,25 @@
             android:configChanges="keyboardHidden|screenLayout|screenSize|orientation"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
+            android:exported="true"
             android:theme="@style/TranslucentBackground" />
-        <activity android:name=".MainActivity_old" />
+        <activity android:name=".MainActivity_old" android:exported="true"/>
         <activity
             android:name=".Splash"
             android:theme="@style/SplashTheme" />
-        <activity android:name=".EXP" />
+        <activity android:name=".EXP"
+            android:exported="true" />
         <activity
             android:name=".SignUp"
-            android:parentActivityName=".SignIn">
+            android:parentActivityName=".SignIn"
+            android:exported="true">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.abhikr.abhikr.SignIn" />
         </activity>
         <activity
             android:name=".ResetPass"
+            android:exported="true"
             android:parentActivityName=".SignUp">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -84,6 +95,7 @@
         <activity
             android:name=".SignIn"
             android:label="@string/app_name"
+            android:exported="true"
             android:parentActivityName=".SignUp">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -91,6 +103,7 @@
         </activity>
         <activity
             android:name=".Phone"
+            android:exported="true"
             android:parentActivityName=".SignUp">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -158,17 +171,21 @@
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
+            android:exported="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.RegisterActivity"
             android:launchMode="singleTop"
+            android:exported="true"
             android:theme="@style/Translucent" />
         <activity
             android:name=".ui.ChatActivity"
             android:parentActivityName=".MainActivity"
+            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.AddGroupActivity"
+            android:exported="true"
             android:theme="@style/MyThemeNoActionbar" />
 
         <service

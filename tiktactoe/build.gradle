@@ -5,7 +5,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 33
     /*defaultConfig { // this block is used for application not for library
         //applicationId "net.simplifiedcoding.tictactoe"
         minSdkVersion 21
